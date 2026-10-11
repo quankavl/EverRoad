@@ -1,81 +1,51 @@
 <!doctype html>
 <html lang="vi">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-  <meta name="theme-color" content="#101b28">
-  <title>Serene Stride — Nhịp Bước An Yên</title>
-  <link rel="stylesheet" href="./style.css">
-  <script type="importmap">
-    {
-      "imports": {
-        "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js"
-      }
-    }
-  </script>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><meta name="theme-color" content="#172b35">
+<title>Serene Streets: Endless Run</title>
+<style>
+:root{--glass:rgba(10,24,31,.68);--line:rgba(255,255,255,.18);--mint:#a6f0d1;--white:#f4f8f7}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#b9d8d8;color:var(--white);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}canvas{display:block;width:100%;height:100%;touch-action:none}#hud{position:fixed;inset:0;pointer-events:none}.brand{position:absolute;top:20px;left:22px}.brand strong{display:block;font-size:clamp(15px,2vw,22px);letter-spacing:.11em;font-weight:800}.brand span{font-size:11px;letter-spacing:.19em;color:#d2e5df;text-transform:uppercase}.panel{background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(14px);border-radius:16px;box-shadow:0 12px 40px #10232b25}.stats{position:absolute;top:20px;right:20px;padding:12px 16px;display:flex;gap:20px;align-items:center}.stat small{display:block;color:#b8d1ca;font-size:10px;letter-spacing:.12em;text-transform:uppercase}.stat b{font-size:19px;font-variant-numeric:tabular-nums}.pill{border:1px solid #ffffff35;border-radius:99px;padding:7px 10px;font-size:11px;color:var(--mint);white-space:nowrap}.bottom{position:absolute;left:20px;bottom:20px;padding:12px 15px;max-width:min(420px,calc(100vw - 40px));font-size:12px;line-height:1.55;color:#d7e5e1}.bottom b{color:#fff}.controls{position:absolute;right:20px;bottom:20px;display:flex;gap:8px;pointer-events:auto}.ctrl{background:var(--glass);border:1px solid var(--line);color:#fff;border-radius:13px;padding:11px 14px;font-size:12px;cursor:pointer;backdrop-filter:blur(12px)}.ctrl:hover,.ctrl:focus-visible{border-color:var(--mint)}.overlay{position:fixed;inset:0;display:grid;place-items:center;background:linear-gradient(180deg,rgba(12,29,36,.15),rgba(12,29,36,.56));z-index:5;padding:22px}.intro{width:min(530px,100%);padding:clamp(24px,5vw,42px);text-align:center}.eyebrow{font-size:10px;letter-spacing:.24em;color:var(--mint);font-weight:800}.intro h1{font-size:clamp(30px,6vw,54px);line-height:1.02;margin:12px 0}.intro p{color:#d1e0dc;line-height:1.7;font-size:14px}.primary{background:var(--mint);color:#14352e;border:0;border-radius:12px;padding:14px 23px;font-weight:800;font-size:14px;cursor:pointer;margin-top:8px}.help{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin:18px 0}.key{border:1px solid #ffffff3a;border-radius:8px;padding:7px 10px;font-size:11px;color:#dcebe6}.hidden{display:none!important}.mobile-pad{position:absolute;left:50%;transform:translateX(-50%);bottom:100px;display:none;gap:8px;pointer-events:auto}.mobile-pad button{width:52px;height:52px;border-radius:50%;background:var(--glass);border:1px solid #ffffff44;color:#fff;font-size:20px;touch-action:none}.mobile-pad .jump{font-size:11px;width:60px;border-radius:18px}.toast{position:absolute;top:95px;left:50%;transform:translateX(-50%);font-size:12px;color:#e8f5f0;white-space:nowrap;text-shadow:0 2px 12px #0008}@media(max-width:700px){.brand{top:13px;left:13px}.brand span{font-size:9px}.stats{top:12px;right:12px;gap:10px;padding:9px 11px}.stat b{font-size:15px}.stat small{font-size:8px}.pill{display:none}.bottom{left:12px;bottom:12px;font-size:10px;max-width:calc(100vw - 24px);padding:9px 11px}.controls{right:12px;bottom:65px}.ctrl{padding:10px;font-size:11px}.mobile-pad{display:flex}.toast{top:75px;font-size:10px}}
+</style>
 </head>
 <body>
-  <main id="game-shell">
-    <canvas id="game-canvas" aria-label="Thế giới game 3D"></canvas>
-
-    <section class="topbar" aria-label="Thông tin chuyến chạy">
-      <div class="brand">
-        <div class="brand-mark">S</div>
-        <div><strong>SERENE STRIDE</strong><span>NHỊP BƯỚC AN YÊN</span></div>
-      </div>
-      <div class="status-group">
-        <div class="status-pill"><span class="status-dot"></span><span id="world-time">07:30</span></div>
-        <div class="status-pill"><span id="weather-icon">☀</span><span id="weather-label">Trời quang</span></div>
-      </div>
-    </section>
-
-    <section class="hud" aria-label="Thống kê">
-      <div class="hud-card"><span class="hud-label">QUÃNG ĐƯỜNG</span><strong><span id="distance">0</span><small> m</small></strong></div>
-      <div class="hud-card"><span class="hud-label">THỜI GIAN</span><strong id="elapsed">00:00</strong></div>
-      <div class="hud-card"><span class="hud-label">NHỊP ĐỘ</span><strong id="pace">Thư thái</strong></div>
-    </section>
-
-    <div class="right-controls">
-      <button class="icon-button" id="sound-toggle" aria-label="Bật hoặc tắt âm thanh" title="Âm thanh">♫</button>
-      <button class="icon-button" id="pause-button" aria-label="Tạm dừng" title="Tạm dừng">Ⅱ</button>
-    </div>
-
-    <section class="welcome-panel" id="welcome-panel">
-      <div class="eyebrow"><span></span> KHÔNG GIAN CỦA RIÊNG BẠN</div>
-      <h1>Hít thở.<br><em>Và cứ bước đi.</em></h1>
-      <p>Một góc phố yên bình, một nhịp chạy của riêng bạn. Không đích đến, không áp lực — chỉ có bạn và con đường phía trước.</p>
-      <button class="primary-button" id="start-button">Bắt đầu hành trình <span>→</span></button>
-      <div class="welcome-foot"><span>◉</span> Có thể chơi bằng bàn phím hoặc cảm ứng</div>
-    </section>
-
-    <section class="pause-panel hidden" id="pause-panel">
-      <div class="pause-symbol">Ⅱ</div>
-      <h2>Tạm nghỉ một chút</h2>
-      <p>Hít một hơi thật sâu. Con đường vẫn ở đây khi bạn sẵn sàng.</p>
-      <button class="primary-button" id="resume-button">Tiếp tục hành trình <span>→</span></button>
-      <button class="text-button" id="restart-button">Bắt đầu lại</button>
-    </section>
-
-    <div class="toast" id="toast" role="status"></div>
-
-    <section class="bottom-bar">
-      <div class="tip"><span class="tip-icon">✦</span><span id="tip-text">Thả lỏng vai và tận hưởng khung cảnh.</span></div>
-      <div class="desktop-help"><kbd>←</kbd><kbd>→</kbd> Đổi làn <span class="help-divider">·</span> <kbd>Space</kbd> Tạm dừng</div>
-    </section>
-
-    <section class="mobile-controls" aria-label="Điều khiển cảm ứng">
-      <button class="move-button" id="left-button" aria-label="Sang trái">←</button>
-      <div class="mobile-center"><span>VUỐT ĐỂ DI CHUYỂN</span><small>Chạm hai bên để đổi làn</small></div>
-      <button class="move-button" id="right-button" aria-label="Sang phải">→</button>
-    </section>
-
-    <div class="loading-screen" id="loading-screen">
-      <div class="loading-logo">S</div>
-      <div class="loading-title">Serene Stride</div>
-      <div class="loading-subtitle">Đang chuẩn bị con đường của bạn…</div>
-      <div class="loading-track"><span></span></div>
-    </div>
-  </main>
-  <script type="module" src="./main.js"></script>
-</body>
-</html>
+<div id="hud"><div class="brand"><strong>SERENE STREETS</strong><span>Chạy chậm · Thở sâu · Khám phá</span></div><div class="stats panel"><div class="stat"><small>Quãng đường</small><b><span id="distance">0</span> <small style="display:inline;font-size:10px">m</small></b></div><div class="stat"><small>Nhịp chạy</small><b><span id="pace">8.0</span> <small style="display:inline;font-size:10px">km/h</small></b></div><div class="pill" id="clock">--:--:--</div></div><div class="toast" id="toast">Một con phố yên bình đang chờ bạn.</div><div class="bottom panel"><b>Điều khiển:</b> ← → hoặc A/D để đổi làn · ↑/W để tăng tốc · ↓/S để chậm lại · Space để nhảy nhẹ<br><span id="status">Chế độ thư giãn: không va chạm, không kết thúc.</span></div><div class="controls"><button class="ctrl" id="soundBtn">♫ Âm thanh: bật</button><button class="ctrl" id="pauseBtn">Ⅱ Tạm dừng</button><button class="ctrl" id="resetBtn">↻ Chơi lại</button></div><div class="mobile-pad"><button data-act="left" aria-label="Sang trái">←</button><button data-act="slow" aria-label="Chậm lại">−</button><button class="jump" data-act="jump">NHẢY</button><button data-act="fast" aria-label="Nhanh hơn">+</button><button data-act="right" aria-label="Sang phải">→</button></div></div>
+<div class="overlay" id="intro"><div class="intro panel"><div class="eyebrow">MỘT KHOẢNG LẶNG GIỮA PHỐ</div><h1>SERENE STREETS:<br>ENDLESS RUN</h1><p>Chạy bộ vô tận qua những con phố 3D dịu êm. Ngắm ánh nắng, hàng cây và nhịp sống đô thị theo thời gian thực. Không áp lực, không thua cuộc — chỉ có bạn và hành trình.</p><div class="help"><span class="key">← → Đổi làn</span><span class="key">↑ Tăng tốc</span><span class="key">↓ Chậm lại</span><span class="key">SPACE Nhảy</span><span class="key">Màn hình cảm ứng</span></div><button class="primary" id="startBtn">BẮT ĐẦU TẢN BỘ</button><p style="font-size:11px;margin-bottom:0">Âm thanh được tạo trực tiếp trong trình duyệt. Nên dùng tai nghe.</p></div></div>
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+const scene=new THREE.Scene();scene.background=new THREE.Color(0xa9d0d0);scene.fog=new THREE.Fog(0xa9d0d0,34,145);
+const camera=new THREE.PerspectiveCamera(62,innerWidth/innerHeight,.1,250);camera.position.set(0,4.5,9.2);
+const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.8));renderer.setSize(innerWidth,innerHeight);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;document.body.prepend(renderer.domElement);
+scene.add(new THREE.HemisphereLight(0xdff8ff,0x66745e,2.1));const sun=new THREE.DirectionalLight(0xffe1b0,3.0);sun.position.set(-12,20,10);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);sun.shadow.camera.left=-22;sun.shadow.camera.right=22;sun.shadow.camera.top=28;sun.shadow.camera.bottom=-28;scene.add(sun);
+const mat=(color,roughness=.8,metalness=0)=>new THREE.MeshStandardMaterial({color,roughness,metalness});const roadMat=mat(0x343e43,.95),sideMat=mat(0xb8b9aa),lineMat=mat(0xe9e7d6),grassMat=mat(0x718d6d),trunkMat=mat(0x6b5545),leafMats=[mat(0x547b62),mat(0x668d70),mat(0x789978)],windowMat=new THREE.MeshStandardMaterial({color:0x91b8c1,roughness:.25,metalness:.2}),facades=[0xcbbca8,0xb5c2c1,0xd3c7b5,0x9daeb0,0xd5bda3].map(c=>mat(c));
+const ground=new THREE.Mesh(new THREE.PlaneGeometry(240,240),grassMat);ground.rotation.x=-Math.PI/2;ground.position.y=-.13;ground.position.z=-65;ground.receiveShadow=true;scene.add(ground);
+const road=new THREE.Mesh(new THREE.BoxGeometry(10,.16,220),roadMat);road.position.set(0,-.05,-75);road.receiveShadow=true;scene.add(road);
+for(let x of [-5.3,5.3]){const curb=new THREE.Mesh(new THREE.BoxGeometry(.35,.24,220),sideMat);curb.position.set(x,.02,-75);scene.add(curb)}
+// Dashed lane markings are recycled in world space.
+const dashes=[];for(let z=18;z>-180;z-=7){for(let x of [-1.67,1.67]){const d=new THREE.Mesh(new THREE.BoxGeometry(.075,.018,3.2),lineMat);d.position.set(x,.045,z);scene.add(d);dashes.push(d)}}
+const sidewalk=[];for(let side of [-1,1]){let s=new THREE.Mesh(new THREE.BoxGeometry(3.2,.12,220),sideMat);s.position.set(side*6.9,-.03,-75);scene.add(s);sidewalk.push(s)}
+const city=[];function makeBuilding(side,z){const g=new THREE.Group();let w=2.5+Math.random()*3.4,h=5+Math.random()*15,dep=4+Math.random()*5;let b=new THREE.Mesh(new THREE.BoxGeometry(w,h,dep),facades[Math.floor(Math.random()*facades.length)]);b.position.y=h/2;b.castShadow=true;b.receiveShadow=true;g.add(b);const floors=Math.max(2,Math.floor(h/2.2)),cols=Math.max(2,Math.floor(w/1.05));for(let f=0;f<floors;f++)for(let c=0;c<cols;c++){const win=new THREE.Mesh(new THREE.BoxGeometry(.48,.68,.035),windowMat);win.position.set(-w/2+(c+.5)*w/cols,1.15+f*(h-1.3)/floors,dep/2+.02);g.add(win)}g.position.set(side*(8.9+Math.random()*2),0,z);g.userData={side,w,h,dep};scene.add(g);city.push(g)}
+for(let z=18;z>-190;z-=13){makeBuilding(-1,z);makeBuilding(1,z-5)}
+const props=[];function makeTree(side,z){const g=new THREE.Group();const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.13,.2,2.2,7),trunkMat);trunk.position.y=1.1;trunk.castShadow=true;g.add(trunk);for(let i=0;i<3;i++){const crown=new THREE.Mesh(new THREE.IcosahedronGeometry(.8+Math.random()*.35,1),leafMats[i]);crown.position.set((Math.random()-.5)*.35,2.2+i*.42,(Math.random()-.5)*.3);crown.castShadow=true;g.add(crown)}g.position.set(side*(5.8+Math.random()*.3),0,z);scene.add(g);props.push(g)}
+for(let z=14;z>-180;z-=12){makeTree(-1,z);makeTree(1,z-5)}
+const lampMat=mat(0x344b50,.35,.55),lampGlow=new THREE.MeshStandardMaterial({color:0xffe2a1,emissive:0xffbd6a,emissiveIntensity:1.4});for(let z=10;z>-170;z-=20)for(let side of [-1,1]){const g=new THREE.Group(),pole=new THREE.Mesh(new THREE.CylinderGeometry(.055,.08,4.2,8),lampMat);pole.position.y=2.1;g.add(pole);const arm=new THREE.Mesh(new THREE.BoxGeometry(.8,.07,.07),lampMat);arm.position.set(-side*.34,4.1,0);g.add(arm);const bulb=new THREE.Mesh(new THREE.SphereGeometry(.13,10,8),lampGlow);bulb.position.set(-side*.7,4.02,0);g.add(bulb);g.position.set(side*5.1,0,z);scene.add(g);props.push(g)}
+// Stylized 3D runner with animated limbs.
+const runner=new THREE.Group();scene.add(runner);runner.position.set(-1.67,0,2);const skin=mat(0xc98f69),shirt=mat(0x2d786b),pants=mat(0x283d4d),shoe=mat(0xe6e2d6),hair=mat(0x332b27);function capsule(radius,length,material){return new THREE.Mesh(new THREE.CapsuleGeometry(radius,length,4,8),material)}
+const torso=new THREE.Mesh(new THREE.CapsuleGeometry(.34,.63,5,10),shirt);torso.position.y=1.35;torso.castShadow=true;runner.add(torso);const head=new THREE.Mesh(new THREE.SphereGeometry(.25,16,12),skin);head.position.set(0,2.12,0);head.castShadow=true;runner.add(head);const haircap=new THREE.Mesh(new THREE.SphereGeometry(.255,12,8,0,Math.PI*2,0,Math.PI*.55),hair);haircap.position.set(0,2.19,-.015);runner.add(haircap);
+const limbs=[];for(let side of [-1,1]){let arm=new THREE.Group();arm.position.set(side*.39,1.62,0);const upper=capsule(.105,.39,shirt);upper.position.y=-.25;arm.add(upper);const hand=new THREE.Mesh(new THREE.SphereGeometry(.105,10,8),skin);hand.position.y=-.52;arm.add(hand);runner.add(arm);limbs.push({obj:arm,phase:side===1?Math.PI:0,kind:'arm'});let leg=new THREE.Group();leg.position.set(side*.18,.88,0);const thigh=capsule(.13,.42,pants);thigh.position.y=-.25;leg.add(thigh);const foot=new THREE.Mesh(new THREE.BoxGeometry(.22,.13,.4),shoe);foot.position.set(0,-.49,.1);foot.castShadow=true;leg.add(foot);runner.add(leg);limbs.push({obj:leg,phase:side===1?Math.PI:0,kind:'leg'})}
+const shadow=new THREE.Mesh(new THREE.CircleGeometry(.52,24),new THREE.MeshBasicMaterial({color:0x243a39,transparent:true,opacity:.25}));shadow.rotation.x=-Math.PI/2;shadow.position.set(0,.015,0);runner.add(shadow);
+let running=false,paused=false,muted=false,elapsed=0,distance=0,speed=8,lane=0,jumpY=0,jumpV=0,clockLast=performance.now(),audioCtx=null,stepTimer=0;const $=id=>document.getElementById(id);
+function audioStart(){if(muted)return;try{audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume()}catch(e){}}
+function tone(freq,dur,vol=.025,type='sine'){if(muted||!audioCtx)return;const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type=type;o.frequency.value=freq;g.gain.setValueAtTime(vol,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+dur);o.connect(g).connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+dur)}
+function act(a){if(!running||paused)return;if(a==='left')lane=Math.max(-1,lane-1);if(a==='right')lane=Math.min(1,lane+1);if(a==='fast')speed=Math.min(13,speed+1);if(a==='slow')speed=Math.max(3,speed-1);if(a==='jump'&&jumpY<.04){jumpV=5.2;tone(480,.12,.018)}}
+window.addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' ','a','d','w','s','A','D','W','S'].includes(e.key))e.preventDefault();if(e.repeat)return;if(e.key==='ArrowLeft'||e.key.toLowerCase()==='a')act('left');if(e.key==='ArrowRight'||e.key.toLowerCase()==='d')act('right');if(e.key==='ArrowUp'||e.key.toLowerCase()==='w')act('fast');if(e.key==='ArrowDown'||e.key.toLowerCase()==='s')act('slow');if(e.code==='Space')act('jump');if(e.key==='Escape')togglePause()},{passive:false});document.querySelectorAll('[data-act]').forEach(b=>{const a=b.dataset.act;b.addEventListener('pointerdown',e=>{e.preventDefault();act(a)})});
+function togglePause(){if(!running)return;paused=!paused;$('pauseBtn').textContent=paused?'▶ Tiếp tục':'Ⅱ Tạm dừng';$('toast').textContent=paused?'Đang nghỉ một chút.':'Tiếp tục tận hưởng hành trình.'} $('pauseBtn').onclick=togglePause;$('soundBtn').onclick=()=>{muted=!muted;$('soundBtn').textContent=muted?'♫ Âm thanh: tắt':'♫ Âm thanh: bật';if(!muted)audioStart()};$('resetBtn').onclick=reset;$('startBtn').onclick=()=>{audioStart();$('intro').classList.add('hidden');running=true;clockLast=performance.now();tone(660,.18,.025)};
+function reset(){distance=0;elapsed=0;speed=8;lane=0;jumpY=0;jumpV=0;runner.position.set(-1.67,0,2);paused=false;$('pauseBtn').textContent='Ⅱ Tạm dừng';$('toast').textContent='Một con phố yên bình đang chờ bạn.';city.forEach(g=>{g.position.z=-Math.random()*185});props.forEach(g=>{g.position.z=-Math.random()*180});dashes.forEach(d=>{d.position.z=18-Math.random()*190});}
+function updateClock(){const d=new Date();$('clock').textContent=d.toLocaleTimeString('vi-VN',{hour12:false})}setInterval(updateClock,1000);updateClock();
+function animate(now){requestAnimationFrame(animate);const dt=Math.min((now-clockLast)/1000,.04);clockLast=now;if(running&&!paused){elapsed+=dt;distance+=speed*dt/3.6;const targetX=lane*1.67;runner.position.x+=(targetX-runner.position.x)*Math.min(1,dt*5.5);if(jumpY>0||jumpV>0){jumpY+=jumpV*dt;jumpV-=12*dt;if(jumpY<0){jumpY=0;jumpV=0}}runner.position.y=jumpY;const phase=elapsed*speed*.95;limbs.forEach(l=>{l.obj.rotation.x=Math.sin(phase+l.phase)*(l.kind==='leg'?.62:.48)});torso.rotation.z=Math.sin(phase)*.025;head.rotation.y=Math.sin(elapsed*.7)*.07;
+const travel=speed*dt;dashes.forEach(d=>{d.position.z+=travel;if(d.position.z>13)d.position.z-=196});city.forEach(g=>{g.position.z+=travel;if(g.position.z>20){g.position.z=-175-Math.random()*22;g.position.x=g.userData.side*(8.9+Math.random()*2)}});props.forEach(g=>{g.position.z+=travel;if(g.position.z>18)g.position.z=-175-Math.random()*25});camera.position.x+=(runner.position.x*.25-camera.position.x)*dt*1.4;camera.position.y=4.5+Math.sin(elapsed*1.6)*.035;camera.lookAt(runner.position.x*.18,1.25,-4);stepTimer+=dt;if(stepTimer>Math.max(.23,.48-speed*.018)){stepTimer=0;tone(95+Math.random()*25,.055,.009,'triangle')}if(Math.floor(elapsed)%23===0&&elapsed>0&&Math.floor(elapsed)!==Math.floor(elapsed-dt))$('toast').textContent=['Hít vào thật sâu, thở ra thật chậm.','Ánh nắng đang len qua những tán cây.','Cứ đi theo nhịp riêng của bạn.'][Math.floor(elapsed/23)%3];}
+$('distance').textContent=Math.floor(distance*1000).toLocaleString('vi-VN');$('pace').textContent=speed.toFixed(1);renderer.render(scene,camera)}requestAnimationFrame(animate);
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setPixelRatio(Math.min(devicePixelRatio,1.8));renderer.setSize(innerWidth,innerHeight)});
+// Gentle ambient bird-like notes, generated only after user interaction.
+setInterval(()=>{if(running&&!paused&&!muted&&audioCtx&&Math.random()>.45){tone(1100+Math.random()*650,.18,.006)}} ,3200);
+</script>
+</body></html>
