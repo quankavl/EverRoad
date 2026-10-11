@@ -1,81 +1,79 @@
 <!doctype html>
 <html lang="vi">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Driftline — Đường Trượt Thư Giãn</title>
-<style>
-:root{--glass:rgba(9,19,30,.58);--line:rgba(255,255,255,.18);--mint:#9fffe0;--white:#f4fbff}
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#91c9d8;color:var(--white);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;touch-action:none}
-canvas{display:block}#ui{position:fixed;inset:0;pointer-events:none}.top{position:absolute;top:18px;left:18px;right:18px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
-.brand,.stats,.panel{background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(16px);box-shadow:0 12px 35px #102b3b25;border-radius:18px}.brand{padding:12px 16px}.brand b{font-size:18px;letter-spacing:2px}.brand small{display:block;color:#c7e8ed;font-size:10px;letter-spacing:2px;margin-top:3px}.stats{display:flex;gap:18px;padding:12px 16px}.stat span{display:block;font-size:10px;color:#b9d7df;letter-spacing:1px}.stat strong{font-size:18px;font-variant-numeric:tabular-nums}
-.center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(440px,calc(100vw - 32px));text-align:center;pointer-events:auto}.panel{padding:26px 24px;background:rgba(8,22,34,.76)}.eyebrow{font-size:11px;letter-spacing:3px;color:var(--mint);text-transform:uppercase}.center h1{font-size:clamp(34px,8vw,54px);line-height:.98;margin:12px 0 12px;letter-spacing:-2px}.center p{color:#d0e4ea;line-height:1.6;font-size:14px}.primary,.secondary{border:0;border-radius:999px;padding:13px 22px;font-weight:800;cursor:pointer;pointer-events:auto}.primary{background:var(--mint);color:#102b32;box-shadow:0 8px 30px #9fffe044}.secondary{background:#ffffff14;border:1px solid var(--line);color:white;margin-left:6px}.hidden{display:none!important}.hint{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);white-space:nowrap;color:white;background:var(--glass);border:1px solid var(--line);border-radius:999px;padding:9px 15px;font-size:12px}
-#pause{position:absolute;top:96px;right:18px;pointer-events:auto;border:1px solid var(--line);border-radius:12px;background:var(--glass);color:white;padding:9px 12px;cursor:pointer}
-.mobile{position:absolute;bottom:25px;left:18px;right:18px;display:flex;justify-content:space-between;align-items:flex-end;pointer-events:auto}.pad{display:grid;grid-template-columns:58px 58px;gap:8px}.act{width:58px;height:58px;border:1px solid #ffffff55;background:#0b233b88;color:white;border-radius:18px;font-size:22px;backdrop-filter:blur(8px);touch-action:none}.act:active{background:#9fffe088;color:#102b32}.jump{width:72px;height:72px;border-radius:50%;font-size:13px;font-weight:800;color:#10323a;background:#a4ffe0dd}.subtle{color:#aac8d3;font-size:11px}
-@media(min-width:800px){.mobile{opacity:.78}.hint{bottom:18px}.center h1{font-size:54px}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#062b46">
+  <title>Azure Drift: Đại Dương Bình Yên</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div id="ui">
- <div class="top">
-  <div class="brand"><b>DRIFTLINE</b><small>ĐƯỜNG TRƯỢT THƯ GIÃN</small></div>
-  <div class="stats"><div class="stat"><span>QUÃNG ĐƯỜNG</span><strong id="distance">0 m</strong></div><div class="stat"><span>ĐIỂM SÁNG</span><strong id="coins">0</strong></div><div class="stat"><span>TỐC ĐỘ</span><strong id="speed">0 km/h</strong></div></div>
- </div>
- <button id="pause" class="hidden">Ⅱ Tạm dừng</button>
- <div class="center" id="welcome"><div class="panel"><div class="eyebrow">Một nhịp trượt, một hơi thở</div><h1>Thả lỏng.<br>Và lướt đi.</h1><p>Trôi qua con đường ven biển bất tận, né chướng ngại, gom những đốm sáng và tận hưởng khoảnh khắc.</p><button class="primary" id="start">BẮT ĐẦU TRƯỢT ↗</button><p class="subtle">Miễn phí • Chơi ngay trên trình duyệt • Không cần tài khoản</p></div></div>
- <div class="center hidden" id="over"><div class="panel"><div class="eyebrow">Chuyến trượt khép lại</div><h1>Hít thở.<br>Thử lại nhé.</h1><p id="result">Bạn đã đi được 0 m.</p><button class="primary" id="again">TRƯỢT LẦN NỮA ↗</button><button class="secondary" id="home">Về màn hình đầu</button></div></div>
- <div class="center hidden" id="paused"><div class="panel"><div class="eyebrow">Tạm dừng một chút</div><h1>Chậm lại.</h1><p>Phong cảnh vẫn ở đây, chờ bạn quay lại.</p><button class="primary" id="resume">TIẾP TỤC</button><button class="secondary" id="restart">Chơi lại</button></div></div>
- <div class="hint" id="hint">← → đổi làn · ↑ nhảy · ↓ cúi người</div>
- <div class="mobile"><div class="pad"><button class="act" data-action="left">←</button><button class="act" data-action="right">→</button><button class="act" data-action="down">↓</button><button class="act" data-action="jump">↑</button></div><button class="act jump" data-action="jump">NHẢY</button></div>
-</div>
-<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}</script>
-<script type="module">
-import * as THREE from 'three';
-const $=s=>document.querySelector(s);
-const scene=new THREE.Scene();scene.background=new THREE.Color(0x9ed5e4);scene.fog=new THREE.Fog(0x9ed5e4,38,155);
-const camera=new THREE.PerspectiveCamera(58,innerWidth/innerHeight,.1,260);camera.position.set(0,5.2,10.8);
-const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.8));renderer.setSize(innerWidth,innerHeight);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;document.body.appendChild(renderer.domElement);
-scene.add(new THREE.HemisphereLight(0xdaf7ff,0x52606a,2.0));const sun=new THREE.DirectionalLight(0xfff1d2,3.1);sun.position.set(-7,13,5);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);sun.shadow.camera.left=-18;sun.shadow.camera.right=18;sun.shadow.camera.top=25;sun.shadow.camera.bottom=-25;scene.add(sun);
-const mat=(color,roughness=.8,metalness=0)=>new THREE.MeshStandardMaterial({color,roughness,metalness});
-const asphalt=mat(0x454f58),edge=mat(0xe9e4d4),sand=mat(0xd7c49e),grass=mat(0x6e9b83),white=mat(0xf5f2e8),dark=mat(0x25313c),boardMat=mat(0xff805e,.42),wheelMat=mat(0x202b34,.45),shirtMat=mat(0x1e7777),skin=mat(0xc78f69),pants=mat(0x26394a),gold=mat(0xffd875,.25,.35);
-const box=(w,h,d,m)=>new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);
-const road=box(10,.22,190,asphalt);road.position.set(0,-.12,-72);road.receiveShadow=true;scene.add(road);
-for(let x of [-5.1,5.1]){let e=box(.16,.23,190,edge);e.position.set(x,-.08,-72);scene.add(e)}
-for(let x of [-1.67,1.67])for(let z=7;z>-170;z-=8){let dash=box(.045,.012,3.5,mat(0xc8d4d4));dash.position.set(x,.002,z);scene.add(dash)}
-const sea= new THREE.Mesh(new THREE.PlaneGeometry(450,260),mat(0x4cabbc,.35));sea.rotation.x=-Math.PI/2;sea.position.set(-130,-.4,-75);scene.add(sea);
-const land=box(130,.18,210,sand);land.position.set(65,-.24,-72);scene.add(land);
-const board=new THREE.Group();scene.add(board);
-const deck= new THREE.Mesh(new THREE.BoxGeometry(.72,.12,1.72,4,1,8),boardMat);deck.position.y=.68;deck.castShadow=true;board.add(deck);
-for(let z of [-.52,.52]){let truck=box(.48,.07,.12,dark);truck.position.set(0,.59,z);board.add(truck);for(let x of [-.34,.34]){let wheel=new THREE.Mesh(new THREE.CylinderGeometry(.105,.105,.09,16),wheelMat);wheel.rotation.z=Math.PI/2;wheel.position.set(x,.51,z);wheel.castShadow=true;board.add(wheel)}}
-const torso=new THREE.Mesh(new THREE.CapsuleGeometry(.27,.62,5,10),shirtMat);torso.position.y=1.62;torso.castShadow=true;board.add(torso);
-const head=new THREE.Mesh(new THREE.SphereGeometry(.22,18,14),skin);head.position.set(0,2.15,-.02);head.castShadow=true;board.add(head);
-const hair=new THREE.Mesh(new THREE.SphereGeometry(.225,16,10,0,Math.PI*2,0,Math.PI*.55),dark);hair.position.set(0,2.22,-.025);board.add(hair);
-const limb=(a,b,r,m)=>{let mesh=new THREE.Mesh(new THREE.CylinderGeometry(r*.78,r,b,10),m);mesh.position.y=a;mesh.castShadow=true;return mesh};
-for(let x of [-.17,.17]){let leg=limb(.92,.58,.105,pants);leg.position.x=x;leg.rotation.z=x<0?-.08:.08;board.add(leg);let shoe=box(.22,.12,.38,dark);shoe.position.set(x,.78,.16);board.add(shoe)}
-for(let x of [-.34,.34]){let arm=limb(1.68,.55,.075,shirtMat);arm.position.set(x,1.53,-.02);arm.rotation.z=x<0?-.38:.38;board.add(arm)}
-board.position.set(0,0,2.5);
-const objects=[];const lanes=[-3.25,0,3.25];let running=false,paused=false,ended=false,lane=1,jumpY=0,jumpV=0,crouch=0,dist=0,score=0,speed=17,elapsed=0,spawn=0;
-function tree(x,z,scale=1){let g=new THREE.Group();let trunk=new THREE.Mesh(new THREE.CylinderGeometry(.13*scale,.2*scale,1.8*scale,7),mat(0x755844));trunk.position.y=.9*scale;g.add(trunk);for(let i=0;i<3;i++){let crown=new THREE.Mesh(new THREE.ConeGeometry((1.05-i*.18)*scale,1.65*scale,8),mat(i===1?0x477e6a:0x588d75));crown.position.y=(1.8+i*.58)*scale;g.add(crown)}g.position.set(x,0,z);g.traverse(o=>{if(o.isMesh)o.castShadow=true});scene.add(g);return g}
-function lamp(x,z){let g=new THREE.Group();let pole=new THREE.Mesh(new THREE.CylinderGeometry(.045,.07,3.4,8),mat(0x48545b,.5,.45));pole.position.y=1.7;g.add(pole);let arm=box(.75,.06,.06,mat(0x48545b));arm.position.set(x<0?.28:-.28,3.3,0);g.add(arm);let glow=new THREE.Mesh(new THREE.SphereGeometry(.16,12,8),mat(0xffedbd,.2));glow.position.set(x<0?.58:-.58,3.24,0);g.add(glow);g.position.set(x,0,z);scene.add(g);return g}
-const scenery=[];for(let i=0;i<38;i++){let z=-i*5.3-5;scenery.push(tree(-8.5,z,.75+Math.random()*.5),tree(8.5,z,.75+Math.random()*.5));if(i%3===0){scenery.push(lamp(-5.9,z),lamp(5.9,z-2))}}
-function makeObstacle(type,l,z){let g=new THREE.Group();if(type==='cone'){let c=new THREE.Mesh(new THREE.ConeGeometry(.43,1.1,12),mat(0xff8c57));c.position.y=.55;g.add(c);let base=box(.78,.12,.55,mat(0xf5e6d2));base.position.y=.07;g.add(base)}else if(type==='barrier'){let b=box(1.45,.78,.48,mat(0xe6a45e));b.position.y=.39;g.add(b);for(let x of [-.42,.42]){let stripe=box(.22,.8,.5,white);stripe.position.set(x,.39,0);stripe.rotation.z=-.18;g.add(stripe)}}else{let rail=box(1.25,.42,.48,mat(0x66757b,.45,.45));rail.position.y=.21;g.add(rail);for(let x of [-.48,.48]){let foot=box(.12,.22,.55,dark);foot.position.set(x,.08,0);g.add(foot)}}g.position.set(lanes[l],0,z);g.traverse(o=>{if(o.isMesh)o.castShadow=true});scene.add(g);objects.push({mesh:g,type,lane:l,z,hit:false});}
-function makeCoin(l,z){let g=new THREE.Group();let c=new THREE.Mesh(new THREE.TorusGeometry(.32,.09,10,24),gold);c.position.y=1.25;c.rotation.y=.35;g.add(c);let center=new THREE.Mesh(new THREE.SphereGeometry(.12,12,8),mat(0xfff1a8,.2,.25));center.position.y=1.25;g.add(center);g.position.set(lanes[l],0,z);scene.add(g);objects.push({mesh:g,type:'coin',lane:l,z,hit:false})}
-function reset(){objects.splice(0).forEach(o=>scene.remove(o.mesh));lane=1;jumpY=0;jumpV=0;crouch=0;dist=0;score=0;speed=17;elapsed=0;spawn=.5;board.position.set(0,0,2.5);board.rotation.set(0,0,0);running=true;paused=false;ended=false;$('#welcome').classList.add('hidden');$('#over').classList.add('hidden');$('#paused').classList.add('hidden');$('#pause').classList.remove('hidden');$('#hint').classList.remove('hidden');}
-function end(){running=false;ended=true;$('#pause').classList.add('hidden');$('#over').classList.remove('hidden');$('#result').textContent=`Bạn đã lướt ${Math.floor(dist)} m và thu thập ${score} đốm sáng. Hẹn gặp lại trên đường trượt!`}
-function act(a){if(!running||paused)return;if(a==='left')lane=Math.max(0,lane-1);if(a==='right')lane=Math.min(2,lane+1);if(a==='jump'&&jumpY<.03)jumpV=8.2;if(a==='down')crouch=.55}
-document.querySelectorAll('[data-action]').forEach(b=>{b.addEventListener('pointerdown',e=>{e.preventDefault();act(b.dataset.action)})});
-addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' ','a','d','w','s'].includes(e.key))e.preventDefault();if(e.repeat)return;({ArrowLeft:()=>act('left'),a:()=>act('left'),ArrowRight:()=>act('right'),d:()=>act('right'),ArrowUp:()=>act('jump'),w:()=>act('jump'),' ':()=>act('jump'),ArrowDown:()=>act('down'),s:()=>act('down'),Escape:()=>togglePause()})[e.key]?.()});
-let touchX=null;addEventListener('touchstart',e=>{if(e.target.closest('button'))return;touchX=e.changedTouches[0].clientX},{passive:true});addEventListener('touchend',e=>{if(touchX===null)return;let dx=e.changedTouches[0].clientX-touchX;if(Math.abs(dx)>35)act(dx<0?'left':'right');touchX=null},{passive:true});
-function togglePause(){if(!running&&!paused)return;paused=!paused;if(paused){running=false;$('#paused').classList.remove('hidden')}else{running=true;$('#paused').classList.add('hidden')}}
-$('#start').onclick=reset;$('#again').onclick=reset;$('#home').onclick=()=>{ended=false;$('#over').classList.add('hidden');$('#welcome').classList.remove('hidden');$('#hint').classList.remove('hidden')};$('#pause').onclick=togglePause;$('#resume').onclick=togglePause;$('#restart').onclick=reset;
-const clock=new THREE.Clock();
-function tick(){requestAnimationFrame(tick);let dt=Math.min(clock.getDelta(),.04);if(running){elapsed+=dt;dist+=speed*dt;speed=Math.min(28,17+dist*.006);spawn-=dt; if(spawn<=0){let l=Math.floor(Math.random()*3);makeObstacle(Math.random()<.55?'cone':Math.random()<.5?'barrier':'rail',l,-105);if(Math.random()<.9){let cl=Math.floor(Math.random()*3);makeCoin(cl,-94-Math.random()*12)}spawn=Math.max(.48,1.12-(speed-17)*.025)+Math.random()*.42}
-jumpV-=19*dt;jumpY=Math.max(0,jumpY+jumpV*dt);if(jumpY===0)jumpV=0;crouch=Math.max(0,crouch-dt*2.5);board.position.x=THREE.MathUtils.damp(board.position.x,lanes[lane],10,dt);board.position.y=jumpY;board.rotation.z=THREE.MathUtils.damp(board.rotation.z,(lanes[lane]-board.position.x)*-.05,8,dt);torso.scale.y=1-crouch*.42;head.position.y=2.15-crouch*.25;
-for(let o of objects){o.z+=speed*dt;o.mesh.position.z=o.z;if(o.type==='coin'){o.mesh.rotation.y+=dt*1.6;o.mesh.position.y=Math.sin(elapsed*3+o.z)*.09}else if(o.z>-.5&&o.z<4.5&&!o.hit&&o.lane===lane){let safe=o.type==='rail'?crouch>.12:jumpY>(o.type==='barrier'?1.0:.72);if(!safe){o.hit=true;end();break}}if(o.type==='coin'&&!o.hit&&o.z>1&&o.z<4.4&&o.lane===lane){o.hit=true;score++;scene.remove(o.mesh)}}
-for(let i=objects.length-1;i>=0;i--)if(objects[i].z>12){scene.remove(objects[i].mesh);objects.splice(i,1)}
-for(let s of scenery){s.position.z+=speed*dt;if(s.position.z>12)s.position.z-=201.4}
-$('#distance').textContent=Math.floor(dist)+' m';$('#coins').textContent=score;$('#speed').textContent=Math.round(speed*1.8)+' km/h';}
-camera.position.x=THREE.MathUtils.damp(camera.position.x,board.position.x*.22,2.3,dt);camera.lookAt(board.position.x*.12,1.15,-7);
-renderer.render(scene,camera)}
-tick();addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,1.8))});
-</script>
-</body></html>
+  <canvas id="game"></canvas>
+  <div id="vignette"></div>
+
+  <header class="hud">
+    <div class="brand">
+      <div class="brand-mark">≈</div>
+      <div><strong>AZURE DRIFT</strong><small>ĐẠI DƯƠNG BÌNH YÊN</small></div>
+    </div>
+    <div class="stats">
+      <div><span>HÀNH TRÌNH</span><strong id="distance">0 m</strong></div>
+      <div><span>THỜI GIAN</span><strong id="timer">00:00</strong></div>
+      <div><span>TỐC ĐỘ</span><strong id="speed">12 km/h</strong></div>
+    </div>
+    <div class="top-actions">
+      <button id="soundBtn" class="icon-btn" aria-label="Bật tắt âm thanh" title="Âm thanh">♫</button>
+      <button id="pauseBtn" class="icon-btn" aria-label="Tạm dừng" title="Tạm dừng">Ⅱ</button>
+    </div>
+  </header>
+
+  <div class="crosshair" aria-hidden="true"><span></span><i></i></div>
+  <div class="hint" id="hint">Hít thở thật sâu. Đại dương đang chờ bạn.</div>
+
+  <section id="startScreen" class="overlay">
+    <div class="panel start-panel">
+      <div class="eyebrow">MỘT KHOẢNG LẶNG GIỮA BIỂN KHƠI</div>
+      <h1>Azure <em>Drift</em></h1>
+      <p class="subtitle">Đại Dương Bình Yên</p>
+      <p class="intro">Lướt nhẹ trên mặt biển, lắng nghe tiếng sóng và để hành trình đưa bạn đi xa hơn đường chân trời.</p>
+      <button id="startBtn" class="primary-btn">BẮT ĐẦU HÀNH TRÌNH <span>→</span></button>
+      <div class="microcopy">KHÔNG ĐÍCH ĐẾN · KHÔNG ÁP LỰC · CHỈ CÓ BIỂN XANH</div>
+    </div>
+  </section>
+
+  <section id="pauseScreen" class="overlay hidden">
+    <div class="panel">
+      <div class="eyebrow">TẠM DỪNG MỘT CHÚT</div>
+      <h2>Thả lỏng nhé.</h2>
+      <p>Biển vẫn ở đây khi bạn sẵn sàng quay lại.</p>
+      <button id="resumeBtn" class="primary-btn">TIẾP TỤC LƯỚT <span>→</span></button>
+      <button id="restartBtn" class="quiet-btn">BẮT ĐẦU LẠI</button>
+    </div>
+  </section>
+
+  <section id="endlessTip" class="bottom-tip">
+    <span class="tip-dot"></span><span id="tipText">W A S D / phím mũi tên để điều khiển</span>
+  </section>
+
+  <div class="desktop-controls">
+    <span><kbd>W</kbd><kbd>↑</kbd> Tăng tốc</span>
+    <span><kbd>S</kbd><kbd>↓</kbd> Giảm tốc</span>
+    <span><kbd>A</kbd><kbd>D</kbd> Rẽ trái / phải</span>
+    <span><kbd>SPACE</kbd> Tạm dừng</span>
+  </div>
+
+  <div id="mobileControls" class="mobile-controls">
+    <div class="touch-stick" id="stickArea" aria-label="Cần điều khiển">
+      <div class="stick-ring"></div><div class="stick-knob" id="stickKnob"></div>
+      <span class="stick-label">LÁI</span>
+    </div>
+    <div class="touch-pedals">
+      <button id="brakeTouch" class="pedal">−<small>CHẬM</small></button>
+      <button id="boostTouch" class="pedal boost">＋<small>NHANH</small></button>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+  <script type="module" src="main.js"></script>
+</body>
+</html>
