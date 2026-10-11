@@ -1,129 +1,82 @@
 <!doctype html>
 <html lang="vi">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#17251d">
-<title>Timber Haven — Khu Vườn Gỗ</title>
-<style>
-:root{--glass:rgba(17,28,22,.78);--line:rgba(255,255,255,.16);--cream:#f5ead4;--gold:#e7bd73}
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#17251d;color:var(--cream);font-family:system-ui,-apple-system,Segoe UI,sans-serif;touch-action:none}
-#scene{position:fixed;inset:0}canvas{display:block;width:100%;height:100%}
-.panel{position:fixed;background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(14px);border-radius:18px;box-shadow:0 12px 36px #0003}
-header{top:14px;left:14px;right:14px;display:flex;align-items:center;justify-content:space-between;padding:12px 15px;gap:12px}
-.brand{font-weight:850;letter-spacing:.06em;font-size:clamp(15px,2vw,22px)}.brand span{color:var(--gold)}
-.sub{font-size:11px;opacity:.72;letter-spacing:.12em;text-transform:uppercase}
-.stats{display:flex;gap:8px}.stat{min-width:74px;text-align:center;padding:5px 10px;border-left:1px solid var(--line)}.stat b{display:block;font-size:18px;color:var(--gold)}.stat small{font-size:10px;opacity:.72}
-#help{left:14px;bottom:104px;max-width:255px;padding:12px 14px;font-size:12px;line-height:1.5}
-#help strong{display:block;font-size:13px;margin-bottom:3px}
-#controls{position:fixed;left:14px;right:14px;bottom:14px;display:flex;justify-content:center;gap:9px;flex-wrap:wrap}
-button{border:1px solid var(--line);border-radius:14px;padding:12px 16px;background:var(--glass);color:var(--cream);font:inherit;font-weight:700;cursor:pointer;backdrop-filter:blur(12px);min-height:46px}
-button.primary{background:linear-gradient(135deg,#e9c887,#b97b3e);color:#231b12;border:0;box-shadow:0 8px 24px #0003}
-button:active{transform:translateY(1px)}button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
-#toast{position:fixed;top:92px;left:50%;transform:translateX(-50%);background:#101b15dd;border:1px solid var(--line);padding:10px 15px;border-radius:999px;font-size:13px;opacity:0;transition:opacity .2s;pointer-events:none;white-space:nowrap}
-#toast.show{opacity:1}
-#footer{position:fixed;right:16px;bottom:82px;font-size:10px;opacity:.55;text-align:right}
-@media(max-width:600px){header{top:9px;left:9px;right:9px;padding:10px 11px;border-radius:15px}.sub{display:none}.stats{gap:0}.stat{min-width:52px;padding:4px 7px}.stat b{font-size:16px}.stat small{font-size:9px}#help{left:9px;bottom:111px;max-width:205px;font-size:11px;padding:10px 11px}#controls{left:8px;right:8px;bottom:8px;gap:6px}button{padding:11px 12px;min-height:44px;font-size:12px}#footer{bottom:65px;right:10px}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#101b19">
+  <meta name="description" content="Timber Haven — trò chơi mô phỏng cắm trại thư giãn 3D chạy trên trình duyệt.">
+  <title>Timber Haven — Khu cắm trại của tôi</title>
+  <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-<div id="scene" aria-label="Cảnh trò chơi 3D"></div>
-<header class="panel">
- <div><div class="brand">TIMBER <span>HAVEN</span></div><div class="sub">Khu vườn gỗ · Trải nghiệm 3D</div></div>
- <div class="stats"><div class="stat"><b id="pieces">0</b><small>MẢNH GỖ</small></div><div class="stat"><b id="score">0</b><small>ĐIỂM</small></div><div class="stat"><b id="best">0</b><small>KỶ LỤC</small></div></div>
-</header>
-<div id="help" class="panel"><strong>🌿 Cách chơi</strong>Kéo để xoay góc nhìn. Chạm hoặc nhấn vào khúc gỗ để tách thành những phần nhỏ hơn. Thư giãn và tích lũy điểm!</div>
-<div id="toast" role="status">Bắt đầu trải nghiệm</div>
-<div id="footer">Chạy trên trình duyệt · Không cần tài khoản</div>
-<div id="controls">
- <button id="split" class="primary">✦ TÁCH GỖ</button>
- <button id="new">↻ Khúc gỗ mới</button>
- <button id="sound">♫ Âm thanh: Bật</button>
- <button id="reset">⟲ Đặt lại</button>
- <button id="full">⛶ Toàn màn hình</button>
-</div>
-<script type="module">
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.166.1/build/three.module.js';
+  <div id="loading" class="loading"><div class="loader"></div><strong>Đang chuẩn bị khu cắm trại…</strong><span>Xin hãy chờ một chút</span></div>
+  <canvas id="game" aria-label="Thế giới cắm trại 3D"></canvas>
+  <div class="vignette"></div>
 
-const host=document.querySelector('#scene');
-const scene=new THREE.Scene();
-scene.background=new THREE.Color(0x9db5a0);
-scene.fog=new THREE.Fog(0x9db5a0,9,24);
-const camera=new THREE.PerspectiveCamera(38,innerWidth/innerHeight,.1,100);
-camera.position.set(0,4.8,9.7);camera.lookAt(0,1.1,0);
-const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
-renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight);
-renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
-renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;
-host.appendChild(renderer.domElement);
-scene.add(new THREE.HemisphereLight(0xe8f4ff,0x493727,2.1));
-const sun=new THREE.DirectionalLight(0xffe0ad,3.2);sun.position.set(-4,8,5);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);scene.add(sun);
-const fill=new THREE.DirectionalLight(0xb2d8ff,1.1);fill.position.set(4,4,-5);scene.add(fill);
+  <header class="topbar">
+    <div class="brand"><span class="brand-icon">✦</span><div><strong>TIMBER HAVEN</strong><small>KHU CẮM TRẠI CỦA TÔI</small></div></div>
+    <div class="top-actions">
+      <div class="weather-pill"><span id="weatherIcon">☀</span><span id="weatherText">Chiều ấm áp</span></div>
+      <button id="soundBtn" class="icon-btn" aria-label="Bật hoặc tắt âm thanh" title="Âm thanh">♫</button>
+      <button id="saveBtn" class="icon-btn" title="Lưu khu cắm trại">▣</button>
+      <button id="helpBtn" class="icon-btn" title="Hướng dẫn">?</button>
+    </div>
+  </header>
 
-const mat=(color,roughness=.85)=>new THREE.MeshStandardMaterial({color,roughness});
-const ground=new THREE.Mesh(new THREE.PlaneGeometry(80,80),mat(0x425b43));ground.rotation.x=-Math.PI/2;ground.position.y=-.03;ground.receiveShadow=true;scene.add(ground);
-// Subtle ground flecks made from simple, procedural geometry.
-for(let i=0;i<150;i++){const m=new THREE.Mesh(new THREE.CircleGeometry(.015+Math.random()*.025,5),mat([0x687753,0x334b36,0x7b7957][i%3]));m.rotation.x=-Math.PI/2;m.position.set((Math.random()-.5)*22,.002,(Math.random()-.5)*22);scene.add(m)}
-// stump
-const stumpMat=mat(0x59402b), barkMat=mat(0x3e3025), ringMat=mat(0xc49a60);
-const stump=new THREE.Mesh(new THREE.CylinderGeometry(.92,1.04,.85,32),stumpMat);stump.position.y=.4;stump.castShadow=true;stump.receiveShadow=true;scene.add(stump);
-const stumpTop=new THREE.Mesh(new THREE.CylinderGeometry(.925,.925,.055,40),mat(0xb98a52));stumpTop.position.y=.84;stumpTop.castShadow=true;scene.add(stumpTop);
-for(let r of [.22,.39,.58,.77]){const ring=new THREE.Mesh(new THREE.TorusGeometry(r,.009,5,64),ringMat);ring.rotation.x=Math.PI/2;ring.position.y=.872;scene.add(ring)}
-for(let i=0;i<16;i++){const stripe=new THREE.Mesh(new THREE.BoxGeometry(.018,.56,.025),barkMat);const a=i*Math.PI/8;stripe.position.set(Math.cos(a)*.96,.4,Math.sin(a)*.96);stripe.rotation.y=-a;scene.add(stripe)}
-// Background tree silhouettes
-for(let i=0;i<28;i++){const x=(Math.random()-.5)*22,z=-5-Math.random()*13,h=2.5+Math.random()*3;const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.12,.2,h*.35,7),mat(0x493b2d));trunk.position.set(x,h*.175,z);trunk.castShadow=true;scene.add(trunk);for(let j=0;j<3;j++){const crown=new THREE.Mesh(new THREE.ConeGeometry(.8+j*.12,h*.36,7),mat([0x294b35,0x35583b,0x456747][(i+j)%3]));crown.position.set(x,h*.35+j*h*.19,z);crown.castShadow=true;scene.add(crown)}}
+  <aside class="left-panel glass">
+    <div class="panel-title"><span>✧</span><div><strong>Góc thiên nhiên</strong><small>Không vội vàng, cứ thư giãn</small></div></div>
+    <div class="stat-row"><span>Không khí</span><strong id="airValue">Trong lành</strong></div>
+    <div class="stat-row"><span>Độ ấm lửa</span><strong id="heatValue">Ấm áp</strong></div>
+    <div class="stat-row"><span>Đồ trang trí</span><strong id="itemCount">3 món</strong></div>
+    <div class="soft-divider"></div>
+    <label class="slider-label" for="timeSlider"><span>Thời gian trong ngày</span><strong id="timeLabel">17:30</strong></label>
+    <input id="timeSlider" type="range" min="6" max="22" step="0.25" value="17.5">
+    <div class="range-labels"><span>06:00</span><span>22:00</span></div>
+    <button id="resetViewBtn" class="wide-btn subtle-btn">⌖  Đưa góc nhìn về trung tâm</button>
+  </aside>
 
-let logs=[],particles=[],score=0,pieceCount=0,muted=false,dragging=false,lastX=0,lastY=0,rotY=0,rotX=0.12;
-const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();
-const woodColors=[0xb77c43,0xc18a4c,0xa96e3b,0xd09a5d];
-function makeLog(radius=.68,length=1.2,pos=new THREE.Vector3(0,1.25,0),depth=0){
- const g=new THREE.Group();g.position.copy(pos);g.userData={radius,length,depth};
- const bark=mat(0x725039),end=mat(woodColors[Math.floor(Math.random()*woodColors.length)]),dark=mat(0x694326);
- const body=new THREE.Mesh(new THREE.CylinderGeometry(radius,radius,length,20,1,false),bark);body.rotation.x=Math.PI/2;body.castShadow=true;body.receiveShadow=true;g.add(body);
- // end grain discs and concentric rings
- for(const side of [-1,1]){const cap=new THREE.Mesh(new THREE.CircleGeometry(radius*.985,28),end);cap.position.z=side*length/2;cap.castShadow=true;g.add(cap);
-  for(let r=radius*.2;r<radius*.9;r+=radius*.19){const ring=new THREE.Mesh(new THREE.TorusGeometry(r,.009,4,36),dark);ring.position.z=side*(length/2+.002);g.add(ring)}
-  const knot=new THREE.Mesh(new THREE.CircleGeometry(radius*.07,12),dark);knot.position.set(radius*.22,-radius*.17,side*(length/2+.004));g.add(knot);
- }
- // bark grooves
- for(let i=0;i<9;i++){const a=i*Math.PI*2/9;const groove=new THREE.Mesh(new THREE.BoxGeometry(.018,length*.9,.02),dark);groove.position.set(Math.cos(a)*radius*.99,Math.sin(a)*radius*.99,0);groove.rotation.z=a;g.add(groove)}
- g.traverse(o=>{if(o.isMesh){o.userData.logRoot=g}});scene.add(g);logs.push(g);return g;
-}
-function clearLogs(){for(const l of logs)scene.remove(l);logs=[]}
-function newLog(){clearLogs();makeLog(.62+Math.random()*.16,1.2+Math.random()*.35,new THREE.Vector3(0,1.45,0),0);toast('Một khúc gỗ mới đã sẵn sàng')}
-function splitLog(log){
- if(!log||!scene.children.includes(log))return;
- const {radius,length,depth}=log.userData;
- const idx=logs.indexOf(log);if(idx>=0)logs.splice(idx,1);scene.remove(log);
- score+=10+Math.max(0,4-depth)*2;pieceCount+=2;
- document.querySelector('#score').textContent=score;document.querySelector('#pieces').textContent=pieceCount;
- const best=Math.max(Number(localStorage.getItem('timberHavenBest')||0),score);localStorage.setItem('timberHavenBest',best);document.querySelector('#best').textContent=best;
- burst(log.position);
- if(radius<.19||depth>=4){toast('Tách hoàn tất! ✨');playTone(520,.08);if(logs.length===0)setTimeout(newLog,650);return}
- const nr=radius*.73,nl=length*.74;
- for(let i=0;i<2;i++){const offset=(i===0?-1:1)*(radius*.48);const child=makeLog(nr,nl,new THREE.Vector3(log.position.x+offset,log.position.y+.08,log.position.z+(i===0?.15:-.15)),depth+1);child.rotation.y=(Math.random()-.5)*.4;child.userData.vx=(i===0?-1:1)*(.7+Math.random());child.userData.vy=1.4+Math.random()*1.2;child.userData.vz=(Math.random()-.5)*1.2;}
- playTone(180+Math.random()*80,.12);
-}
-function burst(p){for(let i=0;i<14;i++){const mesh=new THREE.Mesh(new THREE.BoxGeometry(.025,.025,.08),mat([0xd6a16a,0x8d5a31,0xecd1a0][i%3]));mesh.position.copy(p);mesh.position.y+=.3+Math.random()*.4;mesh.userData={life:1,v:new THREE.Vector3((Math.random()-.5)*2,Math.random()*2,(Math.random()-.5)*2)};scene.add(mesh);particles.push(mesh)}}
-function playTone(freq,dur){if(muted)return;try{const ac=new (window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),gain=ac.createGain();o.type='triangle';o.frequency.value=freq;gain.gain.setValueAtTime(.055,ac.currentTime);gain.gain.exponentialRampToValueAtTime(.001,ac.currentTime+dur);o.connect(gain);gain.connect(ac.destination);o.start();o.stop(ac.currentTime+dur);o.onended=()=>ac.close()}catch(e){}}
-let toastTimer;function toast(s){const t=document.querySelector('#toast');t.textContent=s;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),1600)}
-function pick(ev){const r=renderer.domElement.getBoundingClientRect();pointer.x=((ev.clientX-r.left)/r.width)*2-1;pointer.y=-((ev.clientY-r.top)/r.height)*2+1;raycaster.setFromCamera(pointer,camera);const hits=raycaster.intersectObjects(logs,true);if(hits.length){let root=hits[0].object;while(root&&!root.userData.radius)root=root.parent;if(root)splitLog(root)}}
-renderer.domElement.addEventListener('pointerdown',e=>{dragging=true;lastX=e.clientX;lastY=e.clientY;renderer.domElement.setPointerCapture?.(e.pointerId)});
-renderer.domElement.addEventListener('pointermove',e=>{if(!dragging)return;const dx=e.clientX-lastX,dy=e.clientY-lastY;rotY+=dx*.008;rotX=Math.max(-.2,Math.min(.65,rotX+dy*.004));lastX=e.clientX;lastY=e.clientY});
-renderer.domElement.addEventListener('pointerup',e=>{if(dragging){const dx=e.clientX-lastX,dy=e.clientY-lastY;dragging=false;if(Math.abs(dx)+Math.abs(dy)<8)pick(e)}});
-document.querySelector('#split').onclick=()=>{if(logs.length)splitLog(logs[0]);else newLog()};
-document.querySelector('#new').onclick=newLog;
-document.querySelector('#sound').onclick=()=>{muted=!muted;document.querySelector('#sound').textContent='♫ Âm thanh: '+(muted?'Tắt':'Bật');if(!muted)playTone(440,.08)};
-document.querySelector('#reset').onclick=()=>{score=0;pieceCount=0;document.querySelector('#score').textContent='0';document.querySelector('#pieces').textContent='0';newLog();toast('Đã đặt lại phiên chơi')};
-document.querySelector('#full').onclick=()=>{if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.()};
-document.querySelector('#best').textContent=localStorage.getItem('timberHavenBest')||'0';
-newLog();
-const clock=new THREE.Clock();
-function animate(){requestAnimationFrame(animate);const dt=Math.min(clock.getDelta(),.04);camera.position.x=Math.sin(rotY)*9.7;camera.position.z=Math.cos(rotY)*9.7;camera.position.y=4.8+rotX*2;camera.lookAt(0,1.1,0);
- for(const l of logs){if(l.userData.vy!==undefined){l.position.x+=l.userData.vx*dt;l.position.y+=l.userData.vy*dt;l.position.z+=l.userData.vz*dt;l.userData.vy-=4*dt;l.rotation.z+=l.userData.vx*dt*.25;if(l.position.y<.55){l.position.y=.55;l.userData.vy*=-.22;l.userData.vx*=.72;if(Math.abs(l.userData.vy)<.3){delete l.userData.vy;delete l.userData.vx;delete l.userData.vz}}}}
- for(let i=particles.length-1;i>=0;i--){const p=particles[i];p.userData.life-=dt;p.position.addScaledVector(p.userData.v,dt);p.userData.v.y-=3*dt;p.rotation.x+=dt*4;if(p.userData.life<=0){scene.remove(p);particles.splice(i,1)}}
- renderer.render(scene,camera)}
-animate();
-addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight)});
-</script>
-</body></html>
+  <div class="objective glass"><span class="sparkle">✦</span><div><strong id="objectiveTitle">Một buổi chiều bình yên</strong><small id="objectiveText">Hãy nhóm lửa và tạo nên góc nghỉ ngơi của riêng bạn.</small></div></div>
+
+  <div class="build-panel glass">
+    <div class="build-head"><div><strong>Xây dựng khu trại</strong><small>Chọn vật dụng rồi chạm vào mặt đất</small></div><button id="closeBuild" class="close-btn" aria-label="Đóng bảng">×</button></div>
+    <div class="build-grid">
+      <button class="build-item selected" data-item="fire"><span class="item-emoji">🔥</span><span>Lửa trại</span><small>Trung tâm ấm áp</small></button>
+      <button class="build-item" data-item="tent"><span class="item-emoji">⛺</span><span>Lều cắm trại</span><small>Nơi nghỉ ngơi</small></button>
+      <button class="build-item" data-item="chair"><span class="item-emoji">🪑</span><span>Ghế gỗ</span><small>Ngồi ngắm lửa</small></button>
+      <button class="build-item" data-item="lantern"><span class="item-emoji">🏮</span><span>Đèn lồng</span><small>Ánh sáng dịu</small></button>
+      <button class="build-item" data-item="logs"><span class="item-emoji">🪵</span><span>Đống củi</span><small>Sẵn sàng nhóm lửa</small></button>
+      <button class="build-item" data-item="table"><span class="item-emoji">🪵</span><span>Bàn gỗ</span><small>Góc sinh hoạt</small></button>
+      <button class="build-item" data-item="flowers"><span class="item-emoji">🌼</span><span>Bụi hoa</span><small>Thêm sắc màu</small></button>
+      <button class="build-item" data-item="stone"><span class="item-emoji">🪨</span><span>Đá trang trí</span><small>Nét tự nhiên</small></button>
+    </div>
+    <div class="build-footer"><span id="selectedHint">Đang chọn: Lửa trại</span><button id="cancelBuild" class="text-btn">Hủy chọn</button></div>
+  </div>
+
+  <div class="bottom-hint"><span class="keycap">W A S D</span> Di chuyển <span class="dot">•</span> Kéo chuột để xoay nhìn <span class="dot">•</span> Cuộn để thu phóng</div>
+
+  <div id="mobileControls" class="mobile-controls">
+    <div id="joystick" class="joystick"><div id="stick" class="stick"></div></div>
+    <div class="mobile-buttons"><button id="mobileBuild" class="mobile-action">＋<small>Xây dựng</small></button><button id="mobileInteract" class="mobile-action">🔥<small>Nhóm lửa</small></button></div>
+  </div>
+
+  <div id="toast" class="toast" role="status"></div>
+
+  <div id="helpModal" class="modal-backdrop hidden">
+    <section class="modal glass">
+      <button id="closeHelp" class="close-btn modal-close" aria-label="Đóng">×</button>
+      <div class="modal-kicker">CHÀO MỪNG ĐẾN VỚI</div><h1>Timber Haven</h1>
+      <p class="modal-intro">Một góc rừng nhỏ dành riêng cho bạn. Hãy chậm lại, dựng trại, nhóm lửa và tận hưởng âm thanh thiên nhiên.</p>
+      <div class="help-grid">
+        <div><b>⌨ Máy tính</b><p><kbd>W A S D</kbd> di chuyển · Kéo chuột xoay góc nhìn · Cuộn để phóng to/thu nhỏ</p></div>
+        <div><b>☝ Điện thoại</b><p>Dùng cần điều khiển bên trái để di chuyển. Kéo trên màn hình để xoay góc nhìn.</p></div>
+        <div><b>⛺ Xây dựng</b><p>Chọn một món đồ trong bảng, sau đó chạm hoặc nhấp vào mặt đất để đặt. Chọn vật dụng rồi nhấn vào món đã đặt để nhặt bỏ.</p></div>
+        <div><b>🌗 Thời gian & âm thanh</b><p>Kéo thanh thời gian để ngắm rừng từ ban ngày đến đêm. Bật âm thanh để nghe tiếng lửa và thiên nhiên.</p></div>
+      </div>
+      <button id="startBtn" class="primary-btn">Bắt đầu thư giãn</button>
+      <p class="fine-print">Trải nghiệm mô phỏng độc lập · Tiến trình lưu trên thiết bị của bạn</p>
+    </section>
+  </div>
+
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
