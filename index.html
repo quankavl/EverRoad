@@ -3,123 +3,127 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#10251d">
-<title>Timberlight: Forest Quest</title>
+<meta name="theme-color" content="#17251d">
+<title>Timber Haven — Khu Vườn Gỗ</title>
 <style>
-:root{--glass:rgba(9,25,20,.76);--line:rgba(230,255,235,.18);--cream:#f3f0d7;--gold:#f5ca68;--mint:#a8e6bd}
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#12251d;color:var(--cream);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;touch-action:manipulation}
+:root{--glass:rgba(17,28,22,.78);--line:rgba(255,255,255,.16);--cream:#f5ead4;--gold:#e7bd73}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#17251d;color:var(--cream);font-family:system-ui,-apple-system,Segoe UI,sans-serif;touch-action:none}
 #scene{position:fixed;inset:0}canvas{display:block;width:100%;height:100%}
-.vignette{pointer-events:none;position:fixed;inset:0;background:linear-gradient(180deg,rgba(5,16,12,.42),transparent 27%,transparent 68%,rgba(5,16,12,.6))}
-.topbar{position:fixed;top:14px;left:14px;right:14px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;pointer-events:none}
-.brand,.stats,.bottompanel,.modal{background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(14px);box-shadow:0 10px 35px #06130d55}
-.brand{padding:10px 14px;border-radius:16px;max-width:62vw}.brand .title{font-size:clamp(15px,2.4vw,22px);font-weight:900;letter-spacing:.04em}.brand .sub{font-size:11px;color:#b8d6bf;letter-spacing:.14em;text-transform:uppercase;margin-top:2px}
-.stats{display:flex;gap:14px;padding:10px 14px;border-radius:16px}.stat label{display:block;color:#b8d6bf;font-size:10px;text-transform:uppercase;letter-spacing:.1em}.stat strong{font-size:clamp(16px,2vw,22px);font-variant-numeric:tabular-nums}
-#message{position:fixed;top:23%;left:50%;transform:translate(-50%,-50%);text-align:center;font-weight:900;font-size:clamp(24px,5vw,52px);text-shadow:0 4px 25px #07150e;pointer-events:none;opacity:0;transition:opacity .18s;color:#fff3c2}
-.bottompanel{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);width:min(620px,calc(100vw - 24px));border-radius:22px;padding:12px;display:flex;align-items:center;gap:12px}
-.hint{font-size:12px;color:#c4d9c7;line-height:1.4;flex:1}.hint b{color:#fff3d1}
-button{border:0;color:#14251b;background:linear-gradient(135deg,#ffe7a0,#e9b94f);font:800 14px system-ui;border-radius:14px;padding:13px 18px;cursor:pointer;box-shadow:0 4px 0 #9b6d29;touch-action:manipulation}
-button:active{transform:translateY(2px);box-shadow:0 2px 0 #9b6d29}button.secondary{background:#d8eadb;box-shadow:0 4px 0 #799981}
-#chop{min-width:145px;font-size:15px;padding:16px 20px}
-#toast{position:fixed;left:50%;bottom:105px;transform:translateX(-50%);background:#11251cdd;border:1px solid var(--line);padding:8px 14px;border-radius:99px;font-size:12px;opacity:0;transition:opacity .2s;pointer-events:none;white-space:nowrap}
-#overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:18px;background:linear-gradient(180deg,#0b1c16b8,#0b1c16d9);backdrop-filter:blur(7px)}
-.modal{width:min(510px,100%);border-radius:28px;padding:clamp(20px,5vw,34px);text-align:center}
-.eyebrow{color:var(--mint);font-size:11px;letter-spacing:.22em;font-weight:800;text-transform:uppercase}.modal h1{font-size:clamp(30px,7vw,48px);line-height:1;margin:12px 0;color:#fff0c1}.modal p{color:#d2e1d4;line-height:1.55;font-size:14px}.features{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:20px 0}.feature{border:1px solid var(--line);background:#ffffff08;padding:11px 7px;border-radius:14px;font-size:11px;color:#cce0d0}.feature strong{display:block;color:#ffe4a0;font-size:19px;margin-bottom:4px}.modal-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}.tiny{font-size:10px!important;color:#8fae98!important;margin-top:18px}
-#sound{position:fixed;right:14px;bottom:110px;background:#10251dd9;color:#eaf2dd;border:1px solid var(--line);box-shadow:none;border-radius:50%;width:44px;height:44px;padding:0;font-size:18px}
-#progress{position:fixed;top:0;left:0;width:100%;height:3px;background:#ffffff20}#progressFill{height:100%;width:100%;background:linear-gradient(90deg,#f4c95e,#a6e4ae);transform-origin:left}
-@media(max-width:560px){.topbar{top:9px;left:9px;right:9px}.brand{padding:9px 10px}.brand .sub{font-size:9px}.stats{gap:9px;padding:9px 10px}.stat label{font-size:8px}.bottompanel{bottom:10px;padding:9px;border-radius:18px}.hint{font-size:10px}#chop{min-width:116px;padding:15px 12px;font-size:13px}#sound{bottom:103px;right:10px}.features{gap:5px}.feature{font-size:10px;padding:9px 4px}}
+.panel{position:fixed;background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(14px);border-radius:18px;box-shadow:0 12px 36px #0003}
+header{top:14px;left:14px;right:14px;display:flex;align-items:center;justify-content:space-between;padding:12px 15px;gap:12px}
+.brand{font-weight:850;letter-spacing:.06em;font-size:clamp(15px,2vw,22px)}.brand span{color:var(--gold)}
+.sub{font-size:11px;opacity:.72;letter-spacing:.12em;text-transform:uppercase}
+.stats{display:flex;gap:8px}.stat{min-width:74px;text-align:center;padding:5px 10px;border-left:1px solid var(--line)}.stat b{display:block;font-size:18px;color:var(--gold)}.stat small{font-size:10px;opacity:.72}
+#help{left:14px;bottom:104px;max-width:255px;padding:12px 14px;font-size:12px;line-height:1.5}
+#help strong{display:block;font-size:13px;margin-bottom:3px}
+#controls{position:fixed;left:14px;right:14px;bottom:14px;display:flex;justify-content:center;gap:9px;flex-wrap:wrap}
+button{border:1px solid var(--line);border-radius:14px;padding:12px 16px;background:var(--glass);color:var(--cream);font:inherit;font-weight:700;cursor:pointer;backdrop-filter:blur(12px);min-height:46px}
+button.primary{background:linear-gradient(135deg,#e9c887,#b97b3e);color:#231b12;border:0;box-shadow:0 8px 24px #0003}
+button:active{transform:translateY(1px)}button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+#toast{position:fixed;top:92px;left:50%;transform:translateX(-50%);background:#101b15dd;border:1px solid var(--line);padding:10px 15px;border-radius:999px;font-size:13px;opacity:0;transition:opacity .2s;pointer-events:none;white-space:nowrap}
+#toast.show{opacity:1}
+#footer{position:fixed;right:16px;bottom:82px;font-size:10px;opacity:.55;text-align:right}
+@media(max-width:600px){header{top:9px;left:9px;right:9px;padding:10px 11px;border-radius:15px}.sub{display:none}.stats{gap:0}.stat{min-width:52px;padding:4px 7px}.stat b{font-size:16px}.stat small{font-size:9px}#help{left:9px;bottom:111px;max-width:205px;font-size:11px;padding:10px 11px}#controls{left:8px;right:8px;bottom:8px;gap:6px}button{padding:11px 12px;min-height:44px;font-size:12px}#footer{bottom:65px;right:10px}}
 </style>
 </head>
 <body>
-<div id="scene"></div><div class="vignette"></div><div id="progress"><div id="progressFill"></div></div>
-<div class="topbar">
-  <div class="brand"><div class="title">TIMBERLIGHT</div><div class="sub">Forest Quest · Phiêu lưu trong rừng</div></div>
-  <div class="stats">
-    <div class="stat"><label>Điểm</label><strong id="score">0000</strong></div>
-    <div class="stat"><label>Thời gian</label><strong id="time">45</strong></div>
-    <div class="stat"><label>Chuỗi</label><strong id="combo">×1</strong></div>
-  </div>
+<div id="scene" aria-label="Cảnh trò chơi 3D"></div>
+<header class="panel">
+ <div><div class="brand">TIMBER <span>HAVEN</span></div><div class="sub">Khu vườn gỗ · Trải nghiệm 3D</div></div>
+ <div class="stats"><div class="stat"><b id="pieces">0</b><small>MẢNH GỖ</small></div><div class="stat"><b id="score">0</b><small>ĐIỂM</small></div><div class="stat"><b id="best">0</b><small>KỶ LỤC</small></div></div>
+</header>
+<div id="help" class="panel"><strong>🌿 Cách chơi</strong>Kéo để xoay góc nhìn. Chạm hoặc nhấn vào khúc gỗ để tách thành những phần nhỏ hơn. Thư giãn và tích lũy điểm!</div>
+<div id="toast" role="status">Bắt đầu trải nghiệm</div>
+<div id="footer">Chạy trên trình duyệt · Không cần tài khoản</div>
+<div id="controls">
+ <button id="split" class="primary">✦ TÁCH GỖ</button>
+ <button id="new">↻ Khúc gỗ mới</button>
+ <button id="sound">♫ Âm thanh: Bật</button>
+ <button id="reset">⟲ Đặt lại</button>
+ <button id="full">⛶ Toàn màn hình</button>
 </div>
-<div id="message">Tuyệt vời!</div><div id="toast"></div>
-<button id="sound" aria-label="Bật hoặc tắt âm thanh" title="Âm thanh">♫</button>
-<div class="bottompanel"><div class="hint"><b>Chặt gỗ — nhận điểm!</b><br>Máy tính: <b>Space</b> hoặc <b>Enter</b> · Điện thoại: chạm nút vàng</div><button id="chop">🪓 CHẶT GỖ</button></div>
-<div id="overlay">
-  <div class="modal">
-    <div class="eyebrow">Một chuyến đi giữa rừng xanh</div>
-    <h1>TIMBERLIGHT<br><span style="color:#9ee0ad">FOREST QUEST</span></h1>
-    <p>Thu thập gỗ, giữ nhịp thật chuẩn và tạo chuỗi điểm cao trước khi đồng hồ về không. Khu rừng thay đổi ánh sáng theo thời gian thực.</p>
-    <div class="features">
-      <div class="feature"><strong>🌲</strong>Rừng 3D tạo tự động</div>
-      <div class="feature"><strong>✨</strong>Hạt bụi & hiệu ứng</div>
-      <div class="feature"><strong>📱</strong>Điều khiển cảm ứng</div>
-    </div>
-    <div class="modal-actions"><button id="start">BẮT ĐẦU PHIÊU LƯU</button><button class="secondary" id="how">CÁCH CHƠI</button></div>
-    <p class="tiny">Tài nguyên hình học và âm thanh được tạo trong game. Không sử dụng mô hình/texture thương mại bên ngoài. Cần kết nối mạng để tải thư viện Three.js miễn phí.</p>
-  </div>
-</div>
-<script type="importmap">
-{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js"}}
-</script>
 <script type="module">
-import * as THREE from 'three';
-const root=document.querySelector('#scene');
-const scene=new THREE.Scene(); scene.background=new THREE.Color(0x9bc9c1); scene.fog=new THREE.Fog(0x9bc9c1,15,48);
-const camera=new THREE.PerspectiveCamera(48,innerWidth/innerHeight,.1,100);camera.position.set(0,4.4,11.8);camera.lookAt(0,1.2,0);
-const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false});renderer.setPixelRatio(Math.min(devicePixelRatio,1.8));renderer.setSize(innerWidth,innerHeight);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.12;root.appendChild(renderer.domElement);
-scene.add(new THREE.HemisphereLight(0xd8f4ff,0x40533a,2.0));
-const sun=new THREE.DirectionalLight(0xffe3ac,3.2);sun.position.set(-5,10,6);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);scene.add(sun);
-const mat=(color,rough=.85)=>new THREE.MeshStandardMaterial({color,roughness:rough});
-const groundMat=mat(0x405d3d), bark=mat(0x775038), barkLight=mat(0xa8794e), leaf1=mat(0x2f6c4c),leaf2=mat(0x43865a),leaf3=mat(0x78a967),stone=mat(0x718174);
-const ground=new THREE.Mesh(new THREE.PlaneGeometry(120,120),groundMat);ground.rotation.x=-Math.PI/2;ground.position.y=-.1;ground.receiveShadow=true;scene.add(ground);
-// Soft rolling forest floor
-for(let i=0;i<70;i++){let g=new THREE.Mesh(new THREE.SphereGeometry(THREE.MathUtils.randFloat(.4,1.5),8,6),mat(i%2?0x4c7045:0x59774b));g.scale.y=.18;g.position.set(THREE.MathUtils.randFloatSpread(60),-.13,THREE.MathUtils.randFloat(-35,4));scene.add(g)}
-function tree(x,z,s=1){const group=new THREE.Group();group.position.set(x,0,z);group.scale.setScalar(s);const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.18,.3,2.2,7),bark);trunk.position.y=1.05;trunk.castShadow=true;group.add(trunk);
- for(let i=0;i<3;i++){const c=new THREE.Mesh(new THREE.ConeGeometry(1.05-i*.17,1.7,8),[leaf1,leaf2,leaf3][i]);c.position.y=2.05+i*.62;c.castShadow=true;group.add(c)}
- scene.add(group);return group}
-for(let i=0;i<62;i++){let x=THREE.MathUtils.randFloatSpread(38),z=THREE.MathUtils.randFloat(-25,-2);if(Math.abs(x)<3&&z>-13)continue;tree(x,z,THREE.MathUtils.randFloat(.65,1.45))}
-for(let i=0;i<25;i++){let rock=new THREE.Mesh(new THREE.DodecahedronGeometry(THREE.MathUtils.randFloat(.12,.38),0),stone);rock.position.set(THREE.MathUtils.randFloatSpread(25),.02,THREE.MathUtils.randFloat(-22,5));rock.scale.y=.55;rock.castShadow=true;scene.add(rock)}
-// Main stump and cut log, made only from procedural geometry
-const stump=new THREE.Group();scene.add(stump);
-const stumpBase=new THREE.Mesh(new THREE.CylinderGeometry(.78,.88,.62,12),bark);stumpBase.position.set(0,.27,0);stumpBase.castShadow=true;stumpBase.receiveShadow=true;stump.add(stumpBase);
-const stumpTop=new THREE.Mesh(new THREE.CylinderGeometry(.77,.77,.08,12),mat(0xc89b65));stumpTop.position.set(0,.62,0);stumpTop.castShadow=true;stump.add(stumpTop);
-for(let r of [.22,.4,.57]){const ring=new THREE.Mesh(new THREE.TorusGeometry(r,.012,4,36),mat(0x8e603b));ring.rotation.x=Math.PI/2;ring.position.set(0,.67,0);stump.add(ring)}
-const logGroup=new THREE.Group();scene.add(logGroup);
-function makeLog(){while(logGroup.children.length)logGroup.remove(logGroup.children[0]);const body=new THREE.Mesh(new THREE.CylinderGeometry(.42,.42,2.35,12),barkLight);body.rotation.z=Math.PI/2;body.position.set(0,1.02,-.1);body.castShadow=true;body.receiveShadow=true;logGroup.add(body);
- for(let x of [-1.18,1.18]){let end=new THREE.Mesh(new THREE.CircleGeometry(.405,12),mat(0xd5ab75));end.rotation.y=x<0?-Math.PI/2:Math.PI/2;end.position.set(x,1.02,-.1);logGroup.add(end);for(let r of [.13,.25,.34]){let ring=new THREE.Mesh(new THREE.TorusGeometry(r,.012,4,24),mat(0x9b704b));ring.rotation.y=Math.PI/2;ring.position.set(x+(x<0?-.004:.004),1.02,-.1);logGroup.add(ring)}}
- logGroup.position.set(0,0,1.25);logGroup.rotation.z=0;}
-makeLog();
-// Small glowing firefly/pollen particles
-const particleCount=260;const pGeo=new THREE.BufferGeometry();const positions=new Float32Array(particleCount*3);for(let i=0;i<particleCount;i++){positions[i*3]=THREE.MathUtils.randFloatSpread(28);positions[i*3+1]=THREE.MathUtils.randFloat(.1,5);positions[i*3+2]=THREE.MathUtils.randFloat(-20,5)}pGeo.setAttribute('position',new THREE.BufferAttribute(positions,3));const particles=new THREE.Points(pGeo,new THREE.PointsMaterial({color:0xffedaa,size:.055,transparent:true,opacity:.8}));scene.add(particles);
-const scoreEl=document.querySelector('#score'),timeEl=document.querySelector('#time'),comboEl=document.querySelector('#combo'),overlay=document.querySelector('#overlay'),msg=document.querySelector('#message'),toast=document.querySelector('#toast'),fill=document.querySelector('#progressFill');
-let running=false,remaining=45,score=0,combo=0,lastTap=0,muted=false,audioCtx=null,clockStart=0,roundId=0,shake=0;
-function audio(freq=180,dur=.09,type='triangle',vol=.04){if(muted)return;try{audioCtx ||= new (window.AudioContext||window.webkitAudioContext)();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type=type;o.frequency.value=freq;g.gain.setValueAtTime(vol,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+dur);o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+dur)}catch(e){}}
-function toastText(t){toast.textContent=t;toast.style.opacity=1;clearTimeout(toast._t);toast._t=setTimeout(()=>toast.style.opacity=0,1300)}
-function showMessage(t){msg.textContent=t;msg.style.opacity=1;clearTimeout(msg._t);msg._t=setTimeout(()=>msg.style.opacity=0,620)}
-function updateHud(){scoreEl.textContent=String(score).padStart(4,'0');timeEl.textContent=Math.ceil(remaining);comboEl.textContent='×'+Math.max(1,combo);fill.style.transform=`scaleX(${Math.max(0,remaining/45)})`}
-function startGame(){roundId++;score=0;combo=0;remaining=45;running=true;clockStart=performance.now();overlay.style.display='none';updateHud();toastText('Sẵn sàng! Chặt đúng nhịp để tăng chuỗi.');audio(440,.12)}
-function endGame(){running=false;overlay.style.display='flex';overlay.querySelector('.eyebrow').textContent='Kết thúc lượt chơi';overlay.querySelector('h1').innerHTML='BẠN ĐÃ GHI<br><span style="color:#9ee0ad">'+score+' ĐIỂM</span>';overlay.querySelector('p').textContent='Chuỗi tốt nhất: ×'+Math.max(1,combo)+'. Hãy thử lại để vượt qua kỷ lục của chính bạn!';overlay.querySelector('.features').innerHTML='<div class="feature"><strong>🏆</strong>Tổng điểm<br>'+score+'</div><div class="feature"><strong>⚡</strong>Chuỗi cuối<br>×'+Math.max(1,combo)+'</div><div class="feature"><strong>🌿</strong>Rừng vẫn chờ<br>bạn quay lại</div>';document.querySelector('#start').textContent='CHƠI LẠI';document.querySelector('#how').textContent='CÁCH CHƠI';audio(120,.25,'sine',.03)}
-function chop(){if(!running){if(overlay.style.display!=='none')toastText('Nhấn “Bắt đầu phiêu lưu” trước nhé!');return}
- const now=performance.now();if(now-lastTap<100)return;lastTap=now;combo++;const gained=10+Math.min(combo,15)*2;score+=gained;shake=.16;logGroup.rotation.z=(Math.random()-.5)*.12;logGroup.position.y=.12;setTimeout(()=>{logGroup.position.y=0;logGroup.rotation.z=0},90);
- // quick burst of wood chips
- for(let i=0;i<9;i++){const chip=new THREE.Mesh(new THREE.TetrahedronGeometry(THREE.MathUtils.randFloat(.035,.09)),mat(i%2?0xe1bd81:0x9d6a3e));chip.position.set(THREE.MathUtils.randFloatSpread(1.3),THREE.MathUtils.randFloat(.6,1.7),1);scene.add(chip);const vel=new THREE.Vector3(THREE.MathUtils.randFloatSpread(3),THREE.MathUtils.randFloat(1,4),THREE.MathUtils.randFloatSpread(2));const born=performance.now();const tick=()=>{if(!chip.parent)return;const dt=(performance.now()-born)/1000;chip.position.addScaledVector(vel,.016);vel.y-=.12;chip.rotation.x+=.08;chip.rotation.z+=.06;if(dt>.6){scene.remove(chip);chip.geometry.dispose();return}requestAnimationFrame(tick)};requestAnimationFrame(tick)}
- audio(THREE.MathUtils.randFloat(130,190),.07,'triangle',.055);if(combo%5===0){score+=25;showMessage('COMBO ×'+combo+'  +25');audio(620,.14,'sine',.05)}else if(combo%3===0)showMessage('+'+gained);updateHud();
- logGroup.scale.setScalar(1+Math.sin(combo)*.015);
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.166.1/build/three.module.js';
+
+const host=document.querySelector('#scene');
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(0x9db5a0);
+scene.fog=new THREE.Fog(0x9db5a0,9,24);
+const camera=new THREE.PerspectiveCamera(38,innerWidth/innerHeight,.1,100);
+camera.position.set(0,4.8,9.7);camera.lookAt(0,1.1,0);
+const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight);
+renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;
+host.appendChild(renderer.domElement);
+scene.add(new THREE.HemisphereLight(0xe8f4ff,0x493727,2.1));
+const sun=new THREE.DirectionalLight(0xffe0ad,3.2);sun.position.set(-4,8,5);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);scene.add(sun);
+const fill=new THREE.DirectionalLight(0xb2d8ff,1.1);fill.position.set(4,4,-5);scene.add(fill);
+
+const mat=(color,roughness=.85)=>new THREE.MeshStandardMaterial({color,roughness});
+const ground=new THREE.Mesh(new THREE.PlaneGeometry(80,80),mat(0x425b43));ground.rotation.x=-Math.PI/2;ground.position.y=-.03;ground.receiveShadow=true;scene.add(ground);
+// Subtle ground flecks made from simple, procedural geometry.
+for(let i=0;i<150;i++){const m=new THREE.Mesh(new THREE.CircleGeometry(.015+Math.random()*.025,5),mat([0x687753,0x334b36,0x7b7957][i%3]));m.rotation.x=-Math.PI/2;m.position.set((Math.random()-.5)*22,.002,(Math.random()-.5)*22);scene.add(m)}
+// stump
+const stumpMat=mat(0x59402b), barkMat=mat(0x3e3025), ringMat=mat(0xc49a60);
+const stump=new THREE.Mesh(new THREE.CylinderGeometry(.92,1.04,.85,32),stumpMat);stump.position.y=.4;stump.castShadow=true;stump.receiveShadow=true;scene.add(stump);
+const stumpTop=new THREE.Mesh(new THREE.CylinderGeometry(.925,.925,.055,40),mat(0xb98a52));stumpTop.position.y=.84;stumpTop.castShadow=true;scene.add(stumpTop);
+for(let r of [.22,.39,.58,.77]){const ring=new THREE.Mesh(new THREE.TorusGeometry(r,.009,5,64),ringMat);ring.rotation.x=Math.PI/2;ring.position.y=.872;scene.add(ring)}
+for(let i=0;i<16;i++){const stripe=new THREE.Mesh(new THREE.BoxGeometry(.018,.56,.025),barkMat);const a=i*Math.PI/8;stripe.position.set(Math.cos(a)*.96,.4,Math.sin(a)*.96);stripe.rotation.y=-a;scene.add(stripe)}
+// Background tree silhouettes
+for(let i=0;i<28;i++){const x=(Math.random()-.5)*22,z=-5-Math.random()*13,h=2.5+Math.random()*3;const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.12,.2,h*.35,7),mat(0x493b2d));trunk.position.set(x,h*.175,z);trunk.castShadow=true;scene.add(trunk);for(let j=0;j<3;j++){const crown=new THREE.Mesh(new THREE.ConeGeometry(.8+j*.12,h*.36,7),mat([0x294b35,0x35583b,0x456747][(i+j)%3]));crown.position.set(x,h*.35+j*h*.19,z);crown.castShadow=true;scene.add(crown)}}
+
+let logs=[],particles=[],score=0,pieceCount=0,muted=false,dragging=false,lastX=0,lastY=0,rotY=0,rotX=0.12;
+const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();
+const woodColors=[0xb77c43,0xc18a4c,0xa96e3b,0xd09a5d];
+function makeLog(radius=.68,length=1.2,pos=new THREE.Vector3(0,1.25,0),depth=0){
+ const g=new THREE.Group();g.position.copy(pos);g.userData={radius,length,depth};
+ const bark=mat(0x725039),end=mat(woodColors[Math.floor(Math.random()*woodColors.length)]),dark=mat(0x694326);
+ const body=new THREE.Mesh(new THREE.CylinderGeometry(radius,radius,length,20,1,false),bark);body.rotation.x=Math.PI/2;body.castShadow=true;body.receiveShadow=true;g.add(body);
+ // end grain discs and concentric rings
+ for(const side of [-1,1]){const cap=new THREE.Mesh(new THREE.CircleGeometry(radius*.985,28),end);cap.position.z=side*length/2;cap.castShadow=true;g.add(cap);
+  for(let r=radius*.2;r<radius*.9;r+=radius*.19){const ring=new THREE.Mesh(new THREE.TorusGeometry(r,.009,4,36),dark);ring.position.z=side*(length/2+.002);g.add(ring)}
+  const knot=new THREE.Mesh(new THREE.CircleGeometry(radius*.07,12),dark);knot.position.set(radius*.22,-radius*.17,side*(length/2+.004));g.add(knot);
+ }
+ // bark grooves
+ for(let i=0;i<9;i++){const a=i*Math.PI*2/9;const groove=new THREE.Mesh(new THREE.BoxGeometry(.018,length*.9,.02),dark);groove.position.set(Math.cos(a)*radius*.99,Math.sin(a)*radius*.99,0);groove.rotation.z=a;g.add(groove)}
+ g.traverse(o=>{if(o.isMesh){o.userData.logRoot=g}});scene.add(g);logs.push(g);return g;
 }
-document.querySelector('#start').addEventListener('click',startGame);
-document.querySelector('#chop').addEventListener('click',chop);
-document.querySelector('#how').addEventListener('click',()=>{toastText('Mỗi lần chặt được +10 điểm, chuỗi càng dài càng nhiều điểm.');audio(350,.07)});
-document.querySelector('#sound').addEventListener('click',()=>{muted=!muted;document.querySelector('#sound').textContent=muted?'♪̸':'♫';toastText(muted?'Đã tắt âm thanh':'Đã bật âm thanh');if(!muted)audio(440,.08)});
-addEventListener('keydown',e=>{if(['Space','Enter'].includes(e.code)){e.preventDefault();if(overlay.style.display!=='none')startGame();else chop()}});
-addEventListener('contextmenu',e=>e.preventDefault());
-addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,1.8))});
-let t=0;function animate(now){requestAnimationFrame(animate);t=now*.001;
- if(running){remaining=Math.max(0,45-(now-clockStart)/1000);updateHud();if(remaining<=0)endGame()}
- // dynamic sky lighting shifts over a short in-game day
- const day=(Math.sin(t*.055)+1)/2;sun.intensity=1.4+day*2.1;sun.color.setHSL(.10+day*.035,.55,.65+day*.12);scene.background.setHSL(.48-day*.03,.25,.26+day*.27);scene.fog.color.copy(scene.background);
- particles.rotation.y=t*.018;particles.position.y=Math.sin(t*.7)*.12;
- stump.rotation.y=Math.sin(t*.25)*.018;
- camera.position.x=Math.sin(t*.18)*.13+(shake?Math.sin(t*70)*shake:0);camera.lookAt(0,1.15,0);shake=Math.max(0,shake-.012);
+function clearLogs(){for(const l of logs)scene.remove(l);logs=[]}
+function newLog(){clearLogs();makeLog(.62+Math.random()*.16,1.2+Math.random()*.35,new THREE.Vector3(0,1.45,0),0);toast('Một khúc gỗ mới đã sẵn sàng')}
+function splitLog(log){
+ if(!log||!scene.children.includes(log))return;
+ const {radius,length,depth}=log.userData;
+ const idx=logs.indexOf(log);if(idx>=0)logs.splice(idx,1);scene.remove(log);
+ score+=10+Math.max(0,4-depth)*2;pieceCount+=2;
+ document.querySelector('#score').textContent=score;document.querySelector('#pieces').textContent=pieceCount;
+ const best=Math.max(Number(localStorage.getItem('timberHavenBest')||0),score);localStorage.setItem('timberHavenBest',best);document.querySelector('#best').textContent=best;
+ burst(log.position);
+ if(radius<.19||depth>=4){toast('Tách hoàn tất! ✨');playTone(520,.08);if(logs.length===0)setTimeout(newLog,650);return}
+ const nr=radius*.73,nl=length*.74;
+ for(let i=0;i<2;i++){const offset=(i===0?-1:1)*(radius*.48);const child=makeLog(nr,nl,new THREE.Vector3(log.position.x+offset,log.position.y+.08,log.position.z+(i===0?.15:-.15)),depth+1);child.rotation.y=(Math.random()-.5)*.4;child.userData.vx=(i===0?-1:1)*(.7+Math.random());child.userData.vy=1.4+Math.random()*1.2;child.userData.vz=(Math.random()-.5)*1.2;}
+ playTone(180+Math.random()*80,.12);
+}
+function burst(p){for(let i=0;i<14;i++){const mesh=new THREE.Mesh(new THREE.BoxGeometry(.025,.025,.08),mat([0xd6a16a,0x8d5a31,0xecd1a0][i%3]));mesh.position.copy(p);mesh.position.y+=.3+Math.random()*.4;mesh.userData={life:1,v:new THREE.Vector3((Math.random()-.5)*2,Math.random()*2,(Math.random()-.5)*2)};scene.add(mesh);particles.push(mesh)}}
+function playTone(freq,dur){if(muted)return;try{const ac=new (window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),gain=ac.createGain();o.type='triangle';o.frequency.value=freq;gain.gain.setValueAtTime(.055,ac.currentTime);gain.gain.exponentialRampToValueAtTime(.001,ac.currentTime+dur);o.connect(gain);gain.connect(ac.destination);o.start();o.stop(ac.currentTime+dur);o.onended=()=>ac.close()}catch(e){}}
+let toastTimer;function toast(s){const t=document.querySelector('#toast');t.textContent=s;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),1600)}
+function pick(ev){const r=renderer.domElement.getBoundingClientRect();pointer.x=((ev.clientX-r.left)/r.width)*2-1;pointer.y=-((ev.clientY-r.top)/r.height)*2+1;raycaster.setFromCamera(pointer,camera);const hits=raycaster.intersectObjects(logs,true);if(hits.length){let root=hits[0].object;while(root&&!root.userData.radius)root=root.parent;if(root)splitLog(root)}}
+renderer.domElement.addEventListener('pointerdown',e=>{dragging=true;lastX=e.clientX;lastY=e.clientY;renderer.domElement.setPointerCapture?.(e.pointerId)});
+renderer.domElement.addEventListener('pointermove',e=>{if(!dragging)return;const dx=e.clientX-lastX,dy=e.clientY-lastY;rotY+=dx*.008;rotX=Math.max(-.2,Math.min(.65,rotX+dy*.004));lastX=e.clientX;lastY=e.clientY});
+renderer.domElement.addEventListener('pointerup',e=>{if(dragging){const dx=e.clientX-lastX,dy=e.clientY-lastY;dragging=false;if(Math.abs(dx)+Math.abs(dy)<8)pick(e)}});
+document.querySelector('#split').onclick=()=>{if(logs.length)splitLog(logs[0]);else newLog()};
+document.querySelector('#new').onclick=newLog;
+document.querySelector('#sound').onclick=()=>{muted=!muted;document.querySelector('#sound').textContent='♫ Âm thanh: '+(muted?'Tắt':'Bật');if(!muted)playTone(440,.08)};
+document.querySelector('#reset').onclick=()=>{score=0;pieceCount=0;document.querySelector('#score').textContent='0';document.querySelector('#pieces').textContent='0';newLog();toast('Đã đặt lại phiên chơi')};
+document.querySelector('#full').onclick=()=>{if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.()};
+document.querySelector('#best').textContent=localStorage.getItem('timberHavenBest')||'0';
+newLog();
+const clock=new THREE.Clock();
+function animate(){requestAnimationFrame(animate);const dt=Math.min(clock.getDelta(),.04);camera.position.x=Math.sin(rotY)*9.7;camera.position.z=Math.cos(rotY)*9.7;camera.position.y=4.8+rotX*2;camera.lookAt(0,1.1,0);
+ for(const l of logs){if(l.userData.vy!==undefined){l.position.x+=l.userData.vx*dt;l.position.y+=l.userData.vy*dt;l.position.z+=l.userData.vz*dt;l.userData.vy-=4*dt;l.rotation.z+=l.userData.vx*dt*.25;if(l.position.y<.55){l.position.y=.55;l.userData.vy*=-.22;l.userData.vx*=.72;if(Math.abs(l.userData.vy)<.3){delete l.userData.vy;delete l.userData.vx;delete l.userData.vz}}}}
+ for(let i=particles.length-1;i>=0;i--){const p=particles[i];p.userData.life-=dt;p.position.addScaledVector(p.userData.v,dt);p.userData.v.y-=3*dt;p.rotation.x+=dt*4;if(p.userData.life<=0){scene.remove(p);particles.splice(i,1)}}
  renderer.render(scene,camera)}
-requestAnimationFrame(animate);
+animate();
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight)});
 </script>
-</body>
-</html>
+</body></html>
