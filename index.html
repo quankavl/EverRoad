@@ -2,294 +2,207 @@
 <html lang="vi">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover,user-scalable=no">
-<meta name="theme-color" content="#172b31">
-<title>EverRoad — Web Edition 2.0</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#101b23">
+<title>EverRoad — Hành trình bất tận</title>
 <style>
-:root{color-scheme:dark;--glass:rgba(11,22,27,.68);--line:rgba(255,255,255,.17);--ink:#f7f8f5;--muted:#c5d2ce;--lime:#d7f0bc;--gold:#f2d79a}
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#172b31;color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;touch-action:none}button,input,select{font:inherit}button{cursor:pointer}#view{position:fixed;inset:0;width:100%;height:100%;display:block;outline:none}
-#hud{position:fixed;inset:0;pointer-events:none;z-index:2}.glass{background:var(--glass);border:1px solid var(--line);box-shadow:0 12px 40px #0002;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-radius:16px}
-#brand{position:absolute;top:max(14px,env(safe-area-inset-top));left:max(15px,env(safe-area-inset-left));padding:11px 14px;min-width:185px}#brand .word{font-size:19px;letter-spacing:.2em;font-weight:850}#brand .tag{font-size:9px;letter-spacing:.16em;color:#c5d8c4;margin-top:3px}
-#stats{position:absolute;right:max(15px,env(safe-area-inset-right));top:max(14px,env(safe-area-inset-top));padding:10px 15px;text-align:right;min-width:155px;font-variant-numeric:tabular-nums}#stats .label{font-size:9px;letter-spacing:.18em;color:var(--muted)}#speed{font-size:28px;line-height:1.15;font-weight:750;letter-spacing:-.04em}#speed small{font-size:10px;letter-spacing:.08em;color:var(--muted)}#weatherline{font-size:11px;color:#e2e9df;margin-top:5px}
-#topbuttons{position:absolute;top:max(14px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);display:flex;gap:7px;pointer-events:auto}.btn{color:var(--ink);background:rgba(10,20,24,.73);border:1px solid var(--line);padding:10px 13px;border-radius:12px;backdrop-filter:blur(12px);font-size:12px;font-weight:650;white-space:nowrap;transition:background .16s,border-color .16s}.btn:hover{background:rgba(35,56,59,.9);border-color:#ffffff55}.btn.primary{background:var(--lime);color:#17251b;border-color:transparent;font-weight:850}.btn.primary:hover{background:#e8f7d8}.btn.icon{min-width:42px;font-size:16px;padding:8px 10px}
-#bottomInfo{position:absolute;bottom:max(16px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);padding:9px 13px;font-size:11px;color:#edf0eb;white-space:nowrap;text-align:center;max-width:90vw}#bottomInfo b{color:var(--lime);font-weight:700}
-#touchControls{position:absolute;inset:auto 0 max(18px,env(safe-area-inset-bottom));display:none;justify-content:space-between;align-items:end;padding:0 20px;pointer-events:auto}.touchGroup{display:flex;gap:10px;align-items:end}.touch{width:60px;height:60px;border-radius:50%;border:1px solid #ffffff50;background:rgba(12,22,28,.52);color:#fff;font-size:24px;font-weight:400;backdrop-filter:blur(10px);touch-action:none;user-select:none;-webkit-user-select:none}.touch .micro{display:block;font-size:8px;letter-spacing:.09em;margin-top:-2px;color:#d7e2dc}.touch:active,.touch.down{background:#d7f0bc52;border-color:#d7f0bc99;transform:scale(.97)}
-#overlay{position:fixed;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;padding:18px;background:linear-gradient(110deg,rgba(6,15,20,.45),rgba(6,15,20,.25) 45%,rgba(6,15,20,.65));pointer-events:auto}#cover{width:min(560px,100%);padding:clamp(22px,5vw,38px);border:1px solid #ffffff2e;border-radius:26px;background:rgba(10,21,26,.78);backdrop-filter:blur(20px);box-shadow:0 30px 100px #0005;text-align:left}#cover .eyebrow{font-size:10px;letter-spacing:.2em;color:var(--lime);font-weight:800;text-transform:uppercase}#cover h1{margin:8px 0 0;font-size:clamp(36px,9vw,62px);line-height:1.05;letter-spacing:.16em;font-weight:900}#cover .edition{color:#dae4df;letter-spacing:.22em;font-size:10px;margin-top:9px}#cover p{font-size:14px;line-height:1.7;color:#d9e3de;margin:20px 0 0}#cover .actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:23px}#cover .tip{font-size:11px;color:#aebdb7;line-height:1.6;margin-top:19px}#cover .key{display:inline-block;padding:2px 6px;border:1px solid #ffffff39;border-radius:5px;background:#ffffff0b;color:white;font-size:10px}
-#settings{position:fixed;right:14px;top:76px;width:min(330px,calc(100vw - 28px));padding:18px;z-index:6;pointer-events:auto;display:none}#settings h2{font-size:15px;margin:0 0 13px}#settings .field{display:grid;grid-template-columns:1fr 140px;gap:8px;align-items:center;margin:13px 0;font-size:12px;color:#dce5e0}#settings select,#settings input[type=range]{width:100%;accent-color:var(--lime)}#settings select{background:#15272d;border:1px solid #ffffff22;color:#fff;padding:8px;border-radius:8px}#settings input[type=range]{margin:0}#settings .rowBtns{display:flex;gap:8px;margin-top:18px}#settings .rowBtns button{flex:1}
-#toast{position:fixed;left:50%;top:80px;transform:translateX(-50%);padding:10px 14px;border-radius:12px;background:#121f22dc;border:1px solid #ffffff27;color:white;font-size:12px;z-index:8;display:none;pointer-events:none}
-#errorBox{position:fixed;inset:18px;z-index:10;display:none;align-items:center;justify-content:center;background:#102026;color:#fff;padding:28px;border-radius:18px;text-align:center}
-@media(max-width:760px){#brand{min-width:0;padding:8px 10px;top:max(10px,env(safe-area-inset-top));left:max(10px,env(safe-area-inset-left))}#brand .word{font-size:14px}#brand .tag{font-size:7px}#stats{top:max(10px,env(safe-area-inset-top));right:max(10px,env(safe-area-inset-right));min-width:100px;padding:7px 10px}#stats .label{font-size:8px}#speed{font-size:21px}#weatherline{font-size:9px}#topbuttons{top:auto;bottom:max(88px,calc(env(safe-area-inset-bottom) + 82px));gap:5px}#topbuttons .btn{font-size:10px;padding:8px 9px}#topbuttons .btn.icon{min-width:34px;font-size:14px;padding:6px 7px}#touchControls{display:flex}#bottomInfo{bottom:max(84px,calc(env(safe-area-inset-bottom) + 80px));font-size:10px;white-space:normal;max-width:82vw}#settings{top:auto;bottom:max(86px,calc(env(safe-area-inset-bottom) + 82px));right:10px}#cover{padding:23px}#cover p{font-size:13px} }
-@media(max-width:390px){.touch{width:52px;height:52px}#topbuttons .btn:not(.icon){padding:7px 7px}#brand .tag{letter-spacing:.08em}}
+:root{--glass:rgba(12,22,29,.72);--line:rgba(255,255,255,.16);--text:#f3f7f8;--muted:#b8c8ce;--accent:#b8f1d1}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#8eb7c9;color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;touch-action:manipulation}canvas{display:block}
+#game{position:fixed;inset:0}#hud{position:fixed;inset:0;pointer-events:none;display:none}
+.panel{background:var(--glass);border:1px solid var(--line);border-radius:16px;backdrop-filter:blur(14px);box-shadow:0 10px 35px #0002}
+#brand{position:absolute;left:18px;top:16px;padding:12px 16px;letter-spacing:.02em}#brand b{font-size:18px;letter-spacing:.16em}#brand small{display:block;color:var(--muted);font-size:11px;margin-top:3px}
+#stats{position:absolute;right:18px;top:16px;padding:12px 15px;min-width:135px;text-align:right}#speed{font-size:25px;font-weight:750;letter-spacing:-.04em}#speed small{font-size:11px;color:var(--muted);font-weight:500;letter-spacing:0}#distance{font-size:12px;color:var(--muted);margin-top:2px}
+#toolbar{position:absolute;right:18px;top:104px;display:flex;gap:8px;pointer-events:auto;flex-wrap:wrap;justify-content:flex-end;max-width:60vw}
+button,select,input{font:inherit}button{cursor:pointer;color:var(--text);background:rgba(255,255,255,.09);border:1px solid var(--line);border-radius:11px;padding:9px 12px}button:hover{background:rgba(255,255,255,.17)}button:focus-visible{outline:2px solid var(--accent)}
+#hint{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);padding:9px 14px;color:#e7eff1;font-size:12px;white-space:nowrap;background:#0b1724a8;border:1px solid #ffffff20;border-radius:99px}
+#menu{position:fixed;inset:0;display:grid;place-items:center;padding:18px;background:linear-gradient(120deg,#0b1723c9,#0b172330 60%,#0b1723a8);z-index:5}
+#menuCard{width:min(620px,100%);padding:clamp(22px,5vw,42px);background:rgba(9,20,28,.83);border:1px solid #ffffff25;border-radius:24px;backdrop-filter:blur(18px);box-shadow:0 30px 100px #0005}
+.eyebrow{font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:var(--accent);font-weight:700}
+h1{font-size:clamp(40px,8vw,70px);line-height:.96;letter-spacing:-.065em;margin:14px 0 12px}h1 span{color:var(--accent)}.lead{color:#d0dde1;line-height:1.65;max-width:470px;font-size:14px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0}.field{display:flex;flex-direction:column;gap:7px;color:var(--muted);font-size:12px}.field select,.field input{width:100%;background:#14242e;color:white;border:1px solid #ffffff24;border-radius:10px;padding:11px}.field option{background:#14242e}
+.primary{background:var(--accent);color:#10241c;border:0;font-weight:800;padding:14px 22px}.primary:hover{background:#d4ffe7}.menuBottom{display:flex;align-items:center;gap:15px;flex-wrap:wrap}.foot{font-size:11px;color:#9db0b8;line-height:1.5;margin-top:18px}
+#mobile{position:absolute;inset:auto 0 max(18px,env(safe-area-inset-bottom)) 0;display:none;justify-content:space-between;align-items:end;padding:0 18px;pointer-events:none}
+.pad{display:grid;grid-template-columns:58px 58px;gap:8px;pointer-events:auto}.pad button{height:54px;font-size:20px;background:#0b17248c;backdrop-filter:blur(8px);touch-action:none;user-select:none;-webkit-user-select:none}
+.pedals{display:flex;gap:8px;pointer-events:auto}.pedals button{height:66px;min-width:62px;font-size:12px;font-weight:750;background:#0b17248c;touch-action:none;user-select:none}
+#toast{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:12px;color:#fff9;letter-spacing:.12em;pointer-events:none}
+@media(max-width:600px){#brand{left:10px;top:10px;padding:9px 11px}#brand b{font-size:14px}#stats{right:10px;top:10px;padding:8px 11px;min-width:100px}#speed{font-size:21px}#toolbar{right:10px;top:78px;max-width:72vw;gap:5px}#toolbar button{font-size:11px;padding:7px 8px}#hint{bottom:105px;font-size:10px;max-width:92vw;white-space:normal;text-align:center}#mobile{display:flex}.grid{margin:18px 0}.foot{font-size:10px}}
 </style>
-<script type="importmap">
-{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/"}}
-</script>
 </head>
 <body>
-<canvas id="view" aria-label="Khung cảnh lái xe ba chiều EverRoad"></canvas>
+<div id="game"></div>
 <div id="hud">
- <div id="brand" class="glass"><div class="word">EVERROAD</div><div class="tag">ENDLESS SCENIC DRIVE · WEB EDITION 2.0</div></div>
- <div id="topbuttons"><button class="btn" id="pauseBtn">Ⅱ Tạm dừng</button><button class="btn" id="cameraBtn">◉ Góc nhìn</button><button class="btn" id="weatherBtn">☼ Thời tiết</button><button class="btn icon" id="settingsBtn" title="Cài đặt" aria-label="Cài đặt">⚙</button></div>
- <div id="stats" class="glass"><div class="label">TỐC ĐỘ HIỆN TẠI</div><div id="speed">072 <small>KM/H</small></div><div id="weatherline">08:15 · Nắng trong</div></div>
- <div id="bottomInfo" class="glass"><b>W / ↑</b> tăng tốc&nbsp; · &nbsp;<b>S / ↓</b> phanh&nbsp; · &nbsp;<b>A D / ← →</b> đánh lái</div>
- <div id="touchControls">
-  <div class="touchGroup"><button class="touch" data-key="left" aria-label="Rẽ trái">←<span class="micro">TRÁI</span></button><button class="touch" data-key="right" aria-label="Rẽ phải">→<span class="micro">PHẢI</span></button></div>
-  <div class="touchGroup"><button class="touch" data-key="brake" aria-label="Phanh">−<span class="micro">PHANH</span></button><button class="touch" data-key="gas" aria-label="Tăng tốc">+<span class="micro">GA</span></button></div>
+  <div id="brand" class="panel"><b>EVERROAD</b><small>HÀNH TRÌNH BẤT TẬN</small></div>
+  <div id="stats" class="panel"><div id="speed">0 <small>KM/H</small></div><div id="distance">0,00 KM ĐÃ ĐI</div></div>
+  <div id="toolbar"><button id="pauseBtn">Ⅱ Tạm dừng</button><button id="viewBtn">◉ Góc nhìn</button><button id="weatherBtn">☼ Thời tiết</button><button id="settingsBtn">⚙ Tùy chỉnh</button></div>
+  <div id="hint">W / ↑ tăng tốc · S / ↓ phanh · A D / ← → đánh lái · C đổi góc nhìn · P tạm dừng</div>
+  <div id="mobile">
+    <div class="pad"><button data-key="left">◀</button><button data-key="right">▶</button></div>
+    <div class="pedals"><button data-key="brake">PHANH</button><button data-key="gas" style="min-width:76px;background:#b8f1d1d9;color:#10241c">TĂNG TỐC</button></div>
+  </div>
+</div>
+<div id="menu">
+ <div id="menuCard">
+  <div class="eyebrow">TRÒ CHƠI LÁI XE THƯ GIÃN · 3D</div>
+  <h1>Ever<span>Road</span></h1>
+  <p class="lead">Rời xa nhịp sống vội vã. Lái xe qua những cung đường uốn lượn, đồi xanh và chân trời thay đổi liên tục. Không đua tranh, không đích đến — chỉ có bạn và hành trình.</p>
+  <div class="grid">
+   <label class="field">PHONG CẢNH<select id="scene"><option value="green">Đồi xanh</option><option value="coast">Ven biển</option><option value="autumn">Rừng thu</option><option value="night">Đêm tĩnh lặng</option></select></label>
+   <label class="field">THỜI TIẾT<select id="weather"><option value="clear">Trời quang</option><option value="cloud">Nhiều mây</option><option value="rain">Mưa nhẹ</option></select></label>
+   <label class="field">TỐC ĐỘ TỐI ĐA <select id="maxspeed"><option value="90">90 km/h · Thư thái</option><option value="140" selected>140 km/h · Cân bằng</option><option value="200">200 km/h · Nhanh</option></select></label>
+   <label class="field">CHẤT LƯỢNG ĐỒ HỌA<select id="quality"><option value="high">Cao</option><option value="medium" selected>Vừa</option><option value="low">Tiết kiệm pin</option></select></label>
+  </div>
+  <div class="menuBottom"><button class="primary" id="startBtn">BẮT ĐẦU HÀNH TRÌNH ↗</button><span style="font-size:12px;color:#aabdc4">Miễn phí · Chạy trên trình duyệt</span></div>
+  <div class="foot">Bản dựng độc lập do EverRoad tạo cảm hứng từ thể loại lái xe ngắm cảnh. Cảnh vật và xe được tạo bằng hình học 3D trong mã nguồn; không sử dụng tài nguyên trích xuất từ trò chơi khác. Cần kết nối mạng để tải thư viện Three.js.</div>
  </div>
 </div>
-<div id="settings" class="glass">
- <h2>Cài đặt thế giới</h2>
- <div class="field"><label for="weatherSelect">Thời tiết</label><select id="weatherSelect"><option value="clear">Nắng trong</option><option value="cloudy">Nhiều mây</option><option value="fog">Sương mù</option><option value="rain">Mưa nhẹ</option></select></div>
- <div class="field"><label for="timeRate">Tốc độ ngày / đêm</label><input id="timeRate" type="range" min="0" max="60" value="12" step="1"></div>
- <div class="field"><label for="quality">Chất lượng đồ họa</label><select id="quality"><option value="high">Cao</option><option value="balanced" selected>Cân bằng</option><option value="performance">Hiệu năng</option></select></div>
- <div class="field"><label for="bloom">Ánh sáng phát quang</label><input id="bloom" type="range" min="0" max="1" step="0.05" value="0.32"></div>
- <div class="rowBtns"><button class="btn" id="resetSettings">Mặc định</button><button class="btn primary" id="closeSettings">Hoàn tất</button></div>
-</div>
-<div id="toast"></div>
-<div id="overlay"><div id="cover">
- <div class="eyebrow">Một chuyến đi không đích đến</div><h1>EVERROAD</h1><div class="edition">WEB EDITION 2.0 · 3D SCENIC DRIVE</div>
- <p>Để con đường dẫn lối. Khám phá những triền đồi quanh co trong thế giới 3D được tạo tự động, với ánh sáng đổi thay, sương mù, mây trôi và thời tiết có thể tùy chỉnh.</p>
- <div class="actions"><button class="btn primary" id="startBtn">BẮT ĐẦU HÀNH TRÌNH&nbsp; →</button><button class="btn" id="settingsFromCover">Cài đặt đồ họa</button></div>
- <div class="tip">Máy tính: <span class="key">W</span><span class="key">A</span><span class="key">S</span><span class="key">D</span> hoặc phím mũi tên. Điện thoại: dùng các nút cảm ứng. Dùng <span class="key">Esc</span> để tạm dừng.</div>
- <div class="tip" style="opacity:.68">Cảnh vật và xe được dựng bằng hình học tự sinh; thư viện 3D miễn phí được tải từ CDN khi có Internet.</div>
-</div></div>
-<div id="errorBox"><div><h2>Không thể khởi tạo đồ họa 3D</h2><p id="errorText">Hãy kiểm tra trình duyệt có hỗ trợ WebGL và kết nối Internet để tải thư viện Three.js.</p></div></div>
-<script>
-window.addEventListener('error', e => {
-  const box=document.getElementById('errorBox'), text=document.getElementById('errorText');
-  if(box && text && !window.__everroadReady){box.style.display='flex';text.textContent='Không tải được mô-đun đồ họa 3D. Hãy kiểm tra Internet, dùng Chrome/Edge/Firefox mới và mở qua máy chủ cục bộ. Chi tiết: '+(e.message||'Lỗi tải mô-đun');}
-});
-window.addEventListener('unhandledrejection', e => {
-  const box=document.getElementById('errorBox'), text=document.getElementById('errorText');
-  if(box && text && !window.__everroadReady){box.style.display='flex';text.textContent='EverRoad không tải được thành phần cần thiết. Hãy kiểm tra kết nối Internet. Chi tiết: '+(e.reason?.message||String(e.reason||'Lỗi tải mô-đun'));}
-});
-</script>
 <script type="module">
-import * as THREE from 'three';
-import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
-import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
-import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
-import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js';
 
-(() => {
-'use strict';
-const $ = id => document.getElementById(id);
-const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
-const lerp = (a, b, t) => a + (b - a) * t;
-const smoothstep = (a,b,x) => { const t=clamp((x-a)/(b-a),0,1); return t*t*(3-2*t); };
-const hash = n => { const x=Math.sin(n*127.1+311.7)*43758.5453123; return x-Math.floor(x); };
-const rng = seed => { let s=seed>>>0; return ()=>{s=(s*1664525+1013904223)>>>0;return s/4294967296;}; };
-
-const canvas = $('view');
-let renderer, composer, bloomPass, scene, camera, sky, skyUniforms, sunLight, hemiLight, ambientLight, sunOrb, car, carWheels=[], headLightL, headLightR, terrainMat;
-let initialized=false, running=false, paused=false, cameraMode=0, weather='clear', quality='balanced';
-let distance=0, speed=63, steer=0, playerOffset=0, clockHours=8.25, timeRate=12, bloomStrength=.32, lastFrame=performance.now(), fpsFrames=0, fpsTimer=0;
-const keys={left:false,right:false,gas:false,brake:false};
-const ROAD_LEN=12, ROAD_COUNT=250, ROAD_WRAP=ROAD_LEN*ROAD_COUNT, TERRAIN_LEN=140, TERRAIN_COUNT=27, TERRAIN_WRAP=TERRAIN_LEN*TERRAIN_COUNT, TREE_WRAP=3600, CLOUD_WRAP=4300;
-const roadSegments=[], terrainChunks=[], treeRecords=[], cloudGroups=[];
-let treeTrunks, treeCanopies, rocks, rainGroup, rainPositions, rainCount=quality==='performance'?160:400, rainSeed=[];
-const dummy = new THREE.Object3D();
-const v3 = (x=0,y=0,z=0)=>new THREE.Vector3(x,y,z);
-
-function routeX(s){ return 37*Math.sin(s*.00103)+18*Math.sin(s*.00255+1.1)+8*Math.sin(s*.00044+2.2); }
-function routeSlope(s){ return routeX(s+.8)-routeX(s-.8); }
-function roadPoint(s,lateral=0){const dx=routeSlope(s),inv=1/Math.sqrt(1+dx*dx);return {x:routeX(s)+lateral*inv,z:-s+lateral*dx*inv};}
-function groundHeight(s,lateral){const a=Math.abs(lateral);const hill=smoothstep(9,38,a);const rolling=Math.sin(s*.013+lateral*.033)*2.0+Math.cos(s*.005-lateral*.017)*4.8+Math.sin(s*.0024+Math.abs(lateral)*.012)*2.1;return .02+hill*rolling;}
-function material(color, roughness=1, extra={}) { return new THREE.MeshStandardMaterial({color,roughness, ...extra}); }
-
-function initialize(){
- try {
-  renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false,powerPreference:'high-performance'});
-  if(!renderer.capabilities.isWebGL2) { /* WebGL fallback is handled by renderer */ }
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, window.innerWidth<760?1.35:1.75));
-  renderer.setSize(window.innerWidth,window.innerHeight,false);
-  renderer.outputColorSpace=THREE.SRGBColorSpace;
-  renderer.toneMapping=THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure=1.08;
-  renderer.shadowMap.enabled=true;
-  renderer.shadowMap.type=THREE.PCFSoftShadowMap;
-  scene=new THREE.Scene();
-  scene.fog=new THREE.Fog('#9db9b6',55,650);
-  camera=new THREE.PerspectiveCamera(67,window.innerWidth/window.innerHeight,.1,1800);
-  camera.position.set(0,4,12);
-  makeSky();
-  hemiLight=new THREE.HemisphereLight(0xc6e3ed,0x536443,1.18); scene.add(hemiLight);
-  ambientLight=new THREE.AmbientLight(0xffffff,.18); scene.add(ambientLight);
-  sunLight=new THREE.DirectionalLight(0xffe8bd,3.0);sunLight.castShadow=true;
-  sunLight.shadow.mapSize.set(window.innerWidth<760?1024:2048,window.innerWidth<760?1024:2048);
-  sunLight.shadow.camera.left=-92;sunLight.shadow.camera.right=92;sunLight.shadow.camera.top=95;sunLight.shadow.camera.bottom=-80;sunLight.shadow.camera.near=.1;sunLight.shadow.camera.far=430;sunLight.shadow.bias=-.00022;sunLight.shadow.normalBias=.025;scene.add(sunLight);scene.add(sunLight.target);
-  makeTerrain(); makeRoad(); makeTrees(); makeClouds(); makeCar(); makeRain();
-  const renderPass=new RenderPass(scene,camera);
-  composer=new EffectComposer(renderer);composer.addPass(renderPass);
-  bloomPass=new UnrealBloomPass(new THREE.Vector2(window.innerWidth,window.innerHeight),bloomStrength,.7,.83);composer.addPass(bloomPass);composer.addPass(new OutputPass());
-  updateQuality(quality);
-  resize();initialized=true;window.__everroadReady=true;updateEnvironment(0);animate(performance.now());
- } catch(err){ console.error(err); $('errorBox').style.display='flex'; $('errorText').textContent='Trình duyệt không khởi tạo được WebGL hoặc không tải được mô-đun 3D. Hãy dùng bản Chrome/Edge/Firefox mới và mở dự án qua máy chủ cục bộ. Chi tiết: '+(err?.message||err); }
+const root=document.querySelector('#game'),hud=document.querySelector('#hud'),menu=document.querySelector('#menu');
+const speedEl=document.querySelector('#speed'),distEl=document.querySelector('#distance'),hint=document.querySelector('#hint');
+let scene,camera,renderer,car,clock,roadSegments=[],ground,trees=[],clouds=[],rain=null;
+let running=false,paused=false,velocity=0,steer=0,lateral=0,distance=0,worldZ=0,view=0,weather='clear',sceneType='green',maxSpeed=140,quality='medium',curve=0,curveTarget=0,segmentCounter=0;
+const keys={gas:false,brake:false,left:false,right:false};
+const mats={};
+const rand=(a,b)=>a+Math.random()*(b-a);
+function mat(color,roughness=.85,metalness=0){return new THREE.MeshStandardMaterial({color,roughness,metalness});}
+function makeBox(parent,w,h,d,material,x,y,z){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),material);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m;}
+function buildCar(){
+ const g=new THREE.Group();
+ const body=mat(0x2d6c70,.35,.28),dark=mat(0x18252b,.45),glass= new THREE.MeshStandardMaterial({color:0x9fc8d0,roughness:.2,metalness:.25,transparent:true,opacity:.72}),rubber=mat(0x151719),lamp= new THREE.MeshStandardMaterial({color:0xfff0c5,emissive:0xffd783,emissiveIntensity:.7});
+ makeBox(g,1.75,.48,3.55,body,0,.65,0);makeBox(g,1.42,.54,1.65,body,0,1.08,-.25);
+ makeBox(g,1.25,.42,1.4,glass,0,1.12,-.25);makeBox(g,1.72,.16,.65,dark,0,.45,1.48);
+ for(const x of [-.88,.88])for(const z of [-1.08,1.1]){
+  const wheel=new THREE.Mesh(new THREE.CylinderGeometry(.34,.34,.22,18),rubber);wheel.rotation.z=Math.PI/2;wheel.position.set(x,.36,z);wheel.castShadow=true;g.add(wheel);
+  const hub=new THREE.Mesh(new THREE.CylinderGeometry(.16,.16,.235,12),mat(0x9ba8ac,.3,.7));hub.rotation.z=Math.PI/2;hub.position.copy(wheel.position);g.add(hub);
+ }
+ for(const x of [-.58,.58]){const l=makeBox(g,.35,.14,.05,lamp,x,.67,-1.79);l.material=lamp;}
+ const tail=mat(0xc63b32,.4,0);for(const x of [-.57,.57])makeBox(g,.28,.12,.05,tail,x,.68,1.79);
+ g.position.set(0,0,2);scene.add(g);return g;
 }
-
-function makeSky(){
- skyUniforms={topColor:{value:new THREE.Color('#35668a')},horizonColor:{value:new THREE.Color('#f0c7a0')},bottomColor:{value:new THREE.Color('#9bb8b9')},sunDirection:{value:new THREE.Vector3(0,1,0)},sunTint:{value:new THREE.Color('#fff0ce')},sunStrength:{value:1.0}};
- const skyGeo=new THREE.SphereGeometry(1450,40,26);
- const skyMat=new THREE.ShaderMaterial({uniforms:skyUniforms,side:THREE.BackSide,depthWrite:false,vertexShader:`varying vec3 vDir; void main(){vDir=normalize(position);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,fragmentShader:`uniform vec3 topColor;uniform vec3 horizonColor;uniform vec3 bottomColor;uniform vec3 sunDirection;uniform vec3 sunTint;uniform float sunStrength;varying vec3 vDir;void main(){float h=normalize(vDir).y;float t=smoothstep(-0.20,0.72,h);vec3 col=mix(bottomColor,horizonColor,smoothstep(-0.45,0.03,h));col=mix(col,topColor,t);float d=max(dot(normalize(vDir),normalize(sunDirection)),0.0);float halo=pow(d,18.0)*0.42*sunStrength;float disk=pow(d,320.0)*2.1*sunStrength;col+=sunTint*(halo+disk);gl_FragColor=vec4(col,1.0);}`});
- sky=new THREE.Mesh(skyGeo,skyMat);sky.frustumCulled=false;scene.add(sky);
- const orbMat=new THREE.MeshBasicMaterial({color:0xffe6b3,transparent:true,opacity:.98,toneMapped:false});sunOrb=new THREE.Mesh(new THREE.SphereGeometry(8,20,16),orbMat);scene.add(sunOrb);
+function makeTree(x,z,scale=1,autumn=false){
+ const g=new THREE.Group();const trunk=mat(autumn?0x574333:0x66503b),leaf=mat(autumn?[0xa84e2e,0xc17a37,0x8c6935][Math.floor(Math.random()*3)]:[0x285844,0x356e4d,0x4c8056][Math.floor(Math.random()*3)]);
+ const t=new THREE.Mesh(new THREE.CylinderGeometry(.09*scale,.15*scale,1.5*scale,7),trunk);t.position.y=.75*scale;t.castShadow=true;g.add(t);
+ for(let i=0;i<3;i++){const c=new THREE.Mesh(new THREE.ConeGeometry((.8-i*.16)*scale,1.5*scale,7),leaf);c.position.y=(1.35+i*.48)*scale;c.castShadow=true;g.add(c);}
+ g.position.set(x,0,z);scene.add(g);trees.push(g);return g;
 }
-
-const roadMaterials=[
- material('#3f4343',.96), material('#9a988a',1), material('#e9e7d6',.84,{emissive:'#11120e',emissiveIntensity:.08}), material('#e4d7a1',.9)
-];
-function buildRoadGeometry(s,len){
- const offsets=[-7.2,-5.6,-5.4,-.12,.12,5.4,5.6,7.2]; const positions=[];const indices=[];const geo=new THREE.BufferGeometry();
- for(let end=0;end<2;end++){const station=s+end*len;for(const lateral of offsets){const p=roadPoint(station,lateral);positions.push(p.x,.075,p.z);}}
- const bands=[1,2,0,Math.floor(s/ROAD_LEN)%2===0?3:0,0,2,1];
- for(let b=0;b<7;b++){const i0=b,i1=b+1,i2=8+b+1,i3=8+b;const start=indices.length;indices.push(i0,i1,i2,i0,i2,i3);geo.addGroup(start,6,bands[b]);}
- geo.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));geo.setIndex(indices);geo.computeVertexNormals();return geo;
+function addRoadSegment(z,index){
+ const len=24,group=new THREE.Group();group.position.z=z;
+ const asphalt=mat(0x303a3d,.96),shoulder=mat(0xaaa99c),white=mat(0xe8e4d5),grass=mat(sceneType==='autumn'?0x8a7651:sceneType==='coast'?0xb6ad7b:0x638361);
+ makeBox(group,13,.15,len,grass,0,-.16,-len/2);
+ makeBox(group,7.8,.13,len,asphalt,0,0,-len/2);
+ makeBox(group,.18,.16,len,shoulder,-3.98,.025,-len/2);makeBox(group,.18,.16,len,shoulder,3.98,.025,-len/2);
+ for(let zc=-len+2;zc<0;zc+=5)makeBox(group,.12,.025,2.4,white,0,.085,zc);
+ scene.add(group);roadSegments.push({group,z,len,index});
+ const count=quality==='low'?2:quality==='medium'?4:6;
+ for(let side of [-1,1])for(let i=0;i<count;i++){
+   let x=side*rand(7,20),tz=z-rand(2,len-1);
+   if(sceneType==='coast'&&Math.random()<.55)continue;
+   makeTree(x,tz,rand(.65,1.4),sceneType==='autumn');
+ }
+ // roadside grasses/rocks as small natural clusters
+ for(let i=0;i<(quality==='low'?2:6);i++){
+  const x=(Math.random()<.5?-1:1)*rand(4.5,8),zz=z-rand(1,len);
+  const shrub=new THREE.Mesh(new THREE.DodecahedronGeometry(rand(.18,.42),0),mat(sceneType==='autumn'?0x94754c:0x47714b));
+  shrub.position.set(x,.16,zz);shrub.scale.y=.65;scene.add(shrub);trees.push(shrub);
+ }
 }
-function makeRoad(){
- for(let i=0;i<ROAD_COUNT;i++){let s=-36+i*ROAD_LEN;const mesh=new THREE.Mesh(buildRoadGeometry(s,ROAD_LEN),roadMaterials);mesh.receiveShadow=true;mesh.frustumCulled=false;mesh.userData.s=s;roadSegments.push(mesh);scene.add(mesh);}
+function resetWorld(){
+ for(const r of roadSegments)scene.remove(r.group);roadSegments=[];
+ for(const t of trees)scene.remove(t);trees=[];
+ // create forward road with curved segments
+ curve=0;curveTarget=0;
+ for(let i=0;i<24;i++)addRoadSegment(-i*24,i);
 }
-function recycleRoad(){ for(const mesh of roadSegments){if(mesh.userData.s<distance-45){const s=mesh.userData.s+ROAD_WRAP;mesh.userData.s=s;mesh.geometry.dispose();mesh.geometry=buildRoadGeometry(s,ROAD_LEN);}} }
-
-function terrainGeometry(s,len){
- const rows=15, cols=49, positions=[],colors=[],indices=[];const cLow=new THREE.Color('#426044'),cMid=new THREE.Color('#63815a'),cHigh=new THREE.Color('#748b68');
- for(let i=0;i<=rows;i++){let st=s+len*i/rows;for(let j=0;j<=cols;j++){let lateral=-480+960*j/cols;const p=roadPoint(st,lateral);let y=groundHeight(st,lateral);positions.push(p.x,y,p.z);let col=new THREE.Color();col.copy(cLow).lerp(cMid,smoothstep(0,5,y+1));if(y>3)col.lerp(cHigh,smoothstep(3,9,y));const variation=(hash(Math.floor(st/24)*81+j)-.5)*.035;col.offsetHSL(0,variation,variation);colors.push(col.r,col.g,col.b);}}
- const stride=cols+1;for(let i=0;i<rows;i++)for(let j=0;j<cols;j++){const a=i*stride+j,b=a+1,c=a+stride+1,d=a+stride;indices.push(a,b,d,b,c,d);}
- const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));geo.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));geo.setIndex(indices);geo.computeVertexNormals();return geo;
+function init(){
+ scene=new THREE.Scene();scene.background=new THREE.Color(0x9bc7d7);scene.fog=new THREE.Fog(0x9bc7d7,65,260);
+ camera=new THREE.PerspectiveCamera(65,innerWidth/innerHeight,.1,700);camera.position.set(0,4.2,9);
+ renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
+ renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,quality==='high'?1.8:quality==='medium'?1.3:1));
+ renderer.shadowMap.enabled=quality!=='low';renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+ renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.12;root.appendChild(renderer.domElement);
+ scene.add(new THREE.HemisphereLight(0xd9efff,0x566348,2.1));
+ const sun=new THREE.DirectionalLight(0xfff0d4,quality==='low'?1.5:2.8);sun.position.set(-35,65,25);sun.castShadow=quality!=='low';sun.shadow.mapSize.set(1024,1024);scene.add(sun);
+ const skyGeo=new THREE.SphereGeometry(500,32,18);const skyMat=new THREE.MeshBasicMaterial({color:0x9bc7d7,side:THREE.BackSide});scene.add(new THREE.Mesh(skyGeo,skyMat));
+ // distant rolling hills
+ for(let i=0;i<18;i++){const hill=new THREE.Mesh(new THREE.SphereGeometry(1,16,10),mat(sceneType==='coast'?0x9bb4a8:sceneType==='autumn'?0x8b8668:0x75977b));hill.scale.set(rand(22,55),rand(8,22),rand(18,32));hill.position.set((i%2?1:-1)*rand(35,115),rand(1,8),-rand(80,260));scene.add(hill);clouds.push(hill);}
+ car=buildCar();clock=new THREE.Clock();resetWorld();applyEnvironment();
+ addEventListener('resize',onResize);animate();
 }
-function makeTerrain(){
- terrainMat=new THREE.MeshStandardMaterial({vertexColors:true,roughness:1,metalness:0,side:THREE.DoubleSide});
- for(let i=0;i<TERRAIN_COUNT;i++){const s=-70+i*TERRAIN_LEN;const mesh=new THREE.Mesh(terrainGeometry(s,TERRAIN_LEN),terrainMat);mesh.receiveShadow=true;mesh.userData.s=s;mesh.frustumCulled=false;terrainChunks.push(mesh);scene.add(mesh);}
+function applyEnvironment(){
+ let sky=sceneType==='night'?0x101a30:sceneType==='autumn'?0xc5a889:sceneType==='coast'?0x9ccbdc:0x9bc7d7;
+ if(weather==='cloud')sky=sceneType==='night'?0x242d3c:0x9aaab0;
+ if(weather==='rain')sky=0x687b87;
+ scene.background.setHex(sky);scene.fog.color.setHex(sky);
+ scene.fog.near=weather==='rain'?25:65;scene.fog.far=weather==='rain'?145:260;
+ renderer.toneMappingExposure=sceneType==='night'?.65:1.12;
+ if(rain){scene.remove(rain);rain.geometry.dispose();rain.material.dispose();rain=null;}
+ if(weather==='rain'){
+  const positions=new Float32Array(1000*3);for(let i=0;i<1000;i++){positions[i*3]=rand(-35,35);positions[i*3+1]=rand(0,30);positions[i*3+2]=rand(-75,15);}
+  const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.BufferAttribute(positions,3));
+  rain=new THREE.Points(geo,new THREE.PointsMaterial({color:0xd7e8ef,size:.075,transparent:true,opacity:.5}));scene.add(rain);
+ }
 }
-function recycleTerrain(){for(const mesh of terrainChunks){if(mesh.userData.s+TERRAIN_LEN<distance-90){const s=mesh.userData.s+TERRAIN_WRAP;mesh.userData.s=s;mesh.geometry.dispose();mesh.geometry=terrainGeometry(s,TERRAIN_LEN);}}}
-
-function makeTrees(){
- const rand=rng(302410);let s=-100;
- while(s<3450){s+=5+rand()*10;for(const side of [-1,1]){if(rand()<.09)continue;const lat=side*(12+rand()*56);const scale=.68+rand()*1.25;treeRecords.push({s,initialS:s,lat,scale,twist:rand()*Math.PI*2,color:new THREE.Color().setHSL(.27+rand()*.07,.25+rand()*.23,.19+rand()*.11)});if(rand()<.21){const extraS=s+rand()*4;treeRecords.push({s:extraS,initialS:extraS,lat:side*(22+rand()*75),scale:.5+rand()*.75,twist:rand()*6,color:new THREE.Color().setHSL(.28+rand()*.06,.25+rand()*.2,.20+rand()*.1)});}}}
- const trunkGeo=new THREE.CylinderGeometry(.18,.34,2.15,6);const crownGeo=new THREE.ConeGeometry(1.95,4.7,7);
- const trunkMat=new THREE.MeshStandardMaterial({color:'#594536',roughness:1});const crownMat=new THREE.MeshStandardMaterial({color:'#416d4c',roughness:.93});
- treeTrunks=new THREE.InstancedMesh(trunkGeo,trunkMat,treeRecords.length);treeCanopies=new THREE.InstancedMesh(crownGeo,crownMat,treeRecords.length);treeTrunks.castShadow=true;treeCanopies.castShadow=true;treeCanopies.receiveShadow=true;
- treeTrunks.frustumCulled=false;treeCanopies.frustumCulled=false;scene.add(treeTrunks,treeCanopies);
- treeRecords.forEach((t,i)=>setTreeMatrix(t,i));treeTrunks.instanceMatrix.needsUpdate=true;treeCanopies.instanceMatrix.needsUpdate=true;
+function onResize(){if(!renderer)return;camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);}
+function setWeather(w){weather=w;applyEnvironment();document.querySelector('#weatherBtn').textContent=w==='rain'?'☂ Mưa':w==='cloud'?'☁ Nhiều mây':'☼ Trời quang';}
+function start(){
+ sceneType=document.querySelector('#scene').value;weather=document.querySelector('#weather').value;maxSpeed=Number(document.querySelector('#maxspeed').value);quality=document.querySelector('#quality').value;
+ if(renderer){renderer.dispose();root.innerHTML='';}
+ init();velocity=0;distance=0;lateral=0;steer=0;paused=false;running=true;
+ menu.style.display='none';hud.style.display='block';document.querySelector('#pauseBtn').textContent='Ⅱ Tạm dừng';
+ hint.textContent=innerWidth<600?'Giữ ◀ / ▶ để lái · Giữ TĂNG TỐC để chạy · Chạm nút góc nhìn để đổi camera':'W / ↑ tăng tốc · S / ↓ phanh · A D / ← → đánh lái · C đổi góc nhìn · P tạm dừng';
 }
-function setTreeMatrix(t,i){
- const p=roadPoint(t.s,t.lat),y=groundHeight(t.s,t.lat),sc=t.scale;
- dummy.position.set(p.x,y+1.08*sc,p.z);dummy.rotation.set(0,t.twist,0);dummy.scale.set(sc,sc,sc);dummy.updateMatrix();treeTrunks.setMatrixAt(i,dummy.matrix);
- dummy.position.set(p.x,y+2.7*sc,p.z);dummy.scale.set(sc,sc,sc);dummy.updateMatrix();treeCanopies.setMatrixAt(i,dummy.matrix);treeCanopies.setColorAt(i,t.color);
+function togglePause(){if(!running)return;paused=!paused;document.querySelector('#pauseBtn').textContent=paused?'▶ Tiếp tục':'Ⅱ Tạm dừng';}
+function changeView(){view=(view+1)%3;document.querySelector('#viewBtn').textContent=['◉ Góc nhìn','◉ Góc nhìn gần','◉ Góc nhìn xa'][view];}
+function animate(){
+ requestAnimationFrame(animate);if(!renderer||!scene)return;
+ const dt=Math.min(clock.getDelta(),.04);
+ if(running&&!paused){
+  const gas=keys.gas||keys.up,brake=keys.brake||keys.down,left=keys.left||keys.a,right=keys.right||keys.d;
+  const target=gas?maxSpeed/3.6:0;
+  velocity+=(target-velocity)*(gas?dt*.48:dt*.12);
+  if(brake)velocity=Math.max(0,velocity-dt*17);
+  if(!gas&&!brake)velocity=Math.max(0,velocity-dt*.35);
+  const kmh=velocity*3.6;
+  const steerInput=(right?1:0)-(left?1:0);
+  steer+=(steerInput-steer)*Math.min(1,dt*3.4);
+  lateral+=steer*dt*(1.8+velocity*.65);
+  lateral*=Math.max(0,1-dt*.14);
+  curveTarget=Math.sin(distance*.00055)*.32+Math.sin(distance*.00019+1.5)*.22;
+  curve+=(curveTarget-curve)*dt*.15;
+  distance+=velocity*dt;worldZ=distance;
+  car.position.x=THREE.MathUtils.clamp(lateral,-5.5,5.5);car.position.y=Math.sin(distance*.025)*.025;car.position.z=2;
+  car.rotation.z=-steer*.08;car.rotation.y=-curve*.13-steer*.035;
+  for(const r of roadSegments){r.group.position.z+=velocity*dt; r.group.position.x=-curve*r.index*1.2;
+   if(r.group.position.z>24){r.group.position.z-=roadSegments.length*24; r.index+=roadSegments.length;}}
+  for(const t of trees){t.position.z+=velocity*dt;if(t.position.z>20)t.position.z-=24*24;}
+  const follow=view===0?{x:car.position.x*.48,y:4.0,z:9.5}:view===1?{x:car.position.x*.7,y:2.6,z:5.2}:{x:car.position.x*.25,y:8.5,z:15};
+  camera.position.x+=(follow.x-camera.position.x)*dt*2.5;camera.position.y+=(follow.y-camera.position.y)*dt*2.5;camera.position.z+=(follow.z-camera.position.z)*dt*2.5;
+  camera.lookAt(car.position.x*.5,1.05,-10);
+  speedEl.innerHTML=`${Math.round(kmh)} <small>KM/H</small>`;distEl.textContent=(distance/1000).toLocaleString('vi-VN',{minimumFractionDigits:2,maximumFractionDigits:2})+' KM ĐÃ ĐI';
+  if(rain){const p=rain.geometry.attributes.position;for(let i=0;i<p.count;i++){p.array[i*3+1]-=dt*22;if(p.array[i*3+1]<0){p.array[i*3+1]=30;p.array[i*3+2]=rand(-75,15);}}p.needsUpdate=true;}
+ }else if(car){camera.lookAt(car.position.x*.5,1,-10);}
+ renderer.render(scene,camera);
 }
-function recycleTrees(){let changed=false;for(let i=0;i<treeRecords.length;i++){const t=treeRecords[i];if(t.s<distance-45){t.s+=TREE_WRAP;setTreeMatrix(t,i);changed=true;}}if(changed){treeTrunks.instanceMatrix.needsUpdate=true;treeCanopies.instanceMatrix.needsUpdate=true;treeCanopies.instanceColor.needsUpdate=true;}}
-
-function makeClouds(){
- const rand=rng(78961),cloudMat=new THREE.MeshStandardMaterial({color:'#f0f5f1',roughness:1,transparent:true,opacity:.8,depthWrite:false});
- for(let i=0;i<19;i++){const group=new THREE.Group();const n=4+Math.floor(rand()*4);for(let j=0;j<n;j++){const puff=new THREE.Mesh(new THREE.SphereGeometry(1,10,8),cloudMat);puff.scale.set(6+rand()*11,2.5+rand()*3.2,4+rand()*7);puff.position.set((rand()-.5)*20,(rand()-.5)*4,(rand()-.5)*12);group.add(puff);}const s=-180+i*235;const x=routeX(s)+(rand()-.5)*260;group.position.set(x,55+rand()*50,-s);group.userData={s,initialS:s,offset:(rand()-.5)*300,initialX:x,baseY:group.position.y,drift:(rand()-.5)*.6};cloudGroups.push(group);scene.add(group);}
-}
-function recycleClouds(dt){for(const g of cloudGroups){g.position.x+=g.userData.drift*dt; if(g.userData.s<distance-120){g.userData.s+=CLOUD_WRAP;g.position.z=-g.userData.s;g.position.x=routeX(g.userData.s)+g.userData.offset;g.position.y=g.userData.baseY;}g.visible=weather!=='fog';}}
-
-function makeCar(){
- car=new THREE.Group();
- const bodyMat=new THREE.MeshPhysicalMaterial({color:'#a9c2b5',metalness:.48,roughness:.26,clearcoat:.75,clearcoatRoughness:.2});
- const bodyDark=material('#26363a',.56);const glassMat=new THREE.MeshPhysicalMaterial({color:'#23404b',metalness:.28,roughness:.12,transmission:.12,transparent:true,opacity:.94});
- const tireMat=material('#15191a',.88);const hubMat=new THREE.MeshStandardMaterial({color:'#bbc5c0',metalness:.8,roughness:.25});
- function part(geo,mat,pos,scale){const m=new THREE.Mesh(geo,mat);m.position.set(...pos);if(scale)m.scale.set(...scale);m.castShadow=true;m.receiveShadow=true;car.add(m);return m;}
- part(new THREE.BoxGeometry(2.05,.52,4.15),bodyMat,[0,.68,0]);
- part(new THREE.BoxGeometry(1.72,.58,2.05),bodyMat,[0,1.12,-.22]);
- part(new THREE.BoxGeometry(1.48,.43,1.47),glassMat,[0,1.42,-.23]);
- part(new THREE.BoxGeometry(1.62,.09,1.75),bodyDark,[0,1.7,-.23]);
- part(new THREE.BoxGeometry(1.78,.15,.56),bodyMat,[0,.94,1.77]);
- part(new THREE.BoxGeometry(1.93,.13,.42),bodyDark,[0,.45,-2.02]);
- const wheelGeo=new THREE.CylinderGeometry(.39,.39,.25,16);const hubGeo=new THREE.CylinderGeometry(.21,.21,.27,12);
- for(const x of [-.98,.98])for(const z of [-1.31,1.32]){const w=new THREE.Mesh(wheelGeo,tireMat);w.rotation.z=Math.PI/2;w.position.set(x,.43,z);w.castShadow=true;car.add(w);carWheels.push(w);const h=new THREE.Mesh(hubGeo,hubMat);h.rotation.z=Math.PI/2;h.position.set(x*1.005,.43,z);car.add(h);}
- const lampGeo=new THREE.BoxGeometry(.38,.13,.1),lampMat=new THREE.MeshStandardMaterial({color:'#fff0c9',emissive:'#fff0c9',emissiveIntensity:1.7});
- part(lampGeo,lampMat,[-.68,.79,-2.1]);part(lampGeo,lampMat,[.68,.79,-2.1]);
- const tailMat=new THREE.MeshStandardMaterial({color:'#ff473d',emissive:'#cf1e14',emissiveIntensity:.8});part(new THREE.BoxGeometry(.34,.13,.08),tailMat,[-.67,.8,2.1]);part(new THREE.BoxGeometry(.34,.13,.08),tailMat,[.67,.8,2.1]);
- headLightL=new THREE.PointLight(0xffe6bc,0,48,2);headLightL.position.set(-.6,.7,-2.25);car.add(headLightL);headLightR=new THREE.PointLight(0xffe6bc,0,48,2);headLightR.position.set(.6,.7,-2.25);car.add(headLightR);
- scene.add(car);
-}
-
-function makeRain(){
- rainGroup=new THREE.Group();rainCount=window.innerWidth<760?180:430;rainPositions=new Float32Array(rainCount*6);rainSeed=[];
- const rand=rng(4103);
- for(let i=0;i<rainCount;i++){rainSeed.push({x:(rand()-.5)*52,y:rand()*40,z:(rand()-.5)*70,fall:25+rand()*20});const k=i*6;rainPositions[k]=rainSeed[i].x;rainPositions[k+1]=rainSeed[i].y;rainPositions[k+2]=rainSeed[i].z;rainPositions[k+3]=rainSeed[i].x-.25;rainPositions[k+4]=rainSeed[i].y-1.6;rainPositions[k+5]=rainSeed[i].z+.2;}
- const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.BufferAttribute(rainPositions,3));const mat=new THREE.LineBasicMaterial({color:'#b9dff0',transparent:true,opacity:.28,depthWrite:false});const lines=new THREE.LineSegments(geo,mat);rainGroup.add(lines);scene.add(rainGroup);rainGroup.visible=false;
-}
-function updateRain(dt){rainGroup.visible=weather==='rain';if(!rainGroup.visible)return;const a=rainPositions;for(let i=0;i<rainCount;i++){const k=i*6,r=rainSeed[i];r.y-=r.fall*dt;if(r.y<-2){r.y=35+Math.random()*9;r.x=(Math.random()-.5)*52;r.z=(Math.random()-.5)*70;}a[k]=r.x;a[k+1]=r.y;a[k+2]=r.z;a[k+3]=r.x-.22;a[k+4]=r.y-1.6;a[k+5]=r.z+.15;}rainGroup.position.copy(camera.position);rainGroup.children[0].geometry.attributes.position.needsUpdate=true;}
-
-function updateEnvironment(dt){
- const h=clockHours,angle=(h/24)*Math.PI*2;const elevation=Math.sin((h-6)/12*Math.PI);const sunDir=new THREE.Vector3(Math.cos(angle+.3),Math.max(-.35,elevation),-Math.sin(angle+.3)).normalize();
- sky.position.copy(camera.position);skyUniforms.sunDirection.value.copy(sunDir);const day=clamp((elevation+.16)/.8,0,1);skyUniforms.sunStrength.value=day;
- const palette={
-  top: new THREE.Color().lerpColors(new THREE.Color('#111c35'),new THREE.Color('#3b80a2'),day),
-  horizon: elevation<0?new THREE.Color('#27344b').lerp(new THREE.Color('#9c6c75'),clamp(elevation+1,0,1)):new THREE.Color('#d99378').lerp(new THREE.Color('#f0d7b0'),clamp(elevation,0,1)),
-  bottom: new THREE.Color('#607478').lerp(new THREE.Color('#bdd2ce'),day)
- };
- if(weather==='cloudy'){palette.top.lerp(new THREE.Color('#687b86'),.32);palette.horizon.lerp(new THREE.Color('#b6c1bc'),.28)}
- if(weather==='rain'){palette.top.lerp(new THREE.Color('#435766'),.64);palette.horizon.lerp(new THREE.Color('#93a5a7'),.55)}
- if(weather==='fog'){palette.top.lerp(new THREE.Color('#78908e'),.42);palette.horizon.lerp(new THREE.Color('#d0d6cb'),.62)}
- skyUniforms.topColor.value.copy(palette.top);skyUniforms.horizonColor.value.copy(palette.horizon);skyUniforms.bottomColor.value.copy(palette.bottom);skyUniforms.sunTint.value.copy(elevation<0?new THREE.Color('#8c9bb4'):new THREE.Color('#ffe7bd'));
- sunOrb.visible=elevation>-.04;sunOrb.position.copy(camera.position).addScaledVector(sunDir,600);sunOrb.scale.setScalar(weather==='cloudy'?7:9);
- const sunIntensity=(.08+Math.max(0,elevation)*3.4)*(weather==='cloudy'?.58:weather==='rain'?.32:1);sunLight.intensity=sunIntensity;sunLight.color.copy(new THREE.Color().lerpColors(new THREE.Color('#9aaee4'),new THREE.Color('#fff0d0'),day));sunLight.position.copy(car.position).addScaledVector(sunDir,240);sunLight.target.position.set(car.position.x,0,car.position.z-15);sunLight.target.updateMatrixWorld();
- hemiLight.intensity=.22+day*(weather==='rain'?.6:1.25);ambientLight.intensity=.09+day*.13;
- const fogColor=weather==='rain'?'#7d9198':weather==='cloudy'?'#98acae':weather==='fog'?'#c0d0ca':(elevation<0?'#37465a':day>.4?'#a9c8c5':'#c9a7a4');
- const fogNear=weather==='fog'?10:weather==='rain'?22:weather==='cloudy'?45:75;const fogFar=weather==='fog'?180:weather==='rain'?300:weather==='cloudy'?430:760;scene.fog.color.set(fogColor);scene.fog.near=fogNear;scene.fog.far=fogFar;
- headLightL.intensity=headLightR.intensity=elevation<.08?3.8:weather==='fog'?.75:0;
- for(const g of cloudGroups){const dark=weather==='rain'?new THREE.Color('#84979b'):weather==='cloudy'?new THREE.Color('#c6d0cc'):new THREE.Color('#f0f5f1');for(const mesh of g.children)mesh.material.color.copy(dark);g.visible=weather!=='fog';}
- const hourLabel=String(Math.floor(h)%24).padStart(2,'0')+':'+String(Math.floor((h%1)*60)).padStart(2,'0');const weatherText={clear:'Nắng trong',cloudy:'Nhiều mây',fog:'Sương mù',rain:'Mưa nhẹ'}[weather];$('weatherline').textContent=hourLabel+' · '+weatherText;
-}
-
-function updateQuality(value){quality=value;if(!renderer)return;const mobile=window.innerWidth<760;const ratio=value==='high'?(mobile?1.5:2):value==='performance'?(mobile ? 0.85 : 1): (mobile?1.2:1.5);renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,ratio));renderer.shadowMap.enabled=value!=='performance';sunLight.shadow.mapSize.set(value==='high'?2048:value==='balanced'?1024:512,value==='high'?2048:value==='balanced'?1024:512);sunLight.shadow.map?.dispose();sunLight.shadow.map=null;if(bloomPass)bloomPass.strength=value==='performance'?bloomStrength*.55:bloomStrength;resize();}
-function resize(){if(!renderer||!camera)return;const w=window.innerWidth,h=window.innerHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();if(composer)composer.setSize(w,h);if(bloomPass)bloomPass.setSize(w,h);}
-
-function updateGame(dt){
- if(!running||paused)return;
- const accel=keys.gas?40:keys.brake?-80:0;speed=clamp(speed+accel*dt,0,170);if(!keys.gas&&!keys.brake)speed=lerp(speed,53,dt*.055);
- steer=(keys.left?-1:0)+(keys.right?1:0);playerOffset=clamp(playerOffset+steer*dt*3.15,-4.4,4.4);
- distance+=(speed/3.6)*dt*1.2;
- clockHours=(clockHours+dt*timeRate/3600)%24;
- recycleRoad();recycleTerrain();recycleTrees();recycleClouds(dt);
- const slope=routeSlope(distance),p=roadPoint(distance,playerOffset);car.position.set(p.x,groundHeight(distance,playerOffset)+.01,p.z);car.rotation.y=-Math.atan(slope)-steer*.035;car.rotation.z=-steer*.018;for(const w of carWheels)w.rotation.x-=speed/3.6*dt/0.39;
- const cp=car.position;
- if(cameraMode===0){camera.position.lerp(v3(cp.x-slope*8,cp.y+3.25,cp.z+9.3),1-Math.exp(-dt*3.2));camera.lookAt(routeX(distance+27)+playerOffset*.35,1.1,-distance-27);}
- else if(cameraMode===1){camera.position.lerp(v3(cp.x-slope*1.3,cp.y+1.52,cp.z-1.05),1-Math.exp(-dt*4));camera.lookAt(routeX(distance+75),1.25,-distance-75);}
- else {camera.position.lerp(v3(cp.x-slope*13,cp.y+7.8,cp.z+17),1-Math.exp(-dt*1.8));camera.lookAt(routeX(distance+18),.8,-distance-25);}
- updateRain(dt);updateEnvironment(dt);
- $('speed').innerHTML=String(Math.round(speed)).padStart(3,'0')+' <small>KM/H</small>';
-}
-function animate(now){requestAnimationFrame(animate);const dt=Math.min((now-lastFrame)/1000,.045);lastFrame=now;updateGame(dt);if(initialized){sky.position.copy(camera.position);if(composer)composer.render();else renderer.render(scene,camera);}fpsFrames++;fpsTimer+=dt;if(fpsTimer>2){fpsFrames=0;fpsTimer=0;}}
-
-function begin(){running=true;paused=false;$('overlay').style.display='none';$('pauseBtn').textContent='Ⅱ Tạm dừng';showToast('Chúc bạn có một hành trình thư thái.');}
-function showPause(){paused=true;$('cover').innerHTML=`<div class="eyebrow">Tạm nghỉ giữa hành trình</div><h1>EVERROAD</h1><div class="edition">BẠN ĐANG TẠM DỪNG</div><p>Con đường sẽ tiếp tục chờ bạn phía trước.</p><div class="actions"><button class="btn primary" id="resumeBtn">TIẾP TỤC LÁI XE →</button><button class="btn" id="pauseSettings">Cài đặt</button><button class="btn" id="restartBtn">Khởi động lại</button></div><div class="tip">Nhấn Esc để tiếp tục.</div>`;$('overlay').style.display='flex';$('resumeBtn').onclick=resume;$('pauseSettings').onclick=()=>{$('settings').style.display='block'};$('restartBtn').onclick=()=>{resetJourney();resume();};$('pauseBtn').textContent='▶ Tiếp tục';}
-function resume(){paused=false;$('overlay').style.display='none';$('pauseBtn').textContent='Ⅱ Tạm dừng';}
-function resetJourney(){
- distance=0;speed=63;playerOffset=0;clockHours=8.25;
- roadSegments.forEach((mesh,i)=>{const s=-36+i*ROAD_LEN;mesh.userData.s=s;mesh.geometry.dispose();mesh.geometry=buildRoadGeometry(s,ROAD_LEN);});
- terrainChunks.forEach((mesh,i)=>{const s=-70+i*TERRAIN_LEN;mesh.userData.s=s;mesh.geometry.dispose();mesh.geometry=terrainGeometry(s,TERRAIN_LEN);});
- treeRecords.forEach((t,i)=>{t.s=t.initialS;setTreeMatrix(t,i);});
- if(treeTrunks){treeTrunks.instanceMatrix.needsUpdate=true;treeCanopies.instanceMatrix.needsUpdate=true;treeCanopies.instanceColor.needsUpdate=true;}
- cloudGroups.forEach(g=>{g.userData.s=g.userData.initialS;g.position.set(g.userData.initialX,g.userData.baseY,-g.userData.s);});
- updateEnvironment(0);showToast('Đã bắt đầu lại hành trình.');
-}
-let toastTimer;function showToast(msg){$('toast').textContent=msg;$('toast').style.display='block';clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').style.display='none',2200);}
-function toggleSettings(force){const el=$('settings');el.style.display=force?'block':el.style.display==='block'?'none':'block';}
-
-$('startBtn').addEventListener('click',begin);
-$('settingsFromCover').addEventListener('click',()=>toggleSettings(true));
-$('pauseBtn').addEventListener('click',()=>{if(!running){begin();return}paused?resume():showPause();});
-$('cameraBtn').addEventListener('click',()=>{cameraMode=(cameraMode+1)%3;const labels=['◉ Góc nhìn','◉ Góc lái','◉ Điện ảnh'];$('cameraBtn').textContent=labels[cameraMode];showToast(['Góc nhìn bám đuôi','Góc nhìn từ đầu xe','Góc nhìn điện ảnh'][cameraMode]);});
-$('weatherBtn').addEventListener('click',()=>{const order=['clear','cloudy','fog','rain'];weather=order[(order.indexOf(weather)+1)%order.length];$('weatherSelect').value=weather;updateEnvironment(0);showToast('Thời tiết: '+$('weatherSelect').selectedOptions[0].text);});
-$('settingsBtn').addEventListener('click',()=>toggleSettings());$('closeSettings').addEventListener('click',()=>toggleSettings(false));
-$('weatherSelect').addEventListener('change',e=>{weather=e.target.value;updateEnvironment(0);});
-$('timeRate').addEventListener('input',e=>{timeRate=+e.target.value;});
-$('quality').addEventListener('change',e=>{updateQuality(e.target.value);showToast('Chất lượng: '+e.target.selectedOptions[0].text);});
-$('bloom').addEventListener('input',e=>{bloomStrength=+e.target.value;if(bloomPass)bloomPass.strength=quality==='performance'?bloomStrength*.55:bloomStrength;});
-$('resetSettings').addEventListener('click',()=>{$('weatherSelect').value='clear';weather='clear';$('timeRate').value=12;timeRate=12;$('quality').value='balanced';updateQuality('balanced');$('bloom').value=.32;bloomStrength=.32;if(bloomPass)bloomPass.strength=.32;updateEnvironment(0);showToast('Đã khôi phục cài đặt mặc định.');});
-
-window.addEventListener('keydown',e=>{const k=e.key.toLowerCase();if(['arrowleft','arrowright','arrowup','arrowdown',' '].includes(k))e.preventDefault();if(k==='a'||k==='arrowleft')keys.left=true;if(k==='d'||k==='arrowright')keys.right=true;if(k==='w'||k==='arrowup')keys.gas=true;if(k==='s'||k==='arrowdown')keys.brake=true;if(k==='escape'){if($('settings').style.display==='block')toggleSettings(false);else if(running){paused?resume():showPause();}}if(k==='enter'&&!running)begin();});
-window.addEventListener('keyup',e=>{const k=e.key.toLowerCase();if(k==='a'||k==='arrowleft')keys.left=false;if(k==='d'||k==='arrowright')keys.right=false;if(k==='w'||k==='arrowup')keys.gas=false;if(k==='s'||k==='arrowdown')keys.brake=false;});
-window.addEventListener('blur',()=>{keys.left=keys.right=keys.gas=keys.brake=false;});
-document.querySelectorAll('[data-key]').forEach(b=>{const k=b.dataset.key;const down=e=>{e.preventDefault();keys[k]=true;b.classList.add('down');if(b.setPointerCapture&&e.pointerId!==undefined){try{b.setPointerCapture(e.pointerId)}catch(_){}}};const up=e=>{e.preventDefault();keys[k]=false;b.classList.remove('down')};b.addEventListener('pointerdown',down);b.addEventListener('pointerup',up);b.addEventListener('pointercancel',up);b.addEventListener('lostpointercapture',up);});
-document.addEventListener('visibilitychange',()=>{if(document.hidden&&running&&!paused)showPause();});
-window.addEventListener('resize',()=>{resize();if(initialized)updateQuality(quality);});
-initialize();
-})();
+document.querySelector('#startBtn').addEventListener('click',start);
+document.querySelector('#pauseBtn').addEventListener('click',togglePause);
+document.querySelector('#viewBtn').addEventListener('click',changeView);
+document.querySelector('#weatherBtn').addEventListener('click',()=>setWeather(weather==='clear'?'cloud':weather==='cloud'?'rain':'clear'));
+document.querySelector('#settingsBtn').addEventListener('click',()=>{paused=true;menu.style.display='grid';document.querySelector('#startBtn').textContent='ÁP DỤNG & TIẾP TỤC';});
+document.querySelector('#scene').addEventListener('change',()=>{});
+addEventListener('keydown',e=>{
+ const k=e.key.toLowerCase();if(['arrowup','arrowdown','arrowleft','arrowright',' '].includes(k))e.preventDefault();
+ if(k==='w'||k==='arrowup')keys.gas=true;if(k==='s'||k==='arrowdown')keys.brake=true;
+ if(k==='a'||k==='arrowleft')keys.left=true;if(k==='d'||k==='arrowright')keys.right=true;
+ if(k==='p'||k==='escape')togglePause();if(k==='c')changeView();
+});
+addEventListener('keyup',e=>{const k=e.key.toLowerCase();if(k==='w'||k==='arrowup')keys.gas=false;if(k==='s'||k==='arrowdown')keys.brake=false;if(k==='a'||k==='arrowleft')keys.left=false;if(k==='d'||k==='arrowright')keys.right=false;});
+document.querySelectorAll('[data-key]').forEach(btn=>{
+ const key=btn.dataset.key;
+ const down=e=>{e.preventDefault();keys[key]=true;try{btn.setPointerCapture(e.pointerId)}catch{}};
+ const up=e=>{e.preventDefault();keys[key]=false;};
+ btn.addEventListener('pointerdown',down);btn.addEventListener('pointerup',up);btn.addEventListener('pointercancel',up);btn.addEventListener('lostpointercapture',up);
+});
 </script>
 </body>
 </html>
