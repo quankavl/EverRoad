@@ -2,78 +2,80 @@
 <html lang="vi">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <meta name="theme-color" content="#062b46">
-  <title>Azure Drift: Đại Dương Bình Yên</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta name="theme-color" content="#101b28">
+  <title>Serene Stride — Nhịp Bước An Yên</title>
+  <link rel="stylesheet" href="./style.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js"
+      }
+    }
+  </script>
 </head>
 <body>
-  <canvas id="game"></canvas>
-  <div id="vignette"></div>
+  <main id="game-shell">
+    <canvas id="game-canvas" aria-label="Thế giới game 3D"></canvas>
 
-  <header class="hud">
-    <div class="brand">
-      <div class="brand-mark">≈</div>
-      <div><strong>AZURE DRIFT</strong><small>ĐẠI DƯƠNG BÌNH YÊN</small></div>
+    <section class="topbar" aria-label="Thông tin chuyến chạy">
+      <div class="brand">
+        <div class="brand-mark">S</div>
+        <div><strong>SERENE STRIDE</strong><span>NHỊP BƯỚC AN YÊN</span></div>
+      </div>
+      <div class="status-group">
+        <div class="status-pill"><span class="status-dot"></span><span id="world-time">07:30</span></div>
+        <div class="status-pill"><span id="weather-icon">☀</span><span id="weather-label">Trời quang</span></div>
+      </div>
+    </section>
+
+    <section class="hud" aria-label="Thống kê">
+      <div class="hud-card"><span class="hud-label">QUÃNG ĐƯỜNG</span><strong><span id="distance">0</span><small> m</small></strong></div>
+      <div class="hud-card"><span class="hud-label">THỜI GIAN</span><strong id="elapsed">00:00</strong></div>
+      <div class="hud-card"><span class="hud-label">NHỊP ĐỘ</span><strong id="pace">Thư thái</strong></div>
+    </section>
+
+    <div class="right-controls">
+      <button class="icon-button" id="sound-toggle" aria-label="Bật hoặc tắt âm thanh" title="Âm thanh">♫</button>
+      <button class="icon-button" id="pause-button" aria-label="Tạm dừng" title="Tạm dừng">Ⅱ</button>
     </div>
-    <div class="stats">
-      <div><span>HÀNH TRÌNH</span><strong id="distance">0 m</strong></div>
-      <div><span>THỜI GIAN</span><strong id="timer">00:00</strong></div>
-      <div><span>TỐC ĐỘ</span><strong id="speed">12 km/h</strong></div>
+
+    <section class="welcome-panel" id="welcome-panel">
+      <div class="eyebrow"><span></span> KHÔNG GIAN CỦA RIÊNG BẠN</div>
+      <h1>Hít thở.<br><em>Và cứ bước đi.</em></h1>
+      <p>Một góc phố yên bình, một nhịp chạy của riêng bạn. Không đích đến, không áp lực — chỉ có bạn và con đường phía trước.</p>
+      <button class="primary-button" id="start-button">Bắt đầu hành trình <span>→</span></button>
+      <div class="welcome-foot"><span>◉</span> Có thể chơi bằng bàn phím hoặc cảm ứng</div>
+    </section>
+
+    <section class="pause-panel hidden" id="pause-panel">
+      <div class="pause-symbol">Ⅱ</div>
+      <h2>Tạm nghỉ một chút</h2>
+      <p>Hít một hơi thật sâu. Con đường vẫn ở đây khi bạn sẵn sàng.</p>
+      <button class="primary-button" id="resume-button">Tiếp tục hành trình <span>→</span></button>
+      <button class="text-button" id="restart-button">Bắt đầu lại</button>
+    </section>
+
+    <div class="toast" id="toast" role="status"></div>
+
+    <section class="bottom-bar">
+      <div class="tip"><span class="tip-icon">✦</span><span id="tip-text">Thả lỏng vai và tận hưởng khung cảnh.</span></div>
+      <div class="desktop-help"><kbd>←</kbd><kbd>→</kbd> Đổi làn <span class="help-divider">·</span> <kbd>Space</kbd> Tạm dừng</div>
+    </section>
+
+    <section class="mobile-controls" aria-label="Điều khiển cảm ứng">
+      <button class="move-button" id="left-button" aria-label="Sang trái">←</button>
+      <div class="mobile-center"><span>VUỐT ĐỂ DI CHUYỂN</span><small>Chạm hai bên để đổi làn</small></div>
+      <button class="move-button" id="right-button" aria-label="Sang phải">→</button>
+    </section>
+
+    <div class="loading-screen" id="loading-screen">
+      <div class="loading-logo">S</div>
+      <div class="loading-title">Serene Stride</div>
+      <div class="loading-subtitle">Đang chuẩn bị con đường của bạn…</div>
+      <div class="loading-track"><span></span></div>
     </div>
-    <div class="top-actions">
-      <button id="soundBtn" class="icon-btn" aria-label="Bật tắt âm thanh" title="Âm thanh">♫</button>
-      <button id="pauseBtn" class="icon-btn" aria-label="Tạm dừng" title="Tạm dừng">Ⅱ</button>
-    </div>
-  </header>
-
-  <div class="crosshair" aria-hidden="true"><span></span><i></i></div>
-  <div class="hint" id="hint">Hít thở thật sâu. Đại dương đang chờ bạn.</div>
-
-  <section id="startScreen" class="overlay">
-    <div class="panel start-panel">
-      <div class="eyebrow">MỘT KHOẢNG LẶNG GIỮA BIỂN KHƠI</div>
-      <h1>Azure <em>Drift</em></h1>
-      <p class="subtitle">Đại Dương Bình Yên</p>
-      <p class="intro">Lướt nhẹ trên mặt biển, lắng nghe tiếng sóng và để hành trình đưa bạn đi xa hơn đường chân trời.</p>
-      <button id="startBtn" class="primary-btn">BẮT ĐẦU HÀNH TRÌNH <span>→</span></button>
-      <div class="microcopy">KHÔNG ĐÍCH ĐẾN · KHÔNG ÁP LỰC · CHỈ CÓ BIỂN XANH</div>
-    </div>
-  </section>
-
-  <section id="pauseScreen" class="overlay hidden">
-    <div class="panel">
-      <div class="eyebrow">TẠM DỪNG MỘT CHÚT</div>
-      <h2>Thả lỏng nhé.</h2>
-      <p>Biển vẫn ở đây khi bạn sẵn sàng quay lại.</p>
-      <button id="resumeBtn" class="primary-btn">TIẾP TỤC LƯỚT <span>→</span></button>
-      <button id="restartBtn" class="quiet-btn">BẮT ĐẦU LẠI</button>
-    </div>
-  </section>
-
-  <section id="endlessTip" class="bottom-tip">
-    <span class="tip-dot"></span><span id="tipText">W A S D / phím mũi tên để điều khiển</span>
-  </section>
-
-  <div class="desktop-controls">
-    <span><kbd>W</kbd><kbd>↑</kbd> Tăng tốc</span>
-    <span><kbd>S</kbd><kbd>↓</kbd> Giảm tốc</span>
-    <span><kbd>A</kbd><kbd>D</kbd> Rẽ trái / phải</span>
-    <span><kbd>SPACE</kbd> Tạm dừng</span>
-  </div>
-
-  <div id="mobileControls" class="mobile-controls">
-    <div class="touch-stick" id="stickArea" aria-label="Cần điều khiển">
-      <div class="stick-ring"></div><div class="stick-knob" id="stickKnob"></div>
-      <span class="stick-label">LÁI</span>
-    </div>
-    <div class="touch-pedals">
-      <button id="brakeTouch" class="pedal">−<small>CHẬM</small></button>
-      <button id="boostTouch" class="pedal boost">＋<small>NHANH</small></button>
-    </div>
-  </div>
-
-  <div id="toast" class="toast"></div>
-  <script type="module" src="main.js"></script>
+  </main>
+  <script type="module" src="./main.js"></script>
 </body>
 </html>
