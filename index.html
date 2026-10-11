@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0b1620">
+<title>EverRoad — Hành trình bất tận</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<style>
+:root{--glass:rgba(8,18,27,.66);--line:rgba(255,255,255,.16);--text:#f4f7fa;--muted:#b9c8d2;--accent:#a9e6d0}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#101c27;color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;touch-action:none}
+#game{position:fixed;inset:0}canvas{display:block;width:100%;height:100%}
+.panel{background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 12px 40px #0002;border-radius:18px}
+#brand{position:fixed;top:18px;left:18px;padding:13px 16px;pointer-events:none}
+#brand .name{font-size:17px;letter-spacing:.2em;font-weight:800}#brand .tag{font-size:10px;color:var(--muted);letter-spacing:.13em;margin-top:3px}
+#stats{position:fixed;top:18px;right:18px;padding:13px 16px;min-width:154px;text-align:right}
+#speed{font-size:28px;font-weight:750;letter-spacing:-.04em;line-height:1.1}#speed small{font-size:11px;color:var(--muted);letter-spacing:.08em}#distance{font-size:11px;color:var(--muted);margin-top:5px}
+#toolbar{position:fixed;right:18px;top:118px;display:flex;gap:8px;flex-direction:column}
+button{font:inherit;color:var(--text);border:1px solid var(--line);background:rgba(8,18,27,.72);border-radius:12px;padding:10px 13px;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:none}
+button:hover{background:rgba(30,55,67,.9)}button:active,.control.active{background:rgba(130,210,185,.34);border-color:#b0e8d6}
+#hint{position:fixed;left:50%;transform:translateX(-50%);bottom:20px;padding:9px 14px;color:#e7eff3;font-size:11px;letter-spacing:.02em;white-space:nowrap;text-align:center}
+#mobile{position:fixed;inset:auto 0 max(18px,env(safe-area-inset-bottom)) 0;display:none;justify-content:space-between;align-items:end;padding:0 18px;pointer-events:none}
+.pad{display:flex;gap:10px;pointer-events:auto}.control{width:62px;height:62px;border-radius:20px;font-size:22px;display:grid;place-items:center;background:rgba(8,18,27,.48);border-color:rgba(255,255,255,.28);box-shadow:0 8px 22px #0002}
+.control.gas{width:72px;height:78px;font-size:12px;font-weight:800;letter-spacing:.06em}.control.brake{width:62px;height:62px;font-size:10px;font-weight:800}
+#overlay{position:fixed;inset:0;display:grid;place-items:center;background:linear-gradient(120deg,rgba(5,15,24,.62),rgba(5,15,24,.2));padding:22px}
+#intro{width:min(540px,100%);padding:clamp(24px,5vw,42px);text-align:left}
+.eyebrow{font-size:10px;letter-spacing:.24em;color:var(--accent);font-weight:800}
+h1{font-size:clamp(38px,8vw,64px);line-height:.98;letter-spacing:-.06em;margin:15px 0 12px}
+#intro p{color:#c7d4dc;line-height:1.7;font-size:14px;max-width:410px}
+.primary{background:#c1efdf;color:#10221f;border-color:#c1efdf;font-weight:800;padding:13px 19px;margin-top:12px}
+#intro .meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.chip{border:1px solid var(--line);border-radius:999px;padding:7px 10px;font-size:10px;color:#c7d4dc}
+#pause{position:fixed;inset:0;display:none;place-items:center;background:#07111c66;padding:20px}
+#pause .panel{padding:28px;text-align:center;width:min(340px,100%)}#pause h2{margin:0 0 8px}#pause p{color:var(--muted);font-size:13px;line-height:1.6}
+#toast{position:fixed;left:50%;top:90px;transform:translateX(-50%);font-size:12px;color:#eaf8f2;background:#102720cc;border:1px solid #9fe2c966;border-radius:999px;padding:8px 13px;opacity:0;transition:opacity .3s;pointer-events:none}
+@media(max-width:700px){#brand{top:12px;left:12px;padding:10px 12px}#brand .name{font-size:14px}#stats{top:12px;right:12px;padding:10px 12px;min-width:125px}#speed{font-size:23px}#toolbar{top:96px;right:12px}#toolbar button{padding:9px 10px;font-size:11px}#hint{bottom:112px;font-size:10px;white-space:normal;width:90%}#mobile{display:flex}#intro p{font-size:13px}}
+@media(hover:none),(pointer:coarse){#mobile{display:flex}#hint{bottom:112px}}
+</style>
+</head>
+<body>
+<div id="game"></div>
+<div id="brand" class="panel"><div class="name">EVERROAD</div><div class="tag">HÀNH TRÌNH BẤT TẬN</div></div>
+<div id="stats" class="panel"><div id="speed">0 <small>KM/H</small></div><div id="distance">HÀNH TRÌNH · 0,00 KM</div></div>
+<div id="toolbar">
+  <button id="cameraBtn" title="Đổi góc nhìn">◉ Góc nhìn</button>
+  <button id="timeBtn" title="Đổi thời điểm">☼ Thời gian</button>
+  <button id="pauseBtn">Ⅱ Tạm dừng</button>
+</div>
+<div id="hint" class="panel">W / ↑ tăng tốc · S / ↓ phanh · A D / ← → đánh lái · C đổi góc nhìn</div>
+<div id="mobile">
+  <div class="pad"><button class="control" data-control="left" aria-label="Rẽ trái">‹</button><button class="control" data-control="right" aria-label="Rẽ phải">›</button></div>
+  <div class="pad"><button class="control brake" data-control="brake">PHANH</button><button class="control gas" data-control="gas">TĂNG TỐC</button></div>
+</div>
+<div id="overlay">
+  <div id="intro" class="panel">
+    <div class="eyebrow">TRÒ CHƠI LÁI XE THƯ GIÃN · WEB EDITION</div>
+    <h1>Đường dài.<br>Thảnh thơi.</h1>
+    <p>Chạm vào hành trình của riêng bạn. Lái xe qua những cung đường uốn lượn, rừng xanh và ánh nắng đổi thay — không đích đến, không áp lực.</p>
+    <button id="startBtn" class="primary">Bắt đầu hành trình ↗</button>
+    <div class="meta"><span class="chip">3D thời gian thực</span><span class="chip">Điều khiển cảm ứng</span><span class="chip">Không cần cài đặt</span></div>
+  </div>
+</div>
+<div id="pause"><div class="panel"><h2>Đang nghỉ chân</h2><p>Con đường vẫn ở đó. Hãy tiếp tục khi bạn sẵn sàng.</p><button class="primary" id="resumeBtn">Tiếp tục lái xe</button></div></div>
+<div id="toast"></div>
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js"}}
+</script>
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>
