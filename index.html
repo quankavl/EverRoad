@@ -1,92 +1,167 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Xưởng Đào Coin — Trò chơi mô phỏng</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Đào Vàng — Thợ Mỏ Tí Hon</title>
 <style>
-:root{--bg:#09111f;--panel:#111d30;--panel2:#17263d;--line:#2b3e5b;--text:#eaf2ff;--muted:#9eb0cc;--cyan:#54e5ff;--gold:#ffd166;--green:#62f0a5;--red:#ff7185}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#152746 0,#09111f 58%);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh}
-.wrap{max-width:1180px;margin:auto;padding:24px 16px 48px}.top{display:flex;gap:18px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-bottom:20px}
-.brand{display:flex;gap:12px;align-items:center}.logo{width:54px;height:54px;border-radius:16px;background:linear-gradient(135deg,#54e5ff,#7a7cff);display:grid;place-items:center;font-size:28px;box-shadow:0 0 30px #54e5ff33}
-h1{font-size:clamp(24px,4vw,34px);margin:0;letter-spacing:-.8px}.sub{color:var(--muted);margin:4px 0 0}.tag{font-size:12px;border:1px solid #42617f;color:var(--cyan);padding:5px 9px;border-radius:99px;white-space:nowrap}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}.stat,.panel{background:linear-gradient(145deg,#14233aee,#0e192aee);border:1px solid var(--line);border-radius:18px;box-shadow:0 12px 32px #0002}
-.stat{padding:15px}.label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px}.value{font-size:clamp(20px,3vw,27px);font-weight:800;margin-top:5px}.value small{font-size:12px;color:var(--muted);font-weight:500}.layout{display:grid;grid-template-columns:1.1fr .9fr;gap:14px}.panel{padding:19px;margin-bottom:14px}.panel h2{font-size:18px;margin:0 0 12px}.minerbox{position:relative;overflow:hidden;min-height:270px;display:grid;place-items:center;background:radial-gradient(ellipse at 50% 65%,#1c5b79 0,#122742 35%,#101a2b 75%);border-radius:14px;border:1px solid #2d5971}
-.stars{position:absolute;inset:0;background-image:radial-gradient(#b4f6ff 1px,transparent 1.5px),radial-gradient(#fff 1px,transparent 1.5px);background-size:59px 59px,91px 91px;background-position:0 0,25px 18px;opacity:.3}
-.rig{position:relative;width:205px;height:145px;filter:drop-shadow(0 12px 15px #0008)}.rigtop{height:22px;background:#435775;border:2px solid #829ab8;border-radius:8px 8px 3px 3px}.rigbody{height:110px;background:linear-gradient(145deg,#273d5b,#111a2b);border:2px solid #647d9e;border-top:0;border-radius:3px 3px 10px 10px;padding:13px;display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
-.fan{border:4px solid #456e8c;border-radius:50%;background:radial-gradient(circle,#b9faff 0 8%,#38bad4 10% 20%,#1c3550 22% 100%);animation:spin 3s linear infinite;box-shadow:0 0 16px #54e5ff66}.rig.active .fan{animation-duration:.65s;box-shadow:0 0 24px #54e5ffaa}
-@keyframes spin{to{transform:rotate(360deg)}}.coin{position:absolute;right:calc(50% - 120px);top:45px;font-size:34px;animation:float 3s ease-in-out infinite}.coin.c2{right:calc(50% + 90px);top:100px;font-size:22px;animation-delay:-1s}@keyframes float{50%{transform:translateY(-13px) rotate(12deg)}}
-.miningtext{position:absolute;bottom:13px;text-align:center;color:#a9eefa;font-size:13px}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:13px}.btn{border:1px solid #3c587b;background:#1b2c46;color:var(--text);border-radius:11px;padding:11px 14px;font-weight:700;cursor:pointer;transition:.15s}.btn:hover{transform:translateY(-1px);border-color:var(--cyan)}.btn.primary{background:linear-gradient(135deg,#1aa6c6,#4766e8);border:0;color:#fff}.btn.gold{background:linear-gradient(135deg,#f4bd50,#ed8d3c);border:0;color:#241805}.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
-.progress{height:9px;border-radius:99px;background:#0a1321;overflow:hidden;margin:9px 0 4px;border:1px solid #2c3e58}.bar{height:100%;width:0;background:linear-gradient(90deg,#36d9f5,#6af0b3);transition:width .2s}
-.muted{color:var(--muted);font-size:13px}.row{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid #263750}.row:last-child{border-bottom:0}.row strong{display:block}.row small{color:var(--muted)}.price{font-weight:800;color:var(--gold);white-space:nowrap}.shopitem{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px;border:1px solid #2b3f5e;border-radius:12px;margin-top:9px;background:#101c2e}.shopitem .btn{padding:8px 10px;font-size:13px}.badge{font-size:11px;color:var(--green);border:1px solid #286b55;padding:3px 7px;border-radius:99px}
-.log{height:125px;overflow:auto;background:#0a1422;border:1px solid #263750;border-radius:12px;padding:10px;font-size:13px;color:#b9c9df}.log div{padding:3px 0;border-bottom:1px dashed #1e3048}.footer{color:#8194b1;font-size:12px;text-align:center;margin-top:18px}.notice{background:#17263a;border:1px solid #39516d;border-radius:12px;padding:12px;color:#b9c9df;font-size:13px;margin-top:12px}
-@media(max-width:800px){.stats{grid-template-columns:repeat(2,1fr)}.layout{grid-template-columns:1fr}.panel{padding:15px}.wrap{padding:16px 12px 35px}}
+:root{--gold:#ffd34d;--ink:#20160d;--panel:#fff3cf}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at top,#38604b,#142b25 70%);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#fff7df;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:18px}
+.game{width:min(100%,1000px);background:#2b2118;border:4px solid #b77a35;border-radius:20px;overflow:hidden;box-shadow:0 18px 60px #0008}
+header{padding:14px 20px;background:linear-gradient(90deg,#61391d,#a5662b);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+h1{margin:0;font-size:clamp(22px,4vw,34px);color:#ffe27b;text-shadow:2px 3px #4d260f}
+.sub{font-size:13px;color:#ffedc2}
+.stats{display:flex;gap:8px;flex-wrap:wrap}
+.stat{background:#3b281b;border:1px solid #e3a74b;border-radius:10px;padding:7px 12px;font-weight:700}
+.stat span{color:#ffe27b}
+.stage{position:relative;background:#9bd6db}
+canvas{display:block;width:100%;height:auto;aspect-ratio:900/540;cursor:pointer}
+.overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#1b211bbd;padding:18px}
+.overlay.hidden{display:none}
+.modal{max-width:460px;text-align:center;background:#fff1c8;color:#352111;border:4px solid #d18a32;border-radius:18px;padding:24px;box-shadow:0 12px 30px #0007}
+.modal h2{margin:0 0 8px;color:#8c4a14;font-size:28px}
+.modal p{line-height:1.5}
+button{border:0;border-radius:10px;padding:11px 16px;font-weight:800;cursor:pointer;background:#ffd34d;color:#38200c;box-shadow:0 3px 0 #b77921;transition:transform .1s}
+button:hover{transform:translateY(-1px);filter:brightness(1.04)}
+button:active{transform:translateY(2px);box-shadow:none}
+.controls{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:12px 16px;background:#3a291c}
+.help{font-size:13px;color:#f9e7c2;line-height:1.5}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+#message{min-height:25px;padding:7px 16px;background:#21180f;color:#ffe38a;font-size:14px;text-align:center}
+@media(max-width:600px){body{padding:6px}.game{border-width:2px;border-radius:12px}.controls{padding:10px}.stat{padding:5px 8px;font-size:13px}}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header class="top">
-    <div class="brand"><div class="logo">⛏️</div><div><h1>Xưởng Đào Coin</h1><p class="sub">Xây dàn máy · Tối ưu năng lượng · Tích lũy coin ảo</p></div></div>
-    <span class="tag">TRÒ CHƠI MÔ PHỎNG OFFLINE</span>
-  </header>
-  <section class="stats">
-    <div class="stat"><div class="label">Coin đang có</div><div class="value" id="coins">0.0000 <small>VCO</small></div></div>
-    <div class="stat"><div class="label">Số dư quỹ</div><div class="value" id="cash">250 <small>₫ ảo</small></div></div>
-    <div class="stat"><div class="label">Tốc độ đào</div><div class="value" id="rate">1.0 <small>MH/s</small></div></div>
-    <div class="stat"><div class="label">Điện năng / phút</div><div class="value" id="power">1 <small>điểm</small></div></div>
-  </section>
-  <div class="layout">
-    <main>
-      <section class="panel">
-        <h2>⚡ Dàn máy khai thác</h2>
-        <div class="minerbox"><div class="stars"></div><div class="coin">🪙</div><div class="coin c2">✦</div><div class="rig active" id="rig"><div class="rigtop"></div><div class="rigbody"><div class="fan"></div><div class="fan"></div><div class="fan"></div></div></div><div class="miningtext" id="status">Dàn máy đang hoạt động · Khối tiếp theo: 0%</div></div>
-        <div class="progress"><div class="bar" id="progress"></div></div><div class="muted">Mỗi khối hoàn tất sẽ thưởng coin ảo. Nâng cấp để tăng tốc độ.</div>
-        <div class="actions"><button class="btn primary" id="toggle">⏸ Tạm dừng đào</button><button class="btn" id="claim">🪙 Thu hoạch ngay</button><button class="btn" id="save">💾 Lưu tiến trình</button></div>
-        <div class="notice">Đây là trò chơi giải trí: VCO và số dư chỉ là dữ liệu trong game, không phải tiền thật hay tiền mã hóa thật. Không kết nối ví và không thực hiện giao dịch.</div>
-      </section>
-      <section class="panel"><h2>📊 Nhật ký xưởng</h2><div class="log" id="log" aria-live="polite"><div>Chào mừng đến Xưởng Đào Coin! Dàn máy đã sẵn sàng.</div></div></section>
-    </main>
-    <aside>
-      <section class="panel"><h2>🛠️ Nâng cấp thiết bị</h2><p class="muted">Dùng quỹ ảo để tăng hiệu suất khai thác.</p>
-        <div class="shopitem"><div><strong>Card đồ họa cơ bản</strong><small>+0,8 MH/s mỗi lần nâng</small></div><div style="text-align:right"><div class="price" id="gpuCost">120 ₫ ảo</div><button class="btn gold" id="gpuBuy">Nâng cấp</button></div></div>
-        <div class="shopitem"><div><strong>Bộ nguồn tiết kiệm</strong><small>Giảm tiêu hao điện trong game</small></div><div style="text-align:right"><div class="price" id="powerCost">90 ₫ ảo</div><button class="btn gold" id="powerBuy">Mua ngay</button></div></div>
-        <div class="shopitem"><div><strong>Hệ thống làm mát</strong><small>+25% tốc độ đào</small></div><div style="text-align:right"><div class="price" id="coolCost">180 ₫ ảo</div><button class="btn gold" id="coolBuy">Lắp đặt</button></div></div>
-      </section>
-      <section class="panel"><h2>🧭 Thống kê hành trình</h2>
-        <div class="row"><div><strong>Tổng coin đã đào</strong><small>Từ lúc bắt đầu</small></div><span id="total" class="price">0.0000 VCO</span></div>
-        <div class="row"><div><strong>Khối đã hoàn tất</strong><small>Mỗi khối là một mốc thưởng</small></div><span id="blocks">0</span></div>
-        <div class="row"><div><strong>Cấp dàn máy</strong><small>Dựa trên nâng cấp GPU</small></div><span id="level">Cấp 1</span></div>
-        <div class="row"><div><strong>Thời gian chơi</strong><small>Phiên hiện tại</small></div><span id="time">0 phút</span></div>
-        <div class="actions"><button class="btn" id="reset">↻ Chơi lại từ đầu</button></div>
-      </section>
-    </aside>
-  </div>
-  <div class="footer">Xưởng Đào Coin · Bản chơi thử chạy ngay trên trình duyệt · Tiến trình có thể lưu trên thiết bị này</div>
+<div class="game">
+<header>
+ <div><h1>⛏️ ĐÀO VÀNG</h1><div class="sub">Thợ mỏ tí hon • Gom vàng, hoàn thành mục tiêu!</div></div>
+ <div class="stats">
+  <div class="stat">Màn: <span id="level">1</span></div>
+  <div class="stat">Tiền: <span id="money">0</span> 💰</div>
+  <div class="stat">Mục tiêu: <span id="goal">650</span></div>
+  <div class="stat">Thời gian: <span id="time">60</span> giây</div>
+ </div>
+</header>
+<div class="stage">
+<canvas id="game" width="900" height="540" aria-label="Khu mỏ đào vàng"></canvas>
+<div class="overlay" id="overlay">
+ <div class="modal">
+  <h2 id="modalTitle">Chào mừng đến mỏ vàng!</h2>
+  <p id="modalText">Thả móc câu đúng lúc để kéo vàng, kim cương và túi tiền lên. Tránh đá nặng nếu có thể. Hãy đạt mục tiêu trước khi hết giờ!</p>
+  <p><b>Điều khiển:</b> nhấn <b>Space</b>, <b>Enter</b> hoặc chạm vào khu mỏ để thả móc.</p>
+  <button id="startBtn">Bắt đầu đào vàng</button>
+ </div>
+</div>
+</div>
+<div id="message">Mẹo: vàng lớn có giá trị cao nhưng kéo lên lâu hơn!</div>
+<div class="controls">
+ <div class="help">🖱️ Nhấn chuột / chạm màn hình / phím cách để thả móc.<br>💎 Kim cương rất quý • 🪨 Đá có giá trị thấp và nặng.</div>
+ <div class="actions"><button id="soundBtn">🔊 Âm thanh: Bật</button><button id="restartBtn">↻ Chơi lại</button></div>
+</div>
 </div>
 <script>
-(()=>{
+(() => {
+const canvas=document.getElementById('game'),ctx=canvas.getContext('2d');
 const $=id=>document.getElementById(id);
-const fresh=()=>({coins:0,total:0,cash:250,rate:1,power:1,gpu:0,savers:0,cool:0,progress:0,blocks:0,running:true,seconds:0});
-let s=fresh(), last=Date.now();
-function log(msg){const el=$('log'),d=document.createElement('div');d.textContent=new Date().toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'})+' · '+msg;el.prepend(d);while(el.children.length>35)el.lastChild.remove()}
-function costs(){return {gpu:Math.round(120*Math.pow(1.55,s.gpu)),power:Math.round(90*Math.pow(1.7,s.savers)),cool:Math.round(180*Math.pow(1.9,s.cool))}}
-function rate(){return (1+s.gpu*.8)*Math.pow(1.25,s.cool)}
-function render(){
- const c=costs();$('coins').innerHTML=s.coins.toFixed(4)+' <small>VCO</small>';$('cash').innerHTML=Math.floor(s.cash)+' <small>₫ ảo</small>';$('rate').innerHTML=rate().toFixed(1)+' <small>MH/s</small>';$('power').innerHTML=Math.max(.25,1-s.savers*.2).toFixed(2)+' <small>điểm</small>';
- $('gpuCost').textContent=c.gpu+' ₫ ảo';$('powerCost').textContent=c.power+' ₫ ảo';$('coolCost').textContent=c.cool+' ₫ ảo';
- $('gpuBuy').disabled=s.cash<c.gpu;$('powerBuy').disabled=s.cash<c.power;$('coolBuy').disabled=s.cash<c.cool;
- $('progress').style.width=s.progress+'%';$('status').textContent=(s.running?'Dàn máy đang hoạt động':'Dàn máy đang tạm dừng')+' · Khối tiếp theo: '+Math.floor(s.progress)+'%';$('rig').classList.toggle('active',s.running);
- $('toggle').textContent=s.running?'⏸ Tạm dừng đào':'▶ Tiếp tục đào';$('total').textContent=s.total.toFixed(4)+' VCO';$('blocks').textContent=s.blocks;$('level').textContent='Cấp '+(s.gpu+1);$('time').textContent=Math.floor(s.seconds/60)+' phút';
+let W=900,H=540,level=1,money=0,goal=650,time=60,running=false,ended=false;
+let items=[],hook={x:450,y:102,angle:0,len:0,state:'idle',target:null,speed:5},last=0,spawned=false;
+let sound=true,audioCtx=null,particles=[],messageTimer=0;
+const rand=(a,b)=>a+Math.random()*(b-a);
+function beep(freq=440,dur=.08,type='sine'){if(!sound)return;try{audioCtx=audioCtx||new(window.AudioContext||window.webkitAudioContext)();let o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type=type;o.frequency.value=freq;g.gain.value=.045;o.connect(g);g.connect(audioCtx.destination);o.start();g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+dur);o.stop(audioCtx.currentTime+dur)}catch(e){}}
+function say(s){$('message').textContent=s;messageTimer=2.8}
+function updateStats(){$('level').textContent=level;$('money').textContent=money;$('goal').textContent=goal;$('time').textContent=Math.ceil(time)}
+function makeItems(){
+ items=[];particles=[];
+ const types=[
+  {kind:'gold',r:19,value:100,weight:1.1},{kind:'gold',r:13,value:50,weight:.85},
+  {kind:'gold',r:27,value:250,weight:1.8},{kind:'rock',r:23,value:10,weight:2.5},
+  {kind:'diamond',r:12,value:500,weight:.65},{kind:'bag',r:14,value:rand(80,260)|0,weight:.8}
+ ];
+ for(let i=0;i<17+level*2;i++){
+  let t=types[Math.floor(Math.random()*types.length)],x=rand(55,845),y=rand(220,505);
+  if(Math.abs(x-450)<42&&y<310)x+=90;
+  items.push({...t,x,y,kind:t.kind,alive:true,rot:rand(0,6.28),phase:rand(0,6.28)});
+ }
 }
-function buy(key){const c=costs()[key];if(s.cash<c)return;s.cash-=c;if(key==='gpu'){s.gpu++;log('Đã nâng cấp card đồ họa. Tốc độ đào tăng!')}if(key==='power'){s.savers++;log('Đã lắp bộ nguồn tiết kiệm. Chi phí vận hành giảm!')}if(key==='cool'){s.cool++;log('Đã nâng cấp hệ thống làm mát. Hiệu suất tăng!')}render()}
-$('gpuBuy').onclick=()=>buy('gpu');$('powerBuy').onclick=()=>buy('power');$('coolBuy').onclick=()=>buy('cool');
-$('toggle').onclick=()=>{s.running=!s.running;log(s.running?'Đã tiếp tục khai thác.':'Đã tạm dừng khai thác.');render()};
-$('claim').onclick=()=>{if(s.progress<10){log('Khối chưa đủ tiến độ để thu hoạch. Hãy để máy đào thêm nhé!');return}const n=Math.floor(s.progress/10);const reward=n*.01;s.coins+=reward;s.total+=reward;s.cash+=n*8;s.blocks+=n;s.progress-=n*10;log('Thu hoạch '+reward.toFixed(4)+' VCO và nhận '+(n*8)+' ₫ ảo.');render()};
-$('save').onclick=()=>{try{localStorage.setItem('xuongDaoCoinSave',JSON.stringify(s));log('Đã lưu tiến trình trên trình duyệt này.')}catch(e){log('Không thể lưu trên thiết bị này.')}};
-$('reset').onclick=()=>{if(confirm('Bạn có chắc muốn xóa tiến trình và chơi lại từ đầu?')){s=fresh();try{localStorage.removeItem('xuongDaoCoinSave')}catch(e){}$('log').innerHTML='';log('Đã bắt đầu hành trình mới. Chúc bạn nâng cấp dàn máy vui vẻ!');render()}};
-try{const saved=localStorage.getItem('xuongDaoCoinSave');if(saved){const parsed=JSON.parse(saved);if(parsed&&typeof parsed.coins==='number'){s={...fresh(),...parsed};log('Đã khôi phục tiến trình đã lưu.')}}}catch(e){}
-setInterval(()=>{const now=Date.now(),dt=Math.min((now-last)/1000,2);last=now;if(s.running){s.seconds+=dt;s.progress+=dt*rate()*0.75;while(s.progress>=100){s.progress-=100;s.coins+=.1;s.total+=.1;s.cash+=12;s.blocks++;log('Hoàn tất một khối: +0,1000 VCO và +12 ₫ ảo.')}}render()},500);
-render();
+function start(){level=1;money=0;goal=650;time=60;running=true;ended=false;hook={x:450,y:102,angle:0,len:0,state:'idle',target:null,speed:5};makeItems();$('overlay').classList.add('hidden');say('Bắt đầu nào! Hãy nhắm vào những cục vàng lớn.');updateStats();last=performance.now()}
+function nextLevel(){level++;goal=650+(level-1)*350;time=60;hook={x:450,y:102,angle:0,len:0,state:'idle',target:null,speed:5+level*.25};makeItems();say('Tuyệt vời! Sang màn '+level+' — mục tiêu mới '+goal+' đồng.');updateStats()}
+function finish(win){running=false;ended=true;$('overlay').classList.remove('hidden');$('modalTitle').textContent=win?'🎉 Hoàn thành màn '+level+'!':'⏰ Hết giờ rồi!';
+ $('modalText').textContent=win?`Bạn đã kiếm được ${money} đồng. Bạn có thể tiếp tục đào ở màn tiếp theo hoặc chơi lại từ đầu.`:`Bạn kiếm được ${money} đồng, nhưng cần đạt ${goal} đồng trong màn này. Thử lại nhé!`;
+ $('startBtn').textContent=win?'Đào tiếp màn sau':'Thử lại';$('startBtn').onclick=()=>{if(win){nextLevel();running=true;ended=false;$('overlay').classList.add('hidden');last=performance.now()}else start()};beep(win?740:180,.3,win?'triangle':'sawtooth')}
+function cast(){if(!running||hook.state!=='idle')return;hook.state='out';hook.target=null;beep(280,.06)}
+function hookPos(){return{x:hook.x+Math.sin(hook.angle)*hook.len,y:hook.y+Math.cos(hook.angle)*hook.len}}
+function valueOf(it){return it.kind==='bag'?it.value:it.value}
+function burst(x,y,color){for(let i=0;i<12;i++)particles.push({x,y,vx:rand(-2.5,2.5),vy:rand(-3,1),life:rand(.3,.8),color})}
+function drawBackground(){
+ let g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#8ed2dc');g.addColorStop(.38,'#c8e6bd');g.addColorStop(.39,'#79502e');g.addColorStop(1,'#3b261b');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+ // distant hills
+ ctx.fillStyle='#77b69b';ctx.beginPath();ctx.moveTo(0,210);ctx.quadraticCurveTo(170,130,310,210);ctx.quadraticCurveTo(500,110,680,205);ctx.quadraticCurveTo(800,150,900,190);ctx.lineTo(900,270);ctx.lineTo(0,270);ctx.fill();
+ ctx.fillStyle='#a16a3c';ctx.fillRect(0,208,W,27);
+ // wooden mine frame
+ ctx.fillStyle='#60391e';ctx.fillRect(370,20,160,20);ctx.fillRect(390,20,14,90);ctx.fillRect(496,20,14,90);
+ ctx.fillStyle='#b87b3e';ctx.fillRect(365,17,170,9);ctx.fillRect(385,22,7,82);ctx.fillRect(508,22,7,82);
+ // miner
+ ctx.fillStyle='#3c352d';ctx.beginPath();ctx.arc(450,66,17,0,Math.PI*2);ctx.fill();ctx.fillStyle='#f4c28a';ctx.beginPath();ctx.arc(450,68,11,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#e7b63f';ctx.beginPath();ctx.ellipse(450,57,21,8,0,Math.PI,Math.PI*2);ctx.fill();ctx.fillRect(432,56,36,5);
+ // rocks and little grass
+ for(let i=0;i<20;i++){let x=(i*97+27)%W;ctx.fillStyle=i%2?'#5a3824':'#69452b';ctx.beginPath();ctx.ellipse(x,randStatic(i,238,525),randStatic(i+4,7,20),randStatic(i+8,4,11),0,0,Math.PI*2);ctx.fill()}
+}
+function randStatic(seed,a,b){let v=Math.sin(seed*78.233)*43758.5453;return a+(v-Math.floor(v))*(b-a)}
+function drawItem(it){
+ if(!it.alive)return;ctx.save();ctx.translate(it.x,it.y);ctx.rotate(it.rot+Math.sin(performance.now()/800+it.phase)*.06);
+ if(it.kind==='gold'){
+  let r=it.r;ctx.fillStyle='#a76a0b';ctx.beginPath();ctx.ellipse(0,2,r*1.08,r*.82,0,0,Math.PI*2);ctx.fill();
+  let g=ctx.createLinearGradient(-r,-r,r,r);g.addColorStop(0,'#fff4a1');g.addColorStop(.4,'#ffcf28');g.addColorStop(1,'#c57a09');ctx.fillStyle=g;ctx.beginPath();ctx.ellipse(-1,-1,r,r*.72,-.25,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#fff5b2';ctx.beginPath();ctx.ellipse(-r*.3,-r*.2,r*.28,r*.12,-.4,0,Math.PI*2);ctx.fill();
+ }else if(it.kind==='diamond'){
+  ctx.fillStyle='#087d9b';ctx.beginPath();ctx.moveTo(0,-it.r);ctx.lineTo(it.r,0);ctx.lineTo(0,it.r*1.2);ctx.lineTo(-it.r,0);ctx.closePath();ctx.fill();
+  ctx.fillStyle='#7ef4ff';ctx.beginPath();ctx.moveTo(0,-it.r);ctx.lineTo(it.r*.5,0);ctx.lineTo(0,it.r*1.2);ctx.lineTo(-it.r*.2,0);ctx.closePath();ctx.fill();
+  ctx.strokeStyle='#d4ffff';ctx.lineWidth=2;ctx.stroke();
+ }else if(it.kind==='rock'){
+  ctx.fillStyle='#3d3936';ctx.beginPath();ctx.moveTo(-it.r,-it.r*.2);ctx.lineTo(-it.r*.45,-it.r);ctx.lineTo(it.r*.55,-it.r*.8);ctx.lineTo(it.r,it.r*.05);ctx.lineTo(it.r*.45,it.r*.8);ctx.lineTo(-it.r*.6,it.r);ctx.closePath();ctx.fill();
+  ctx.fillStyle='#77736b';ctx.beginPath();ctx.moveTo(-it.r*.45,-it.r*.45);ctx.lineTo(it.r*.15,-it.r*.68);ctx.lineTo(-it.r*.05,0);ctx.lineTo(-it.r*.65,it.r*.25);ctx.fill();
+ }else{
+  ctx.fillStyle='#fff0a0';ctx.beginPath();ctx.roundRect(-it.r*.75,-it.r*.75,it.r*1.5,it.r*1.5,4);ctx.fill();ctx.strokeStyle='#9b5c19';ctx.lineWidth=2;ctx.stroke();
+  ctx.fillStyle='#c47b21';ctx.font='bold 16px sans-serif';ctx.textAlign='center';ctx.fillText('$',0,6);
+ }
+ ctx.restore();
+}
+function drawHook(){
+ const p=hookPos();ctx.strokeStyle='#493a2c';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(450,101);ctx.lineTo(p.x,p.y);ctx.stroke();
+ ctx.strokeStyle='#d5d8d2';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p.x+Math.sin(hook.angle)*12,p.y+12);ctx.quadraticCurveTo(p.x+Math.sin(hook.angle)*24,p.y+18,p.x+Math.sin(hook.angle)*14,p.y+27);ctx.stroke();
+ ctx.fillStyle='#d6d2c3';ctx.beginPath();ctx.arc(p.x,p.y,4,0,Math.PI*2);ctx.fill();
+}
+function draw(){
+ drawBackground();items.forEach(drawItem);drawHook();
+ // HUD in canvas
+ ctx.fillStyle='#fff4d3';ctx.font='bold 17px system-ui';ctx.textAlign='left';ctx.fillText('Mục tiêu: '+goal+' đồng',18,31);
+ ctx.font='14px system-ui';ctx.fillText('Vàng: 50–250  •  Kim cương: 500  •  Túi tiền: ngẫu nhiên',18,53);
+ particles.forEach(p=>{ctx.globalAlpha=Math.max(0,p.life);ctx.fillStyle=p.color;ctx.beginPath();ctx.arc(p.x,p.y,3,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1});
+}
+function update(dt){
+ if(!running)return;
+ time-=dt;if(time<=0){time=0;updateStats();finish(money>=goal);return}
+ if(messageTimer>0){messageTimer-=dt;if(messageTimer<=0)$('message').textContent='Mẹo: vàng lớn có giá trị cao nhưng kéo lên lâu hơn!'}
+ if(hook.state==='out'){
+  hook.len+=hook.speed*dt*60;hook.angle+=Math.sin(performance.now()/400)*.0006;
+  const p=hookPos();
+  for(const it of items){if(it.alive&&Math.hypot(p.x-it.x,p.y-it.y)<it.r+7){it.alive=false;hook.target=it;hook.state='in';say(it.kind==='rock'?'Ối! Đá nặng quá!':'Đã móc được '+(it.kind==='diamond'?'kim cương':it.kind==='bag'?'túi tiền':'vàng')+'!');beep(it.kind==='rock'?120:620,.12);break}}
+  if(p.y>H-5||p.x<5||p.x>W-5){hook.state='in';hook.target=null}
+ }else if(hook.state==='in'){
+  let weight=hook.target?hook.target.weight:1;hook.len-=hook.speed*dt*60/weight;
+  if(hook.len<=0){hook.len=0;hook.state='idle';if(hook.target){let it=hook.target;let val=valueOf(it);money+=val;burst(450,100,it.kind==='diamond'?'#9efaff':'#ffd34d');say('+'+val+' đồng! Tổng tiền: '+money);hook.target=null;updateStats();if(money>=goal){finish(true);return}}}
+ }
+ particles=particles.filter(p=>p.life>0);particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.08;p.life-=dt});
+ updateStats();
+}
+function loop(now){let dt=Math.min(.04,(now-last)/1000||0);last=now;update(dt);draw();requestAnimationFrame(loop)}
+canvas.addEventListener('pointerdown',e=>{if(running)cast()});
+window.addEventListener('keydown',e=>{if(e.code==='Space'||e.code==='Enter'){e.preventDefault();if(!running&&!ended){$('startBtn').click()}else cast()}});
+$('startBtn').onclick=start;
+$('restartBtn').onclick=()=>{ $('startBtn').onclick=start;start() };
+$('soundBtn').onclick=()=>{sound=!sound;$('soundBtn').textContent=sound?'🔊 Âm thanh: Bật':'🔇 Âm thanh: Tắt';if(sound)beep(520,.08)};
+makeItems();draw();updateStats();requestAnimationFrame(loop);
 })();
 </script>
 </body>
