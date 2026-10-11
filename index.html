@@ -3,120 +3,90 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#091323">
-<title>Tu Tiên Cảnh — Tiên Đài Tĩnh Tâm</title>
+<title>Xưởng Đào Coin — Trò chơi mô phỏng</title>
 <style>
-:root{--bg:#07111e;--panel:#101f31;--panel2:#172c41;--gold:#f2d18a;--jade:#8ce7cf;--text:#edf7fb;--muted:#a9bfce;--line:#8ccbc522}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -10%,#31566c 0,#13283b 38%,#07111e 78%);color:var(--text);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
-header{padding:20px 16px 15px;text-align:center;border-bottom:1px solid var(--line);background:#07111ebd}h1{margin:0;color:var(--gold);letter-spacing:.06em;font-size:clamp(25px,4vw,39px)}header p{margin:5px 0 0;color:var(--muted)}main{max-width:1180px;margin:auto;padding:16px;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(310px,.85fr);gap:15px}
-.panel{background:linear-gradient(145deg,#142a3dec,#0b1928f5);border:1px solid var(--line);border-radius:17px;padding:16px;box-shadow:0 15px 36px #0003;min-width:0}.panel h2{font-size:19px;color:var(--gold);margin:0 0 11px}.scene{position:relative;height:330px;overflow:hidden;border-radius:13px;background:linear-gradient(#101f45 0%,#315d75 52%,#101e31 100%);isolation:isolate}
-#sky{position:absolute;inset:0;width:100%;height:100%;z-index:-1}.moon{position:absolute;top:30px;right:13%;width:51px;height:51px;border-radius:50%;background:#fff0c6;box-shadow:0 0 30px #fff0c677}
-.cloud{position:absolute;width:150px;height:28px;background:#b6e2e544;border-radius:50%;filter:blur(9px);animation:drift 22s linear infinite}.c1{top:85px;left:-160px}.c2{top:145px;left:-230px;animation-delay:-11s;transform:scale(.7)}@keyframes drift{to{left:110%}}
-.mountain{position:absolute;bottom:50px;width:0;height:0;border-left:145px solid transparent;border-right:145px solid transparent;border-bottom:170px solid #142f44}.m1{left:-45px;border-bottom-color:#1d4655;border-left-width:125px;border-right-width:125px}.m2{left:25%;border-bottom-color:#102b41}.m3{right:-45px;border-bottom-color:#1a3d50;border-left-width:155px;border-right-width:155px}
-.waterfall{position:absolute;left:27%;bottom:57px;width:15px;height:93px;background:linear-gradient(#9be7e8aa,#c6f9ef22);filter:blur(2px);transform:skew(-7deg)}
-.platform{position:absolute;left:50%;bottom:42px;transform:translateX(-50%);width:205px;height:40px;border-radius:50%;background:linear-gradient(#78b7b0,#183b4b 55%,#0a1726);border:2px solid #b3d9c866;box-shadow:0 0 26px #80e6d733}
-.platform:before{content:"";position:absolute;inset:6px 20px;border:1px solid #e3ce8a66;border-radius:50%}
-.person{position:absolute;bottom:64px;left:50%;transform:translateX(-50%);font-size:61px;filter:drop-shadow(0 0 16px #a5ffe2a8);animation:breathe 4s ease-in-out infinite;z-index:2}@keyframes breathe{0%,100%{transform:translate(-50%,0) scale(1)}50%{transform:translate(-50%,-5px) scale(1.025)}}
-.scene-label{position:absolute;left:10px;bottom:9px;color:#e5fff8;font-size:12px;text-shadow:0 2px 4px #000}
-.scene-top{position:absolute;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;gap:8px;font-size:12px;color:#f2f8ff}.pill{background:#061522aa;border:1px solid #bce5dd44;border-radius:30px;padding:5px 9px}
-.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:12px 0}.stat{background:#ffffff08;border:1px solid #ffffff0c;border-radius:11px;padding:9px 7px;text-align:center;min-width:0}.stat span{display:block;color:var(--muted);font-size:11px}.stat strong{display:block;color:var(--jade);font-size:clamp(15px,2vw,20px);overflow-wrap:anywhere}
-.progress{height:10px;background:#06101b;border-radius:99px;overflow:hidden;margin:8px 0 5px;border:1px solid #ffffff12}.progress div{height:100%;width:0;background:linear-gradient(90deg,#62cbb6,#f3d18a);transition:width .35s}
-button{font:inherit;font-weight:700;border:0;border-radius:10px;padding:10px 12px;margin:4px 4px 4px 0;background:linear-gradient(135deg,#f3d99c,#bf934d);color:#172330;cursor:pointer;transition:filter .15s,transform .15s}button:hover{filter:brightness(1.08)}button:active{transform:scale(.98)}button.secondary{background:#1c3b50;color:#e8f8ff;border:1px solid #6598a555}button:disabled{opacity:.4;cursor:not-allowed}.actions{display:flex;flex-wrap:wrap;gap:4px}.actions button{flex:1;min-width:135px}
-.tabs{display:flex;gap:5px;flex-wrap:wrap;margin:0 0 12px}.tab{background:#0a1927;color:var(--muted);border:1px solid #ffffff13}.tab.active{background:#285064;color:#fff;border-color:#86d5c877}
-.view[hidden]{display:none}.item{display:flex;align-items:center;gap:10px;background:#ffffff07;border:1px solid #ffffff12;border-radius:12px;padding:10px;margin:8px 0}.emoji{font-size:29px;min-width:36px;text-align:center}.item-info{flex:1;min-width:0}.item-info b{display:block}.item-info small{display:block;color:var(--muted);font-size:12px}.item button{margin:0;white-space:nowrap;font-size:12px;padding:8px}
-.notice{font-size:12px;color:var(--muted);line-height:1.55}.log{height:115px;overflow:auto;font-size:12px;color:#c8dce7;background:#06111c99;border-radius:10px;padding:10px}.log p{margin:0 0 6px}.quest{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid #ffffff0d}.quest span{flex:1}.quest b{color:var(--jade);font-size:12px}.badge{font-size:11px;border-radius:30px;padding:3px 7px;background:#2b514f;color:#b8f4e5}
-footer{text-align:center;color:var(--muted);font-size:12px;padding:0 16px 25px}.toast{position:fixed;left:50%;bottom:18px;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#e9f8f1;color:#10252c;padding:10px 15px;border-radius:10px;box-shadow:0 5px 25px #0005;transition:.25s;z-index:9;max-width:90vw}.toast.show{opacity:1;transform:translate(-50%,0)}
-@media(max-width:800px){main{grid-template-columns:1fr;padding:10px}.scene{height:290px}.stats{grid-template-columns:repeat(2,1fr)}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+:root{--bg:#09111f;--panel:#111d30;--panel2:#17263d;--line:#2b3e5b;--text:#eaf2ff;--muted:#9eb0cc;--cyan:#54e5ff;--gold:#ffd166;--green:#62f0a5;--red:#ff7185}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#152746 0,#09111f 58%);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh}
+.wrap{max-width:1180px;margin:auto;padding:24px 16px 48px}.top{display:flex;gap:18px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-bottom:20px}
+.brand{display:flex;gap:12px;align-items:center}.logo{width:54px;height:54px;border-radius:16px;background:linear-gradient(135deg,#54e5ff,#7a7cff);display:grid;place-items:center;font-size:28px;box-shadow:0 0 30px #54e5ff33}
+h1{font-size:clamp(24px,4vw,34px);margin:0;letter-spacing:-.8px}.sub{color:var(--muted);margin:4px 0 0}.tag{font-size:12px;border:1px solid #42617f;color:var(--cyan);padding:5px 9px;border-radius:99px;white-space:nowrap}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}.stat,.panel{background:linear-gradient(145deg,#14233aee,#0e192aee);border:1px solid var(--line);border-radius:18px;box-shadow:0 12px 32px #0002}
+.stat{padding:15px}.label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px}.value{font-size:clamp(20px,3vw,27px);font-weight:800;margin-top:5px}.value small{font-size:12px;color:var(--muted);font-weight:500}.layout{display:grid;grid-template-columns:1.1fr .9fr;gap:14px}.panel{padding:19px;margin-bottom:14px}.panel h2{font-size:18px;margin:0 0 12px}.minerbox{position:relative;overflow:hidden;min-height:270px;display:grid;place-items:center;background:radial-gradient(ellipse at 50% 65%,#1c5b79 0,#122742 35%,#101a2b 75%);border-radius:14px;border:1px solid #2d5971}
+.stars{position:absolute;inset:0;background-image:radial-gradient(#b4f6ff 1px,transparent 1.5px),radial-gradient(#fff 1px,transparent 1.5px);background-size:59px 59px,91px 91px;background-position:0 0,25px 18px;opacity:.3}
+.rig{position:relative;width:205px;height:145px;filter:drop-shadow(0 12px 15px #0008)}.rigtop{height:22px;background:#435775;border:2px solid #829ab8;border-radius:8px 8px 3px 3px}.rigbody{height:110px;background:linear-gradient(145deg,#273d5b,#111a2b);border:2px solid #647d9e;border-top:0;border-radius:3px 3px 10px 10px;padding:13px;display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.fan{border:4px solid #456e8c;border-radius:50%;background:radial-gradient(circle,#b9faff 0 8%,#38bad4 10% 20%,#1c3550 22% 100%);animation:spin 3s linear infinite;box-shadow:0 0 16px #54e5ff66}.rig.active .fan{animation-duration:.65s;box-shadow:0 0 24px #54e5ffaa}
+@keyframes spin{to{transform:rotate(360deg)}}.coin{position:absolute;right:calc(50% - 120px);top:45px;font-size:34px;animation:float 3s ease-in-out infinite}.coin.c2{right:calc(50% + 90px);top:100px;font-size:22px;animation-delay:-1s}@keyframes float{50%{transform:translateY(-13px) rotate(12deg)}}
+.miningtext{position:absolute;bottom:13px;text-align:center;color:#a9eefa;font-size:13px}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:13px}.btn{border:1px solid #3c587b;background:#1b2c46;color:var(--text);border-radius:11px;padding:11px 14px;font-weight:700;cursor:pointer;transition:.15s}.btn:hover{transform:translateY(-1px);border-color:var(--cyan)}.btn.primary{background:linear-gradient(135deg,#1aa6c6,#4766e8);border:0;color:#fff}.btn.gold{background:linear-gradient(135deg,#f4bd50,#ed8d3c);border:0;color:#241805}.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.progress{height:9px;border-radius:99px;background:#0a1321;overflow:hidden;margin:9px 0 4px;border:1px solid #2c3e58}.bar{height:100%;width:0;background:linear-gradient(90deg,#36d9f5,#6af0b3);transition:width .2s}
+.muted{color:var(--muted);font-size:13px}.row{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid #263750}.row:last-child{border-bottom:0}.row strong{display:block}.row small{color:var(--muted)}.price{font-weight:800;color:var(--gold);white-space:nowrap}.shopitem{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px;border:1px solid #2b3f5e;border-radius:12px;margin-top:9px;background:#101c2e}.shopitem .btn{padding:8px 10px;font-size:13px}.badge{font-size:11px;color:var(--green);border:1px solid #286b55;padding:3px 7px;border-radius:99px}
+.log{height:125px;overflow:auto;background:#0a1422;border:1px solid #263750;border-radius:12px;padding:10px;font-size:13px;color:#b9c9df}.log div{padding:3px 0;border-bottom:1px dashed #1e3048}.footer{color:#8194b1;font-size:12px;text-align:center;margin-top:18px}.notice{background:#17263a;border:1px solid #39516d;border-radius:12px;padding:12px;color:#b9c9df;font-size:13px;margin-top:12px}
+@media(max-width:800px){.stats{grid-template-columns:repeat(2,1fr)}.layout{grid-template-columns:1fr}.panel{padding:15px}.wrap{padding:16px 12px 35px}}
 </style>
 </head>
 <body>
-<header><h1>☯ TU TIÊN CẢNH</h1><p>Tiên Đài Tĩnh Tâm · Tu luyện nhàn nhã · Sưu tầm pháp bảo</p></header>
-<main>
-<section class="panel">
-<h2>🌌 Tiên Đài Ngồi Thiền</h2>
-<div class="scene" aria-label="Cảnh tiên đài giữa núi non và biển mây">
-<canvas id="sky"></canvas><div class="moon"></div><div class="cloud c1"></div><div class="cloud c2"></div><div class="mountain m1"></div><div class="mountain m2"></div><div class="mountain m3"></div><div class="waterfall"></div><div class="platform"></div><div class="person">🧘</div>
-<div class="scene-top"><span class="pill" id="realmPill">Cảnh giới: Luyện Khí</span><span class="pill" id="autosave">● Tự lưu đã bật</span></div><div class="scene-label">Linh khí hội tụ giữa biển mây</div>
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><div class="logo">⛏️</div><div><h1>Xưởng Đào Coin</h1><p class="sub">Xây dàn máy · Tối ưu năng lượng · Tích lũy coin ảo</p></div></div>
+    <span class="tag">TRÒ CHƠI MÔ PHỎNG OFFLINE</span>
+  </header>
+  <section class="stats">
+    <div class="stat"><div class="label">Coin đang có</div><div class="value" id="coins">0.0000 <small>VCO</small></div></div>
+    <div class="stat"><div class="label">Số dư quỹ</div><div class="value" id="cash">250 <small>₫ ảo</small></div></div>
+    <div class="stat"><div class="label">Tốc độ đào</div><div class="value" id="rate">1.0 <small>MH/s</small></div></div>
+    <div class="stat"><div class="label">Điện năng / phút</div><div class="value" id="power">1 <small>điểm</small></div></div>
+  </section>
+  <div class="layout">
+    <main>
+      <section class="panel">
+        <h2>⚡ Dàn máy khai thác</h2>
+        <div class="minerbox"><div class="stars"></div><div class="coin">🪙</div><div class="coin c2">✦</div><div class="rig active" id="rig"><div class="rigtop"></div><div class="rigbody"><div class="fan"></div><div class="fan"></div><div class="fan"></div></div></div><div class="miningtext" id="status">Dàn máy đang hoạt động · Khối tiếp theo: 0%</div></div>
+        <div class="progress"><div class="bar" id="progress"></div></div><div class="muted">Mỗi khối hoàn tất sẽ thưởng coin ảo. Nâng cấp để tăng tốc độ.</div>
+        <div class="actions"><button class="btn primary" id="toggle">⏸ Tạm dừng đào</button><button class="btn" id="claim">🪙 Thu hoạch ngay</button><button class="btn" id="save">💾 Lưu tiến trình</button></div>
+        <div class="notice">Đây là trò chơi giải trí: VCO và số dư chỉ là dữ liệu trong game, không phải tiền thật hay tiền mã hóa thật. Không kết nối ví và không thực hiện giao dịch.</div>
+      </section>
+      <section class="panel"><h2>📊 Nhật ký xưởng</h2><div class="log" id="log" aria-live="polite"><div>Chào mừng đến Xưởng Đào Coin! Dàn máy đã sẵn sàng.</div></div></section>
+    </main>
+    <aside>
+      <section class="panel"><h2>🛠️ Nâng cấp thiết bị</h2><p class="muted">Dùng quỹ ảo để tăng hiệu suất khai thác.</p>
+        <div class="shopitem"><div><strong>Card đồ họa cơ bản</strong><small>+0,8 MH/s mỗi lần nâng</small></div><div style="text-align:right"><div class="price" id="gpuCost">120 ₫ ảo</div><button class="btn gold" id="gpuBuy">Nâng cấp</button></div></div>
+        <div class="shopitem"><div><strong>Bộ nguồn tiết kiệm</strong><small>Giảm tiêu hao điện trong game</small></div><div style="text-align:right"><div class="price" id="powerCost">90 ₫ ảo</div><button class="btn gold" id="powerBuy">Mua ngay</button></div></div>
+        <div class="shopitem"><div><strong>Hệ thống làm mát</strong><small>+25% tốc độ đào</small></div><div style="text-align:right"><div class="price" id="coolCost">180 ₫ ảo</div><button class="btn gold" id="coolBuy">Lắp đặt</button></div></div>
+      </section>
+      <section class="panel"><h2>🧭 Thống kê hành trình</h2>
+        <div class="row"><div><strong>Tổng coin đã đào</strong><small>Từ lúc bắt đầu</small></div><span id="total" class="price">0.0000 VCO</span></div>
+        <div class="row"><div><strong>Khối đã hoàn tất</strong><small>Mỗi khối là một mốc thưởng</small></div><span id="blocks">0</span></div>
+        <div class="row"><div><strong>Cấp dàn máy</strong><small>Dựa trên nâng cấp GPU</small></div><span id="level">Cấp 1</span></div>
+        <div class="row"><div><strong>Thời gian chơi</strong><small>Phiên hiện tại</small></div><span id="time">0 phút</span></div>
+        <div class="actions"><button class="btn" id="reset">↻ Chơi lại từ đầu</button></div>
+      </section>
+    </aside>
+  </div>
+  <div class="footer">Xưởng Đào Coin · Bản chơi thử chạy ngay trên trình duyệt · Tiến trình có thể lưu trên thiết bị này</div>
 </div>
-<div class="stats">
-<div class="stat"><span>✨ Tu vi</span><strong id="xp">0</strong></div><div class="stat"><span>💎 Linh ngọc</span><strong id="jade">25</strong></div><div class="stat"><span>🌿 Tu vi mỗi giây</span><strong id="rate">1</strong></div><div class="stat"><span>🏔️ Cảnh giới</span><strong id="realm">Luyện Khí</strong></div>
-</div>
-<b id="progressText">Tiến độ đột phá: 0 / 100</b><div class="progress"><div id="bar"></div></div>
-<div class="actions"><button id="meditate">🧘 Tĩnh tâm (+5 tu vi)</button><button id="breakthrough" class="secondary">✨ Thử đột phá</button><button id="sound" class="secondary">♫ Bật âm thanh thiền</button></div>
-<p class="notice">Tu luyện tự động vẫn tiếp tục khi trò chơi đang mở. Tiến độ được lưu trên trình duyệt này.</p>
-<h2 style="margin-top:17px">📜 Nhật Ký Tu Luyện</h2><div class="log" id="log" aria-live="polite"><p>• Bạn đã đến Tiên Đài. Hãy hít thở chậm và bắt đầu tu luyện.</p></div>
-</section>
-<section class="panel">
-<div class="tabs"><button class="tab active" data-tab="home">🏯 Đạo Trường</button><button class="tab" data-tab="items">🎒 Túi Pháp Bảo</button><button class="tab" data-tab="nft">🔖 Xưởng NFT</button><button class="tab" data-tab="tasks">📜 Nhiệm Vụ</button></div>
-<div class="view" id="view-home">
-<h2>🪷 Đạo Trường Tu Luyện</h2>
-<div class="item"><div class="emoji">🕯️</div><div class="item-info"><b>Tâm Pháp Tĩnh Tâm</b><small>Tăng tu vi tự động lên 1 điểm mỗi giây.</small></div><button id="upgrade">Nâng cấp · 20 ngọc</button></div>
-<div class="item"><div class="emoji">🌬️</div><div class="item-info"><b>Tụ Linh Trận</b><small>Tăng thêm 2 tu vi mỗi giây cho mỗi cấp.</small></div><button id="array">Nâng cấp · 35 ngọc</button></div>
-<div class="item"><div class="emoji">🍵</div><div class="item-info"><b>Trà Ngộ Đạo</b><small>Nhận tức thời 25 tu vi, mỗi lần dùng tốn 8 ngọc.</small></div><button id="tea">Dùng · 8 ngọc</button></div>
-<h2 style="margin-top:18px">🌙 Phúc Lợi Người Tu Đạo</h2>
-<div class="item"><div class="emoji">🎁</div><div class="item-info"><b>Quà khởi hành</b><small>Nhận một lần trong phiên chơi này: 20 linh ngọc.</small></div><button id="gift">Nhận quà</button></div>
-<p class="notice">Mọi nâng cấp chỉ sử dụng linh ngọc trong trò chơi. Không cần nạp tiền, không có giao dịch tiền thật.</p>
-</div>
-<div class="view" id="view-items" hidden><h2>🎒 Túi Pháp Bảo</h2><p class="notice">Vật phẩm sưu tầm hiện có trong tài khoản chơi thử của bạn.</p><div id="inventory"></div></div>
-<div class="view" id="view-nft" hidden><h2>🔖 Xưởng Đúc NFT Mô Phỏng</h2><p class="notice">Đúc một bản ghi sưu tầm ngay trong trò chơi. Đây chưa phải NFT trên blockchain, không cần ví và không mất tiền thật.</p><div id="mintList"></div><h2 style="margin-top:18px">Bản ghi đã đúc</h2><div id="nftList"></div></div>
-<div class="view" id="view-tasks" hidden><h2>📜 Nhiệm Vụ Tu Tiên</h2><div id="quests"></div><p class="notice">Nhiệm vụ được cập nhật tự động theo tiến độ. Mỗi phần thưởng chỉ nhận một lần.</p></div>
-</section>
-</main>
-<footer>Tu Tiên Cảnh · Bản thử nghiệm HTML5 tiếng Việt · NFT mô phỏng · Chơi miễn phí</footer>
-<div class="toast" id="toast"></div>
 <script>
 (()=>{
-'use strict';
 const $=id=>document.getElementById(id);
-const realms=[{name:'Luyện Khí',need:100},{name:'Trúc Cơ',need:250},{name:'Kim Đan',need:500},{name:'Nguyên Anh',need:900},{name:'Hóa Thần',need:1500},{name:'Đại Thừa',need:2500},{name:'Độ Kiếp',need:4000},{name:'Chân Tiên',need:6500}];
-const catalog=[
-{id:'lien-hoa',name:'Liên Hoa Tụ Linh',emoji:'🪷',kind:'Pháp bảo',cost:10,desc:'Một đóa sen ngưng tụ linh khí tinh khiết.'},
-{id:'ho-ly',name:'Hồ Ly Nguyệt Ảnh',emoji:'🦊',kind:'Linh thú',cost:15,desc:'Linh thú hiền hòa đồng hành dưới ánh trăng.'},
-{id:'kiem-may',name:'Vân Ảnh Tiên Kiếm',emoji:'🗡️',kind:'Tiên kiếm',cost:25,desc:'Thanh kiếm nhẹ như mây, ánh lên sắc bạc.'},
-{id:'ngoc-boi',name:'Ngọc Bội Trường Sinh',emoji:'📿',kind:'Ngọc khí',cost:20,desc:'Ngọc bội biểu trưng cho sự an nhiên và bền bỉ.'}
-];
-const fresh=()=>({xp:0,jade:25,realm:0,meditateLevel:0,arrayLevel:0,owned:[],nfts:[],gift:false,claimed:[],totalMeditations:0});
-let state=fresh(),soundOn=false,audio=null,toastTimer=null;
-try{const raw=localStorage.getItem('tutiencanh_v2');if(raw){const saved=JSON.parse(raw);state={...fresh(),...saved};}}catch(e){}
-function save(){try{localStorage.setItem('tutiencanh_v2',JSON.stringify(state));$('autosave').textContent='● Đã tự lưu';}catch(e){$('autosave').textContent='● Không thể tự lưu';}}
-function notify(s){$('toast').textContent=s;$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),2200);}
-function log(s){const p=document.createElement('p');p.textContent='• '+new Date().toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'})+' — '+s;$('log').prepend(p);while($('log').children.length>18)$('log').lastChild.remove();}
-function rate(){return 1+state.meditateLevel+2*state.arrayLevel;}
-function addXp(n){const old=state.realm;state.xp+=n;while(state.realm<realms.length-1&&state.xp>=realms[state.realm].need)state.realm++;if(state.realm>old){state.jade+=10*(state.realm-old);log('Linh khí dâng trào! Tự động đột phá đến '+realms[state.realm].name+'. Nhận '+(10*(state.realm-old))+' linh ngọc.');notify('Đột phá thành công: '+realms[state.realm].name+'!');}}
+const fresh=()=>({coins:0,total:0,cash:250,rate:1,power:1,gpu:0,savers:0,cool:0,progress:0,blocks:0,running:true,seconds:0});
+let s=fresh(), last=Date.now();
+function log(msg){const el=$('log'),d=document.createElement('div');d.textContent=new Date().toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'})+' · '+msg;el.prepend(d);while(el.children.length>35)el.lastChild.remove()}
+function costs(){return {gpu:Math.round(120*Math.pow(1.55,s.gpu)),power:Math.round(90*Math.pow(1.7,s.savers)),cool:Math.round(180*Math.pow(1.9,s.cool))}}
+function rate(){return (1+s.gpu*.8)*Math.pow(1.25,s.cool)}
 function render(){
-$('xp').textContent=Math.floor(state.xp).toLocaleString('vi-VN');$('jade').textContent=state.jade.toLocaleString('vi-VN');$('rate').textContent=rate();$('realm').textContent=realms[state.realm].name;$('realmPill').textContent='Cảnh giới: '+realms[state.realm].name;
-const prev=state.realm?realms[state.realm-1].need:0,goal=realms[state.realm].need,got=Math.max(0,state.xp-prev),need=goal-prev;
-$('progressText').textContent=state.realm===realms.length-1?'Đã đạt cảnh giới cao nhất trong bản thử nghiệm':`Tiến độ cảnh giới: ${Math.min(got,need).toLocaleString('vi-VN')} / ${need.toLocaleString('vi-VN')}`;
-$('bar').style.width=(state.realm===realms.length-1?100:Math.min(100,got/need*100))+'%';
-$('breakthrough').disabled=state.realm===realms.length-1||state.xp<goal;
-$('upgrade').textContent='Nâng cấp · '+(20+state.meditateLevel*20)+' ngọc';$('array').textContent='Nâng cấp · '+(35+state.arrayLevel*30)+' ngọc';
-$('upgrade').disabled=state.jade<20+state.meditateLevel*20;$('array').disabled=state.jade<35+state.arrayLevel*30;$('tea').disabled=state.jade<8;$('gift').disabled=state.gift;
-renderInventory();renderMints();renderNFTs();renderQuests();save();
+ const c=costs();$('coins').innerHTML=s.coins.toFixed(4)+' <small>VCO</small>';$('cash').innerHTML=Math.floor(s.cash)+' <small>₫ ảo</small>';$('rate').innerHTML=rate().toFixed(1)+' <small>MH/s</small>';$('power').innerHTML=Math.max(.25,1-s.savers*.2).toFixed(2)+' <small>điểm</small>';
+ $('gpuCost').textContent=c.gpu+' ₫ ảo';$('powerCost').textContent=c.power+' ₫ ảo';$('coolCost').textContent=c.cool+' ₫ ảo';
+ $('gpuBuy').disabled=s.cash<c.gpu;$('powerBuy').disabled=s.cash<c.power;$('coolBuy').disabled=s.cash<c.cool;
+ $('progress').style.width=s.progress+'%';$('status').textContent=(s.running?'Dàn máy đang hoạt động':'Dàn máy đang tạm dừng')+' · Khối tiếp theo: '+Math.floor(s.progress)+'%';$('rig').classList.toggle('active',s.running);
+ $('toggle').textContent=s.running?'⏸ Tạm dừng đào':'▶ Tiếp tục đào';$('total').textContent=s.total.toFixed(4)+' VCO';$('blocks').textContent=s.blocks;$('level').textContent='Cấp '+(s.gpu+1);$('time').textContent=Math.floor(s.seconds/60)+' phút';
 }
-function renderInventory(){$('inventory').innerHTML='';if(!state.owned.length){$('inventory').innerHTML='<p class="notice">Túi đồ đang trống. Ghé Xưởng NFT để sưu tầm vật phẩm miễn phí bằng linh ngọc trong game.</p>';return;}state.owned.forEach(id=>{const it=catalog.find(x=>x.id===id);if(it)$('inventory').append(makeItem(it,'Đã sở hữu'));});}
-function makeItem(it,action,handler){const row=document.createElement('div');row.className='item';const emoji=document.createElement('div');emoji.className='emoji';emoji.textContent=it.emoji;const info=document.createElement('div');info.className='item-info';const b=document.createElement('b');b.textContent=it.name;const sm=document.createElement('small');sm.textContent=it.kind+' · '+it.desc;info.append(b,sm);row.append(emoji,info);if(action){const btn=document.createElement('button');btn.textContent=action;if(handler)btn.onclick=handler;else btn.disabled=true;row.append(btn);}return row;}
-function renderMints(){$('mintList').innerHTML='';catalog.forEach(it=>{const already=state.nfts.some(n=>n.itemId===it.id);const row=makeItem(it,already?'Đã đúc':it.cost+' ngọc',()=>mint(it));const btn=row.querySelector('button');btn.disabled=already||state.jade<it.cost;$('mintList').append(row);});}
-function renderNFTs(){$('nftList').innerHTML='';if(!state.nfts.length){$('nftList').innerHTML='<p class="notice">Chưa có bản ghi NFT mô phỏng nào.</p>';return;}state.nfts.forEach(n=>{const row=makeItem(catalog.find(x=>x.id===n.itemId)||{emoji:'🔖',name:n.name,kind:'Vật phẩm',desc:''},'Đã đúc');const sm=row.querySelector('small');sm.textContent='Mã sưu tầm: '+n.id+' · Chỉ lưu trong trình duyệt này';$('nftList').append(row);});}
-function renderQuests(){const quests=[
-{id:'meditate',title:'Tĩnh tâm lần đầu',desc:'Thực hiện 5 lần ngồi thiền.',done:state.totalMeditations>=5,reward:10},
-{id:'realm',title:'Bước vào Trúc Cơ',desc:'Đạt cảnh giới Trúc Cơ trở lên.',done:state.realm>=1,reward:20},
-{id:'collect',title:'Sưu tầm pháp bảo',desc:'Đúc ít nhất một bản ghi NFT mô phỏng.',done:state.nfts.length>=1,reward:15}
-];$('quests').innerHTML='';quests.forEach(q=>{const row=document.createElement('div');row.className='quest';const span=document.createElement('span');span.innerHTML='<b>'+q.title+'</b><br><small class="notice">'+q.desc+'</small>';const btn=document.createElement('button');if(state.claimed.includes(q.id)){btn.textContent='Đã nhận';btn.disabled=true;}else if(q.done){btn.textContent='Nhận '+q.reward+' ngọc';btn.onclick=()=>{state.claimed.push(q.id);state.jade+=q.reward;log('Hoàn thành nhiệm vụ '+q.title+', nhận '+q.reward+' linh ngọc.');notify('Đã nhận thưởng nhiệm vụ!');render();};}else{btn.textContent='Chưa xong';btn.disabled=true;}row.append(span,btn);$('quests').append(row);});}
-function mint(it){if(state.nfts.some(n=>n.itemId===it.id))return;if(state.jade<it.cost){notify('Chưa đủ linh ngọc.');return;}state.jade-=it.cost;if(!state.owned.includes(it.id))state.owned.push(it.id);const id='TTC-'+Math.random().toString(36).slice(2,6).toUpperCase()+'-'+Date.now().toString(36).slice(-4).toUpperCase();state.nfts.push({itemId:it.id,name:it.name,id});log('Đã đúc bản ghi NFT mô phỏng: '+it.name+'.');notify('Đúc vật phẩm thành công!');render();}
-$('meditate').onclick=()=>{addXp(5);state.jade+=1;state.totalMeditations++;log('Bạn tĩnh tâm, tu vi +5 và linh ngọc +1.');render();};
-$('breakthrough').onclick=()=>{if(state.realm<realms.length-1&&state.xp>=realms[state.realm].need){const old=state.realm;state.realm++;state.jade+=10;log('Bạn chủ động đột phá đến '+realms[state.realm].name+', nhận 10 linh ngọc.');render();}};
-$('upgrade').onclick=()=>{const cost=20+state.meditateLevel*20;if(state.jade>=cost){state.jade-=cost;state.meditateLevel++;log('Tâm Pháp Tĩnh Tâm tăng lên cấp '+state.meditateLevel+'.');notify('Tu vi tự động tăng!');render();}};
-$('array').onclick=()=>{const cost=35+state.arrayLevel*30;if(state.jade>=cost){state.jade-=cost;state.arrayLevel++;log('Tụ Linh Trận tăng lên cấp '+state.arrayLevel+'.');notify('Tụ Linh Trận đã nâng cấp!');render();}};
-$('tea').onclick=()=>{if(state.jade>=8){state.jade-=8;addXp(25);log('Bạn thưởng trà ngộ đạo, tu vi +25.');render();}};
-$('gift').onclick=()=>{if(!state.gift){state.gift=true;state.jade+=20;log('Nhận quà khởi hành: 20 linh ngọc.');notify('Đã nhận quà khởi hành!');render();}};
-document.querySelectorAll('[data-tab]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b===btn));document.querySelectorAll('.view').forEach(v=>v.hidden=v.id!=='view-'+btn.dataset.tab);}));
-function toggleSound(){if(soundOn){if(audio){audio.osc.stop();audio.ctx.close();audio=null;}soundOn=false;$('sound').textContent='♫ Bật âm thanh thiền';notify('Đã tắt âm thanh.');return;}try{const Ctx=window.AudioContext||window.webkitAudioContext;if(!Ctx){notify('Trình duyệt không hỗ trợ âm thanh.');return;}const ctx=new Ctx(),osc=ctx.createOscillator(),gain=ctx.createGain();osc.type='sine';osc.frequency.value=174.61;gain.gain.value=.018;osc.connect(gain);gain.connect(ctx.destination);osc.start();audio={ctx,osc};soundOn=true;$('sound').textContent='♫ Tắt âm thanh thiền';notify('Đã bật âm nền nhẹ.');}catch(e){notify('Không thể bật âm thanh trong trình duyệt này.');}}
-$('sound').onclick=toggleSound;
-function drawSky(){const canvas=$('sky'),rect=canvas.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,2);canvas.width=Math.max(1,rect.width*dpr);canvas.height=Math.max(1,rect.height*dpr);const c=canvas.getContext('2d');c.scale(dpr,dpr);for(let i=0;i<75;i++){const x=(i*97.3+17)%rect.width,y=(i*43.7+9)%(rect.height*.67),r=(i%3)*.35+.35;c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.fillStyle=`rgba(230,248,255,${.18+((i*7)%7)/10})`;c.fill();}}
-window.addEventListener('resize',drawSky);drawSky();render();
-setInterval(()=>{addXp(rate());render();},1000);
-document.addEventListener('visibilitychange',()=>{if(document.hidden)save();});
-window.addEventListener('beforeunload',save);
+function buy(key){const c=costs()[key];if(s.cash<c)return;s.cash-=c;if(key==='gpu'){s.gpu++;log('Đã nâng cấp card đồ họa. Tốc độ đào tăng!')}if(key==='power'){s.savers++;log('Đã lắp bộ nguồn tiết kiệm. Chi phí vận hành giảm!')}if(key==='cool'){s.cool++;log('Đã nâng cấp hệ thống làm mát. Hiệu suất tăng!')}render()}
+$('gpuBuy').onclick=()=>buy('gpu');$('powerBuy').onclick=()=>buy('power');$('coolBuy').onclick=()=>buy('cool');
+$('toggle').onclick=()=>{s.running=!s.running;log(s.running?'Đã tiếp tục khai thác.':'Đã tạm dừng khai thác.');render()};
+$('claim').onclick=()=>{if(s.progress<10){log('Khối chưa đủ tiến độ để thu hoạch. Hãy để máy đào thêm nhé!');return}const n=Math.floor(s.progress/10);const reward=n*.01;s.coins+=reward;s.total+=reward;s.cash+=n*8;s.blocks+=n;s.progress-=n*10;log('Thu hoạch '+reward.toFixed(4)+' VCO và nhận '+(n*8)+' ₫ ảo.');render()};
+$('save').onclick=()=>{try{localStorage.setItem('xuongDaoCoinSave',JSON.stringify(s));log('Đã lưu tiến trình trên trình duyệt này.')}catch(e){log('Không thể lưu trên thiết bị này.')}};
+$('reset').onclick=()=>{if(confirm('Bạn có chắc muốn xóa tiến trình và chơi lại từ đầu?')){s=fresh();try{localStorage.removeItem('xuongDaoCoinSave')}catch(e){}$('log').innerHTML='';log('Đã bắt đầu hành trình mới. Chúc bạn nâng cấp dàn máy vui vẻ!');render()}};
+try{const saved=localStorage.getItem('xuongDaoCoinSave');if(saved){const parsed=JSON.parse(saved);if(parsed&&typeof parsed.coins==='number'){s={...fresh(),...parsed};log('Đã khôi phục tiến trình đã lưu.')}}}catch(e){}
+setInterval(()=>{const now=Date.now(),dt=Math.min((now-last)/1000,2);last=now;if(s.running){s.seconds+=dt;s.progress+=dt*rate()*0.75;while(s.progress>=100){s.progress-=100;s.coins+=.1;s.total+=.1;s.cash+=12;s.blocks++;log('Hoàn tất một khối: +0,1000 VCO và +12 ₫ ảo.')}}render()},500);
+render();
 })();
 </script>
 </body>
