@@ -1,62 +1,104 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Giai Điệu – Webgame nghe nhạc</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nông Trại Xanh – Webgame thư giãn</title>
 <style>
-:root{--bg:#090d1b;--panel:#141b31;--panel2:#1b2440;--text:#f4f6ff;--muted:#a8b2d0;--cyan:#73e5e8;--pink:#ff7eb6;--gold:#ffd479;--line:#ffffff18}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 20% 0%,#29265c 0,transparent 45%),radial-gradient(ellipse at 90% 15%,#153d58 0,transparent 36%),var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
-header{padding:24px clamp(16px,4vw,52px);display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid var(--line);background:#080c19a8;backdrop-filter:blur(12px);position:sticky;top:0;z-index:4}
-.logo{font-size:24px;font-weight:900;letter-spacing:.3px}.logo span{color:var(--cyan)}.sub{color:var(--muted);font-size:12px}.tag{border:1px solid #73e5e855;background:#73e5e812;color:var(--cyan);padding:7px 11px;border-radius:99px;font-size:12px}
-main{max-width:1180px;margin:auto;padding:25px 18px 45px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-bottom:18px}.stat,.panel{background:linear-gradient(145deg,#19213aee,#11172aee);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 14px 40px #0002}.stat small{display:block;color:var(--muted)}.stat strong{font-size:25px;display:block;margin-top:3px}.gold{color:var(--gold)}.cyan{color:var(--cyan)}
-.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}.tabs button,button{cursor:pointer;border:0;border-radius:11px;padding:11px 15px;font:inherit;font-weight:750;color:var(--text);background:#ffffff12}.tabs button.active,.primary{background:linear-gradient(100deg,#58d8de,#8b9dff);color:#081324}.secondary{border:1px solid #ffffff22;background:#ffffff0a}.grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(270px,.8fr);gap:16px}.hidden{display:none!important}h2,h3{margin:0 0 9px}h2{font-size:21px}h3{font-size:17px}.muted{color:var(--muted)}.hero{min-height:310px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;overflow:hidden;position:relative;background:radial-gradient(circle at 50% 35%,#584aa966,transparent 48%),linear-gradient(150deg,#202b4a,#101629)}
-.disc{width:145px;height:145px;border-radius:50%;background:repeating-radial-gradient(circle,#111 0 4px,#282b42 5px 7px);display:grid;place-items:center;box-shadow:0 0 0 9px #ffffff08,0 0 48px #73e5e855;margin:14px 0;animation:spin 7s linear infinite;animation-play-state:paused}.disc.playing{animation-play-state:running}.disc:before{content:"♫";width:49px;height:49px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--pink),var(--cyan));color:#101629;font-size:25px;font-weight:900;border:5px solid #101629}
-@keyframes spin{to{transform:rotate(360deg)}}.player-controls{display:flex;gap:9px;align-items:center;justify-content:center;flex-wrap:wrap;margin:13px}.round{width:48px;height:48px;border-radius:50%;font-size:19px}.trackline{display:flex;gap:10px;align-items:center;width:100%;max-width:540px;margin:7px auto}.trackline input{flex:1;accent-color:var(--cyan)}input[type=range]{width:100%;accent-color:var(--cyan)}.upload{display:block;border:1px dashed #73e5e866;border-radius:13px;padding:14px;text-align:center;color:var(--cyan);cursor:pointer;margin-top:12px}.upload input{display:none}.list{display:flex;flex-direction:column;gap:8px;margin-top:12px}.song{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid var(--line);border-radius:12px;background:#ffffff06}.song .cover{width:42px;height:42px;display:grid;place-items:center;border-radius:10px;background:linear-gradient(135deg,#7259bc,#35aeb8);font-size:19px}.song .info{flex:1;min-width:0}.song b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.song small{color:var(--muted)}.song button{padding:8px 11px}
-.walletgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.field{display:flex;flex-direction:column;gap:6px;margin:12px 0}.field label{color:var(--muted);font-size:13px}.field input,.field select{width:100%;padding:12px;border:1px solid #ffffff24;border-radius:10px;background:#0d1426;color:var(--text);font:inherit}.notice{padding:12px;border-radius:12px;background:#47391b55;border:1px solid #ffd47955;color:#ffe5ad;font-size:13px;margin-top:12px}.success{color:var(--cyan);min-height:22px;font-size:13px;margin-top:8px}.history{padding-left:20px;color:var(--muted);font-size:13px}.history li{margin:7px 0}.task{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}.task div{flex:1}.task small{display:block;color:var(--muted)}.progress{height:7px;background:#ffffff15;border-radius:8px;overflow:hidden;margin:10px 0}.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--pink))}.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#effcff;color:#111b2c;padding:12px 18px;border-radius:12px;font-weight:800;display:none;z-index:9}.footer{text-align:center;color:var(--muted);font-size:12px;margin-top:25px}
-@media(max-width:760px){header{align-items:flex-start;flex-direction:column}.stats{grid-template-columns:1fr 1fr}.stats .stat:last-child{grid-column:span 2}.grid,.walletgrid{grid-template-columns:1fr}.hero{min-height:280px}}
-</style></head>
+:root{--green:#2f7d32;--deep:#205b29;--lime:#a6d96a;--cream:#fff8e8;--brown:#815334;--gold:#f4c542;--ink:#243323}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:linear-gradient(#dff5ff,#f5f8dd 45%,#d5edb8);min-height:100vh}
+header{padding:22px max(16px,calc((100% - 1180px)/2));background:linear-gradient(120deg,#286b35,#4b9b43);color:white;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;box-shadow:0 5px 18px #1d57252a}
+.brand{display:flex;align-items:center;gap:12px}.logo{font-size:42px;filter:drop-shadow(0 3px 2px #17451d)}h1{font-size:clamp(22px,3vw,32px);margin:0}.subtitle{opacity:.88;font-size:13px}
+.topstats{display:flex;gap:8px;flex-wrap:wrap}.pill{background:#ffffff20;border:1px solid #ffffff50;border-radius:999px;padding:9px 13px;font-weight:700;white-space:nowrap}
+main{max-width:1180px;margin:22px auto;padding:0 16px 40px;display:grid;grid-template-columns:minmax(0,1.55fr) minmax(290px,.85fr);gap:18px}
+.panel{background:#ffffffeb;border:1px solid #ffffff;border-radius:20px;padding:18px;box-shadow:0 10px 28px #315b2420;margin-bottom:16px}
+.panel h2{font-size:20px;margin:0 0 12px;display:flex;gap:8px;align-items:center}.hint{font-size:13px;color:#5c7158;line-height:1.5}
+.sky{border-radius:16px;overflow:hidden;background:linear-gradient(#87d7f3 0%,#c7efff 58%,#b2d77d 59%,#79b954 100%);position:relative;min-height:150px;padding:18px}
+.sun{position:absolute;right:28px;top:17px;font-size:42px;filter:drop-shadow(0 0 12px #ffe98c)}.farm-title{font-weight:900;font-size:22px;color:#225b2a;text-shadow:0 1px #fff8}.farm-sub{font-size:13px;color:#315d31}
+.field{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:12px;background:#9dce70;border-radius:0 0 16px 16px;border:5px solid #6d9f4e;border-top:0}
+.plot{min-height:124px;border:2px solid #b8d98c;border-radius:13px;background:linear-gradient(#986d42,#80522f);color:white;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:5px;padding:8px;cursor:pointer;transition:transform .15s,filter .15s;box-shadow:inset 0 4px 0 #ffffff17}
+.plot:hover{transform:translateY(-2px);filter:brightness(1.08)}.plot.empty{background:linear-gradient(#a9d66e,#80b951);color:#24552a;border-style:dashed}.crop{font-size:34px;line-height:1.1}.plot strong{font-size:13px}.plot small{font-size:11px;opacity:.92}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.btn{border:0;border-radius:12px;padding:11px 14px;font-weight:800;cursor:pointer;background:var(--green);color:#fff;box-shadow:0 3px 0 #1f5925;transition:transform .12s}.btn:hover{filter:brightness(1.08)}.btn:active{transform:translateY(2px);box-shadow:0 1px 0 #1f5925}.btn.secondary{background:#e8f4db;color:#2b672d;box-shadow:0 3px 0 #bdd8a8}.btn.gold{background:#e5a91b;box-shadow:0 3px 0 #a8750c;color:#352600}.btn:disabled{opacity:.5;cursor:not-allowed}
+.inventory{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.seed{border:1px solid #d9e7cc;border-radius:14px;padding:12px;background:#fbfff7}.seedtop{display:flex;justify-content:space-between;align-items:center;gap:8px}.seedemoji{font-size:27px}.seed p{margin:6px 0;font-size:12px;color:#63745d}.seed .btn{width:100%;padding:8px;font-size:13px}
+.balance{font-size:30px;font-weight:900;color:#23652b}.balance small{font-size:13px;color:#6c7e65;font-weight:600}.walletgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.walletbox{background:#f0f8e9;padding:12px;border-radius:13px}.walletbox span{font-size:12px;color:#61735a;display:block}.walletbox b{font-size:20px}
+label{display:block;font-size:13px;font-weight:750;margin:10px 0 5px}input,select{width:100%;border:1px solid #cbdcbe;border-radius:10px;padding:11px;background:white;font:inherit;color:var(--ink)}.notice{padding:11px 12px;background:#fff4d4;border:1px solid #f1d68b;border-radius:12px;font-size:12px;line-height:1.5;color:#6b4d08;margin-top:10px}.status{margin-top:10px;padding:10px 12px;background:#eaf7e6;border-radius:10px;font-size:13px;display:none}.log{max-height:160px;overflow:auto;font-size:12px;color:#60715b}.log div{padding:7px 0;border-bottom:1px solid #edf2e8}
+footer{text-align:center;font-size:12px;color:#587050;padding:0 16px 25px}.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#234f2a;color:#fff;padding:12px 18px;border-radius:999px;box-shadow:0 8px 25px #0002;transition:.25s;z-index:5}.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:800px){main{grid-template-columns:1fr}.topstats{width:100%}.pill{font-size:12px}.field{gap:7px;padding:8px}.plot{min-height:110px;padding:5px}.crop{font-size:29px}}
+</style>
+</head>
 <body>
-<header><div><div class="logo">♫ GIAI ĐIỆU<span>+</span></div><div class="sub">Nghe nhạc thư giãn · Nhiệm vụ · Ví điểm thưởng</div></div><div class="tag">BẢN CHƠI THỬ · TIẾNG VIỆT</div></header>
+<header>
+ <div class="brand"><div class="logo">🌻</div><div><h1>Nông Trại Xanh</h1><div class="subtitle">Gieo hạt hôm nay · Thu hoạch niềm vui mỗi ngày</div></div></div>
+ <div class="topstats"><div class="pill">🪙 <span id="headCoins">250</span> xu</div><div class="pill">⭐ <span id="headPoints">0</span> điểm thưởng</div><div class="pill">🌱 Cấp <span id="level">1</span></div></div>
+</header>
 <main>
-<div class="stats"><div class="stat"><small>🎧 Thời gian nghe trong phiên</small><strong class="cyan" id="minutes">0 phút</strong></div><div class="stat"><small>✨ Điểm thưởng mô phỏng</small><strong class="gold" id="pointsTop">0</strong></div><div class="stat"><small>🎵 Bài đã nghe</small><strong id="playedCount">0</strong></div></div>
-<nav class="tabs"><button class="active" data-tab="music">🎧 Nghe nhạc</button><button data-tab="missions">🎯 Nhiệm vụ</button><button data-tab="wallet">👛 Ví & quy đổi</button><button data-tab="guide">📘 Hướng dẫn</button></nav>
-<section id="music" class="grid">
-<div>
-<div class="panel hero"><div class="sub">KHÔNG GIAN ÂM NHẠC CỦA BẠN</div><div class="disc" id="disc"></div><h2 id="nowTitle">Chưa chọn bài hát</h2><div class="muted" id="nowArtist">Thêm tệp nhạc của bạn để bắt đầu</div>
-<div class="player-controls"><button id="prev" class="secondary">⏮</button><button id="play" class="primary round">▶</button><button id="next" class="secondary">⏭</button></div>
-<div class="trackline"><span id="currentTime">0:00</span><input id="seek" type="range" min="0" max="100" value="0"><span id="duration">0:00</span></div>
-<div class="trackline" style="max-width:300px"><span>🔉</span><input id="volume" type="range" min="0" max="1" step=".01" value=".8"></div>
-<audio id="audio" preload="metadata"></audio></div>
-<div class="panel" style="margin-top:15px"><h3>📂 Thư viện nhạc của bạn</h3><p class="muted">Chọn các tệp âm thanh có sẵn trên thiết bị. Tệp không được tải lên máy chủ.</p><label class="upload">＋ Chọn tệp nhạc từ thiết bị<input id="files" type="file" accept="audio/*" multiple></label><div class="list" id="playlist"><div class="muted">Chưa có bài hát. Hãy chọn tệp nhạc để phát.</div></div></div>
-</div>
+<section>
+ <div class="panel" style="padding:12px">
+  <div class="sky"><div class="sun">☀️</div><div class="farm-title">Khu vườn của bạn</div><div class="farm-sub">Chăm sóc cây trồng để nhận xu. Nhấn vào ô đất để gieo hoặc thu hoạch.</div></div>
+  <div class="field" id="field"></div>
+  <div class="actions"><button class="btn" id="waterBtn">💧 Tưới toàn bộ</button><button class="btn secondary" id="dailyBtn">🎁 Nhận quà mỗi ngày</button><button class="btn secondary" id="saveBtn">💾 Lưu tiến trình</button></div>
+  <p class="hint" id="farmHint">Mẹo: cây sẽ lớn dần theo thời gian. Bạn có thể đóng trình duyệt và quay lại sau.</p>
+ </div>
+ <div class="panel">
+  <h2>🌾 Hạt giống</h2><p class="hint">Mua hạt bằng xu, sau đó chọn một ô đất trống để gieo.</p>
+  <div class="inventory" id="seeds"></div>
+ </div>
+ <div class="panel"><h2>📜 Nhật ký nông trại</h2><div class="log" id="log"><div>🌞 Chào mừng bạn đến với Nông Trại Xanh!</div></div></div>
+</section>
 <aside>
-<div class="panel"><h3>🌱 Tiến trình nghe nhạc</h3><p class="muted">Bản thử nghiệm cộng điểm theo thời gian nghe có phát nhạc.</p><div class="progress"><i id="listenBar"></i></div><div class="muted" id="listenStatus">Nghe 1 phút để hoàn thành mốc đầu tiên.</div><div class="notice">Điểm chỉ dùng để thử giao diện. Thời gian nghe và điểm không tạo ra thu nhập thật.</div></div>
-<div class="panel" style="margin-top:15px"><h3>✨ Mốc thưởng</h3><div class="task"><span>🎶</span><div><b>Nghe nhạc 1 phút</b><small>Thưởng thử: 10 điểm, một lần</small></div><span id="task1">0/1</span></div><div class="task"><span>🎼</span><div><b>Nghe nhạc 5 phút</b><small>Thưởng thử: 30 điểm, một lần</small></div><span id="task5">0/1</span></div></div>
-</aside></section>
-<section id="missions" class="hidden">
-<div class="panel"><h2>🎯 Nhiệm vụ nghe nhạc</h2><p class="muted">Các mốc này chỉ minh họa cơ chế điểm trong trò chơi.</p><div class="task"><span>🎧</span><div><b>Nghe liên tục 1 phút</b><small>Nhận 10 điểm mô phỏng</small><div class="progress"><i id="missionBar1"></i></div></div><b id="missionState1">Chưa xong</b></div><div class="task"><span>🌙</span><div><b>Tích lũy 5 phút nghe</b><small>Nhận thêm 30 điểm mô phỏng</small><div class="progress"><i id="missionBar5"></i></div></div><b id="missionState5">Chưa xong</b></div></div>
-</section>
-<section id="wallet" class="hidden">
-<div class="walletgrid"><div class="panel"><h3>🔄 Quy đổi điểm</h3><p class="muted">Đổi điểm thử nghiệm sang số dư minh họa.</p><div class="stat"><small>Điểm hiện có</small><strong class="gold" id="pointsWallet">0</strong></div><div class="field"><label for="convertAmount">Số điểm muốn quy đổi (bội số 10)</label><input id="convertAmount" type="number" min="10" step="10" value="10"></div><p class="muted">Tỷ lệ minh họa: 10 điểm = 1 đơn vị số dư demo.</p><button class="primary" id="convert">Quy đổi điểm</button><div class="success" id="convertMsg"></div></div>
-<div class="panel"><h3>🏦 Yêu cầu rút tiền (mô phỏng)</h3><div class="stat"><small>Số dư demo</small><strong class="cyan" id="cashBalance">0 đơn vị</strong></div><div class="field"><label for="withdrawAmount">Số dư muốn rút</label><input id="withdrawAmount" type="number" min="1" step="1" value="1"></div><div class="field"><label for="method">Phương thức minh họa</label><select id="method"><option>Ví điện tử (mô phỏng)</option><option>Chuyển khoản ngân hàng (mô phỏng)</option></select></div><button class="secondary" id="withdraw">Tạo yêu cầu rút thử</button><div class="success" id="withdrawMsg"></div><div class="notice">⚠️ Không có tiền thật được chuyển. Không nhập số tài khoản, mật khẩu, mã OTP hoặc thông tin tài chính thật. Muốn rút tiền thật cần máy chủ bảo mật và tích hợp nhà cung cấp thanh toán hợp pháp.</div></div></div>
-<div class="panel" style="margin-top:16px"><h3>📜 Lịch sử ví trong phiên</h3><ul class="history" id="history"><li>Chưa có giao dịch.</li></ul><button class="secondary" id="clearHistory">Xóa lịch sử hiển thị</button></div>
-</section>
-<section id="guide" class="hidden"><div class="panel"><h2>📘 Hướng dẫn sử dụng</h2><ol><li>Vào mục <b>Nghe nhạc</b>, chọn tệp âm thanh trên thiết bị.</li><li>Nhấn nút phát để nghe; có thể tua bài, chỉnh âm lượng, chuyển bài.</li><li>Nghe khi nhạc đang phát để tiến trình thử nghiệm tăng lên và hoàn thành mốc thưởng.</li><li>Vào <b>Ví & quy đổi</b> để thử đổi điểm và tạo yêu cầu rút mô phỏng.</li></ol><div class="notice">Đây là bản mẫu HTML chạy ngay trên trình duyệt. Điểm, quy đổi và yêu cầu rút chỉ là dữ liệu thử nghiệm trong phiên; không có giá trị tiền mặt, không được bảo đảm thanh toán và không kết nối ngân hàng.</div></div></section>
-<div class="footer">GIAI ĐIỆU+ · Webgame HTML5 tiếng Việt · Tệp nhạc được phát cục bộ trên thiết bị</div>
-</main><div class="toast" id="toast"></div>
+ <div class="panel">
+  <h2>👛 Ví của tôi</h2>
+  <div class="balance"><span id="walletCoins">250</span> <small>xu trong trò chơi</small></div>
+  <div class="walletgrid" style="margin-top:12px"><div class="walletbox"><span>Điểm thưởng mô phỏng</span><b id="walletPoints">0</b></div><div class="walletbox"><span>Giá quy đổi thử</span><b>100 xu = 1 điểm</b></div></div>
+  <label for="exchangeAmount">Số xu muốn quy đổi</label><input id="exchangeAmount" type="number" min="100" step="100" value="100">
+  <button class="btn gold" id="exchangeBtn" style="width:100%;margin-top:9px">🔄 Quy đổi xu thành điểm</button>
+  <div class="notice">⚠️ Đây là webgame minh họa. Xu và điểm chỉ là dữ liệu trong trò chơi, không có giá trị tiền thật. Chức năng quy đổi không tạo ra tiền và không kết nối ngân hàng.</div>
+ </div>
+ <div class="panel">
+  <h2>🏦 Yêu cầu rút tiền (mô phỏng)</h2>
+  <p class="hint">Bạn có thể thử luồng gửi yêu cầu để xem giao diện. Không nhập thông tin ngân hàng thật.</p>
+  <div class="walletbox"><span>Điểm thưởng khả dụng</span><b id="availablePoints">0 điểm</b></div>
+  <label for="withdrawAmount">Số điểm muốn gửi yêu cầu</label><input id="withdrawAmount" type="number" min="1" step="1" value="1">
+  <label for="demoMethod">Phương thức minh họa</label><select id="demoMethod"><option>Ví thử nghiệm</option><option>Chuyển khoản giả lập</option></select>
+  <label for="demoAccount">Tên tài khoản thử nghiệm</label><input id="demoAccount" maxlength="32" placeholder="Ví dụ: nguoidung_demo">
+  <button class="btn" id="withdrawBtn" style="width:100%;margin-top:12px">📨 Gửi yêu cầu thử</button>
+  <div id="withdrawStatus" class="status"></div>
+  <div class="notice">🔒 Không cung cấp số tài khoản, mật khẩu, mã OTP hoặc dữ liệu tài chính thật ở đây. Rút tiền thật cần máy chủ, xác minh hợp pháp và tích hợp cổng thanh toán an toàn.</div>
+ </div>
+</aside>
+</main>
+<footer>Nông Trại Xanh · Bản demo HTML5 chạy trực tiếp trên trình duyệt · Dữ liệu lưu trên thiết bị này</footer>
+<div class="toast" id="toast"></div>
 <script>
-(()=>{const $=id=>document.getElementById(id),audio=$('audio');let files=[],index=-1,seconds=0,points=0,cash=0,played=new Set(),earned1=false,earned5=false,history=[],tick=0;
-const fmt=n=>Math.floor(n).toLocaleString('vi-VN');const time=s=>{s=Math.max(0,Math.floor(s||0));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
-function toast(t){const el=$('toast');el.textContent=t;el.style.display='block';clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.style.display='none',2300)}
-function render(){ $('minutes').textContent=Math.floor(seconds/60)+' phút';$('pointsTop').textContent=fmt(points);$('pointsWallet').textContent=fmt(points);$('cashBalance').textContent=fmt(cash)+' đơn vị';$('playedCount').textContent=played.size;$('task1').textContent=earned1?'1/1':'0/1';$('task5').textContent=earned5?'1/1':'0/1';let p=Math.min(100,seconds/300*100);$('listenBar').style.width=p+'%';$('missionBar1').style.width=Math.min(100,seconds/60*100)+'%';$('missionBar5').style.width=p+'%';$('listenStatus').textContent=seconds<60?'Còn '+(60-seconds)+' giây đến mốc đầu tiên.':seconds<300?'Đã hoàn thành mốc đầu tiên! Còn '+(300-seconds)+' giây đến mốc tiếp theo.':'Đã hoàn thành hai mốc nghe thử.';$('missionState1').textContent=earned1?'Đã nhận':'Chưa xong';$('missionState5').textContent=earned5?'Đã nhận':'Chưa xong';}
-function addHistory(t){history.unshift(new Date().toLocaleTimeString('vi-VN')+' — '+t);history=history.slice(0,30);$('history').innerHTML=history.length?history.map(x=>'<li>'+x+'</li>').join(''):'<li>Chưa có giao dịch.</li>'}
-function renderList(){const box=$('playlist');box.innerHTML='';if(!files.length){box.innerHTML='<div class="muted">Chưa có bài hát. Hãy chọn tệp nhạc để phát.</div>';return}files.forEach((f,i)=>{const row=document.createElement('div');row.className='song';row.innerHTML='<div class="cover">♫</div><div class="info"><b></b><small></small></div><button class="secondary">Phát</button>';row.querySelector('b').textContent=f.name;row.querySelector('small').textContent=(f.size/1024/1024).toFixed(1)+' MB';row.querySelector('button').onclick=()=>load(i,true);box.appendChild(row)})}
-function load(i,autoplay){if(!files.length)return;index=(i+files.length)%files.length;audio.src=URL.createObjectURL(files[index]);$('nowTitle').textContent=files[index].name;$('nowArtist').textContent='Tệp nhạc trên thiết bị của bạn';played.add(index);renderList();if(autoplay)audio.play().then(updatePlay).catch(()=>{});$('seek').value=0}
-function updatePlay(){const on=!audio.paused;$('play').textContent=on?'Ⅱ':'▶';$('disc').classList.toggle('playing',on)}
-$('files').onchange=e=>{files=Array.from(e.target.files||[]);index=-1;renderList();if(files.length){load(0,false);toast('Đã thêm '+files.length+' bài nhạc')}};$('play').onclick=()=>{if(index<0){if(!files.length){$('files').click();return}load(0,false)}if(audio.paused)audio.play().then(updatePlay).catch(()=>toast('Không phát được tệp này'));else audio.pause();updatePlay()};$('prev').onclick=()=>load(index-1,true);$('next').onclick=()=>load(index+1,true);audio.onplay=updatePlay;audio.onpause=updatePlay;audio.onended=()=>load(index+1,true);audio.ontimeupdate=()=>{if(audio.duration){$('seek').value=audio.currentTime/audio.duration*100;$('currentTime').textContent=time(audio.currentTime);$('duration').textContent=time(audio.duration)}};$('seek').oninput=()=>{if(audio.duration)audio.currentTime=Number($('seek').value)/100*audio.duration};$('volume').oninput=e=>audio.volume=Number(e.target.value);audio.volume=.8;
-setInterval(()=>{if(!audio.paused&&!audio.ended){seconds++;tick++;if(seconds>=60&&!earned1){earned1=true;points+=10;addHistory('Thưởng mốc nghe 1 phút: +10 điểm mô phỏng');toast('Bạn nhận 10 điểm thử nghiệm!')}if(seconds>=300&&!earned5){earned5=true;points+=30;addHistory('Thưởng mốc nghe 5 phút: +30 điểm mô phỏng');toast('Bạn nhận thêm 30 điểm thử nghiệm!')}render()}},1000);
-$('convert').onclick=()=>{const n=Math.floor(Number($('convertAmount').value));if(!Number.isFinite(n)||n<10||n%10){$('convertMsg').textContent='Nhập số điểm từ 10 trở lên, theo bội số 10.';return}if(n>points){$('convertMsg').textContent='Bạn không đủ điểm để quy đổi.';return}points-=n;cash+=n/10;addHistory('Quy đổi '+fmt(n)+' điểm thành '+fmt(n/10)+' đơn vị số dư demo');render();$('convertMsg').textContent='Quy đổi mô phỏng thành công.'};
-$('withdraw').onclick=()=>{const n=Math.floor(Number($('withdrawAmount').value));if(!Number.isFinite(n)||n<1){$('withdrawMsg').textContent='Số dư muốn rút phải từ 1 trở lên.';return}if(n>cash){$('withdrawMsg').textContent='Số dư demo không đủ.';return}cash-=n;addHistory('Tạo yêu cầu rút thử '+fmt(n)+' đơn vị qua '+$('method').value+' — chưa gửi đi đâu');render();$('withdrawMsg').textContent='Đã ghi nhận yêu cầu rút thử trên trang này; không có giao dịch tiền thật.';toast('Đã tạo yêu cầu rút thử')};
-$('clearHistory').onclick=()=>{history=[];addHistory('Lịch sử đã được làm mới');};document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('active',x===b));['music','missions','wallet','guide'].forEach(id=>$(id).classList.toggle('hidden',id!==b.dataset.tab))});render();
-})();
-</script></body></html>
+const CROPS=[
+ {id:'carrot',name:'Cà rốt',emoji:'🥕',cost:20,reward:34,time:12,desc:'Nhanh lớn · 12 giây'},
+ {id:'corn',name:'Bắp',emoji:'🌽',cost:35,reward:58,time:22,desc:'Thu hoạch khá · 22 giây'},
+ {id:'tomato',name:'Cà chua',emoji:'🍅',cost:50,reward:82,time:30,desc:'Giá trị tốt · 30 giây'},
+ {id:'sunflower',name:'Hướng dương',emoji:'🌻',cost:70,reward:118,time:42,desc:'Lớn chậm · 42 giây'}
+];
+const SAVE_KEY='nongTraiXanhSave_v1';
+let state={coins:250,points:0,level:1,xp:0,plots:Array(9).fill(null),lastDaily:'',logs:[]};
+let selectedCrop='carrot',toastTimer;
+function load(){try{const s=JSON.parse(localStorage.getItem(SAVE_KEY));if(s&&Array.isArray(s.plots)&&s.plots.length===9)state={...state,...s};}catch(e){}}
+function save(silent=false){localStorage.setItem(SAVE_KEY,JSON.stringify(state));if(!silent)toast('Đã lưu tiến trình trên thiết bị!');}
+function log(msg){state.logs.unshift(new Date().toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'})+' · '+msg);state.logs=state.logs.slice(0,20);renderLog();}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),2400);}
+function cropById(id){return CROPS.find(c=>c.id===id);}
+function growth(p){if(!p)return 0;return Math.min(1,(Date.now()-p.plantedAt)/(p.time*1000));}
+function render(){renderStats();renderField();renderSeeds();renderLog();}
+function renderStats(){document.getElementById('headCoins').textContent=state.coins;document.getElementById('walletCoins').textContent=state.coins;document.getElementById('headPoints').textContent=state.points;document.getElementById('walletPoints').textContent=state.points;document.getElementById('availablePoints').textContent=state.points+' điểm';document.getElementById('level').textContent=state.level;}
+function renderField(){const f=document.getElementById('field');f.innerHTML='';state.plots.forEach((p,i)=>{const b=document.createElement('button');b.className='plot'+(!p?' empty':'');if(!p){b.innerHTML='<span class="crop">🟫</span><strong>Ô đất '+(i+1)+'</strong><small>Nhấn để gieo hạt</small>';}else{const c=cropById(p.crop),g=growth(p);b.innerHTML=`<span class="crop">${g>=1?c.emoji: g>.55?'🌿':'🌱'}</span><strong>${c.name}</strong><small>${g>=1?'✨ Đã chín · Thu hoạch': 'Đang lớn · '+Math.ceil((1-g)*c.time)+' giây'}</small>`;}b.addEventListener('click',()=>plotClick(i));f.appendChild(b);});}
+function renderSeeds(){const s=document.getElementById('seeds');s.innerHTML='';CROPS.forEach(c=>{const d=document.createElement('div');d.className='seed';d.innerHTML=`<div class="seedtop"><span class="seedemoji">${c.emoji}</span><b>${c.name}</b></div><p>Giá: 🪙 ${c.cost} xu<br>Thu hoạch: +${c.reward} xu<br>${c.desc}</p><button class="btn ${selectedCrop===c.id?'':'secondary'}" data-id="${c.id}">${selectedCrop===c.id?'✓ Đang chọn':'Chọn hạt giống'}</button>`;d.querySelector('button').onclick=()=>{selectedCrop=c.id;renderSeeds();toast('Đã chọn hạt '+c.name);};s.appendChild(d);});}
+function plotClick(i){const p=state.plots[i];if(p){if(growth(p)<1){toast('Cây vẫn đang lớn, hãy quay lại sau nhé!');return;}const c=cropById(p.crop);state.coins+=c.reward;state.xp+=c.reward;state.plots[i]=null;while(state.xp>=state.level*150){state.xp-=state.level*150;state.level++;log('🎉 Bạn đã lên cấp '+state.level+'!');}log('🌾 Thu hoạch '+c.name+', nhận '+c.reward+' xu.');save(true);render();toast('Thu hoạch thành công: +'+c.reward+' xu!');return;}
+const c=cropById(selectedCrop);if(state.coins<c.cost){toast('Bạn chưa đủ xu để mua hạt giống.');return;}state.coins-=c.cost;state.plots[i]={crop:c.id,plantedAt:Date.now(),time:c.time};log('🌱 Đã gieo '+c.name+' ở ô đất '+(i+1)+'.');save(true);render();toast('Đã gieo '+c.name+'!');}
+document.getElementById('waterBtn').onclick=()=>{let n=0;state.plots.forEach(p=>{if(p){p.plantedAt-=Math.floor(p.time*1000*.15);n++;}});if(!n){toast('Chưa có cây nào cần tưới.');return;}log('💧 Tưới vườn: cây đang trồng lớn nhanh thêm một chút.');save(true);render();toast('Đã tưới '+n+' cây!');};
+document.getElementById('dailyBtn').onclick=()=>{const today=new Date().toLocaleDateString('sv-SE');if(state.lastDaily===today){toast('Bạn đã nhận quà hôm nay rồi!');return;}state.lastDaily=today;state.coins+=100;log('🎁 Nhận quà đăng nhập: +100 xu.');save(true);render();toast('Quà mỗi ngày: +100 xu!');};
+document.getElementById('saveBtn').onclick=()=>save();
+document.getElementById('exchangeBtn').onclick=()=>{const amount=Math.floor(Number(document.getElementById('exchangeAmount').value));if(!Number.isFinite(amount)||amount<100||amount%100!==0){toast('Nhập số xu từ 100 trở lên, theo bội số 100.');return;}if(amount>state.coins){toast('Bạn không đủ xu để quy đổi.');return;}const pts=amount/100;state.coins-=amount;state.points+=pts;log('🔄 Quy đổi '+amount+' xu thành '+pts+' điểm thưởng mô phỏng.');save(true);render();toast('Đã quy đổi thành '+pts+' điểm mô phỏng.');};
+document.getElementById('withdrawBtn').onclick=()=>{const amount=Math.floor(Number(document.getElementById('withdrawAmount').value));const account=document.getElementById('demoAccount').value.trim();const status=document.getElementById('withdrawStatus');if(!Number.isFinite(amount)||amount<1){toast('Nhập số điểm hợp lệ.');return;}if(amount>state.points){toast('Điểm thưởng không đủ.');return;}if(!account){toast('Hãy nhập tên tài khoản thử nghiệm.');return;}state.points-=amount;const code='NTX-'+Math.random().toString(36).slice(2,8).toUpperCase();status.style.display='block';status.innerHTML=`<b>✅ Đã tạo yêu cầu mô phỏng</b><br>Mã yêu cầu: <b>${code}</b><br>Số điểm: ${amount}<br>Phương thức: ${document.getElementById('demoMethod').value}<br>Tài khoản thử nghiệm: ${escapeHtml(account)}<br><b>Trạng thái: Chỉ mô phỏng — không có khoản tiền nào được chuyển.</b>`;log('🏦 Tạo yêu cầu rút thử '+amount+' điểm ('+code+'). Không có tiền thật được chuyển.');save(true);render();toast('Đã tạo yêu cầu rút thử!');};
+function escapeHtml(s){return s.replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));}
+function renderLog(){const el=document.getElementById('log');el.innerHTML=state.logs.length?state.logs.map(x=>'<div>'+escapeHtml(x)+'</div>').join(''):'<div>Chưa có hoạt động nào.</div>';}
+load();render();setInterval(()=>{renderField();},1000);window.addEventListener('beforeunload',()=>save(true));
+</script>
+</body>
+</html>
