@@ -3,403 +3,174 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#080f20">
-<title>Cardano Staking | Dashboard 2.0</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#12375B">
+<title>WebAppBuilder - Website to App</title>
 <style>
-:root {
-  font-family: Inter, system-ui, Arial, sans-serif;
-  color: #eaf1ff;
-  background: #080f20;
-  color-scheme: dark;
+*{box-sizing:border-box}
+body{
+ margin:0;font-family:Arial,sans-serif;
+ background:#f3f6fa;color:#172b45;
 }
-* { box-sizing: border-box; }
-body { margin: 0; min-height: 100vh; }
-header {
-  height: 76px;
-  padding: 0 5%;
-  border-bottom: 1px solid #263650;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+header{
+ background:#12375b;color:white;
+ padding:22px 7%;
+ display:flex;justify-content:space-between;
+ align-items:center;
 }
-.brand { font-size: 19px; font-weight: 800; color: #75aaff; }
-main { max-width: 1120px; margin: auto; padding: 32px 20px; }
-h1 { font-size: 29px; margin-bottom: 5px; }
-h2 { font-size: 18px; margin-top: 0; }
-p { line-height: 1.55; }
-.muted { color: #91a5c4; }
-.small { font-size: 12px; }
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
-  gap: 16px;
-  margin: 20px 0;
+header h2{margin:0}
+main{max-width:900px;margin:35px auto;padding:20px}
+.panel{
+ background:white;border-radius:15px;
+ padding:25px;margin-bottom:20px;
+ box-shadow:0 3px 15px #142b4510;
 }
-.card {
-  background: #111d33;
-  border: 1px solid #263650;
-  border-radius: 17px;
-  padding: 22px;
-  min-width: 0;
+h1{font-size:27px}
+label{display:block;font-weight:bold;margin:17px 0 8px}
+input,select{
+ width:100%;padding:13px;
+ border:1px solid #d6dfeb;border-radius:8px;
+ font-size:15px;
 }
-.hero {
-  background: linear-gradient(120deg,#15396c,#17294c);
-  border-color: #31578d;
+button{
+ border:0;border-radius:8px;
+ padding:13px 20px;
+ background:#1769aa;color:white;
+ font-weight:bold;cursor:pointer;
 }
-.value {
-  font-size: clamp(23px,4vw,31px);
-  font-weight: 800;
-  margin: 10px 0;
-  overflow-wrap: anywhere;
-}
-button {
-  border: 0;
-  border-radius: 10px;
-  padding: 12px 17px;
-  margin: 5px 5px 5px 0;
-  font-weight: 700;
-  background: #3478f6;
-  color: white;
-  cursor: pointer;
-}
-button.secondary { background: #293b59; }
-button:disabled { opacity: .45; cursor: not-allowed; }
-.badge {
-  display: inline-block;
-  background: #193d35;
-  color: #7ce2b2;
-  border-radius: 20px;
-  padding: 5px 10px;
-  font-size: 12px;
-}
-.warning {
-  color: #ffcf83;
-  background: #392d19;
-  border-radius: 10px;
-  padding: 12px;
-}
-.address {
-  overflow-wrap: anywhere;
-  font-size: 12px;
-  color: #b9c9e2;
-}
-.row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 0;
-  border-bottom: 1px solid #263650;
-}
-.row:last-child { border: 0; }
-.status { margin-top: 12px; min-height: 24px; }
-footer {
-  text-align: center;
-  color: #7186a6;
-  padding: 30px 15px;
-  font-size: 12px;
-}
-@media(max-width:550px) {
-  header { padding: 0 16px; }
-  main { padding: 24px 14px; }
-  .brand { font-size: 15px; }
-  h1 { font-size: 24px; }
-}
+button:hover{background:#10548b}
+.options{display:flex;gap:20px;flex-wrap:wrap}
+.options label{font-weight:normal}
+#result{display:none;margin-top:20px}
+.status{padding:15px;background:#e8f7ed;border-radius:8px}
+footer{text-align:center;color:#718096;padding:25px}
 </style>
 </head>
-
 <body>
+
 <header>
-  <div class="brand">₳ CARDANO STAKING</div>
-  <span class="badge">MAINNET</span>
+<h2>◈ WebAppBuilder</h2>
+<span>HTML5 Platform · MVP 1.0</span>
 </header>
 
 <main>
-  <section>
-    <h1>Dashboard cá nhân</h1>
-    <p class="muted">Quản lý tài sản và staking Cardano của bạn.</p>
-  </section>
+<section class="panel">
+<h1>Biến website thành ứng dụng</h1>
+<p>Cấu hình website và chuẩn bị dự án Android / iOS.</p>
 
-  <section class="card">
-    <h2>Kết nối ví Cardano</h2>
-    <button id="connectEternl">Eternl</button>
-    <button id="connectLace">Lace</button>
-    <button id="disconnect" class="secondary" disabled>
-      Ngắt kết nối
-    </button>
-    <button id="refresh" class="secondary" disabled>
-      ↻ Làm mới dữ liệu
-    </button>
-    <div id="status" class="status muted" role="status"
-         aria-live="polite">Chưa kết nối ví.</div>
-  </section>
+<form id="builder">
+<label>Địa chỉ website</label>
+<input id="website" type="url"
+placeholder="https://example.com" required>
 
-  <section class="grid">
-    <div class="card hero">
-      <p class="muted">Tổng số dư ADA trong ví</p>
-      <div class="value" id="balance">— ADA</div>
-      <p class="small muted">Dữ liệu đọc từ ví đã kết nối</p>
-    </div>
+<label>Tên ứng dụng</label>
+<input id="appName" maxlength="50"
+placeholder="Tên ứng dụng" required>
 
-    <div class="card">
-      <p class="muted">ADA đang staking</p>
-      <div class="value" id="staked">— ADA</div>
-      <p class="small muted">Active stake theo dữ liệu blockchain</p>
-    </div>
+<label>Nền tảng</label>
+<select id="platform">
+<option value="both">Android + iOS</option>
+<option value="android">Android</option>
+<option value="ios">iOS</option>
+</select>
 
-    <div class="card">
-      <p class="muted">Phần thưởng khả dụng</p>
-      <div class="value" id="rewards">— ADA</div>
-      <p class="small muted">Rewards chưa rút theo API</p>
-    </div>
-  </section>
+<label>Màu thương hiệu</label>
+<input id="color" type="color" value="#1769aa">
 
-  <section class="card">
-    <h2>Thông tin ví</h2>
-    <div class="row">
-      <span class="muted">Ví</span>
-      <strong id="wallet">Chưa kết nối</strong>
-    </div>
-    <div class="row">
-      <span class="muted">Blockchain</span>
-      <strong id="network">Chưa xác định</strong>
-    </div>
-    <p class="muted">Địa chỉ staking (Reward Address)</p>
-    <div id="stakeAddress" class="address">—</div>
-    <p class="muted">Địa chỉ thanh toán</p>
-    <div id="paymentAddress" class="address">—</div>
-  </section>
+<label>Kiếm tiền</label>
+<div class="options">
+<label><input type="checkbox" id="ads">
+Quảng cáo</label>
+<label><input type="checkbox" id="affiliate">
+Affiliate</label>
+</div>
 
-  <section class="card">
-    <h2>Thông tin Stake Pool</h2>
-    <div class="row">
-      <span class="muted">Pool ID</span>
-      <strong id="pool">—</strong>
-    </div>
-    <div class="row">
-      <span class="muted">Trạng thái ủy quyền</span>
-      <strong id="delegation">Chưa xác định</strong>
-    </div>
-  </section>
+<br>
+<button type="submit">Kiểm tra và tạo cấu hình</button>
+</form>
 
-  <section class="card">
-    <h2>Thông tin hệ thống</h2>
-    <div class="row">
-      <span class="muted">Nguồn dữ liệu</span>
-      <strong>Koios API</strong>
-    </div>
-    <div class="row">
-      <span class="muted">Mạng</span>
-      <strong>Cardano Mainnet</strong>
-    </div>
-    <div class="row">
-      <span class="muted">Giao dịch</span>
-      <strong>Chưa kích hoạt</strong>
-    </div>
-    <p class="small muted" id="updated">Chưa cập nhật dữ liệu.</p>
-  </section>
+<div id="result">
+<div class="status">
+<strong>✓ Cấu hình đã được tạo!</strong>
+<p id="summary"></p>
+<button id="download">Xuất cấu hình JSON</button>
+</div>
+</div>
+</section>
 
-  <div class="warning small">
-    Bảo mật: Website không yêu cầu Seed Phrase hoặc Private Key.
-    Không gửi ADA vào website. Mọi dữ liệu địa chỉ gửi đến Koios
-    để truy vấn blockchain công khai. Phiên bản này không ký giao dịch.
-  </div>
+<section class="panel">
+<h3>Thông tin nền tảng</h3>
+<p>✓ HTML5, CSS3, JavaScript</p>
+<p>✓ Không bắt buộc máy chủ riêng</p>
+<p>✓ Hỗ trợ cấu hình Android và iOS</p>
+<p>✓ Hỗ trợ cấu hình kiếm tiền cho chủ website</p>
+</section>
 </main>
 
-<footer>
-  CARDANO PERSONAL STAKING · VERSION 2.0<br>
-  Non-custodial · Vietnamese Interface
-</footer>
+<footer>WebAppBuilder © 2026</footer>
 
-<script type="module">
-import * as CSL from
-  "https://esm.sh/@emurgo/cardano-serialization-lib-browser@15.0.3";
+<script>
+let config = null;
 
-const API = "https://api.koios.rest/api/v1";
+document.getElementById("builder")
+.addEventListener("submit", function(e){
+ e.preventDefault();
 
-const $ = id => document.getElementById(id);
-let walletApi = null;
-let walletName = "";
-let currentRewardAddress = "";
+ const website = document.getElementById("website").value.trim();
+ const appName = document.getElementById("appName").value.trim();
 
-function setStatus(message) {
-  $("status").textContent = message;
-}
+ try {
+  const parsed = new URL(website);
 
-function formatADA(lovelace) {
-  const number = Number(lovelace);
-  if (!Number.isFinite(number)) return "Không có dữ liệu";
-  return (number / 1_000_000).toLocaleString("vi-VN", {
-    maximumFractionDigits: 6
-  }) + " ADA";
-}
-
-function hexToBytes(hex) {
-  if (!/^(?:[0-9a-fA-F]{2})+$/.test(hex)) {
-    throw new Error("Dữ liệu địa chỉ không hợp lệ.");
+  if(parsed.protocol !== "https:"){
+   throw new Error("Chỉ chấp nhận HTTPS");
   }
-  return Uint8Array.from(
-    hex.match(/.{2}/g).map(x => parseInt(x,16))
-  );
-}
 
-function toBech32(hex) {
-  return CSL.Address.from_bytes(hexToBytes(hex)).to_bech32();
-}
-
-async function koios(endpoint, body) {
-  const response = await fetch(API + "/" + endpoint, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(body)
-  });
-
-  if (!response.ok) {
-    throw new Error("Koios API lỗi: " + response.status);
+  if(!appName){
+   throw new Error("Tên ứng dụng không hợp lệ");
   }
-  return response.json();
-}
 
-function reset() {
-  walletApi = null;
-  walletName = "";
-  currentRewardAddress = "";
+  config = {
+   product: "WebAppBuilder",
+   version: "1.0.0",
+   website: parsed.href,
+   appName,
+   platform: document.getElementById("platform").value,
+   theme: document.getElementById("color").value,
+   monetization: {
+    ads: document.getElementById("ads").checked,
+    affiliate: document.getElementById("affiliate").checked
+   }
+  };
 
-  $("balance").textContent = "— ADA";
-  $("staked").textContent = "— ADA";
-  $("rewards").textContent = "— ADA";
-  $("wallet").textContent = "Chưa kết nối";
-  $("network").textContent = "Chưa xác định";
-  $("stakeAddress").textContent = "—";
-  $("paymentAddress").textContent = "—";
-  $("pool").textContent = "—";
-  $("delegation").textContent = "Chưa xác định";
-  $("disconnect").disabled = true;
-  $("refresh").disabled = true;
-  $("updated").textContent = "Chưa cập nhật dữ liệu.";
-}
+  document.getElementById("summary").textContent =
+   appName + " - " + parsed.hostname;
 
-async function connect(name) {
-  reset();
-  setStatus("Đang kết nối ví...");
+  document.getElementById("result").style.display = "block";
 
-  try {
-    const provider = window.cardano?.[name];
-
-    if (!provider || typeof provider.enable !== "function") {
-      throw new Error("Không tìm thấy ví " + name);
-    }
-
-    const api = await provider.enable();
-    const networkId = await api.getNetworkId();
-
-    if (networkId !== 1) {
-      throw new Error("Ví không kết nối Cardano Mainnet.");
-    }
-
-    const rewardHex = await api.getRewardAddresses();
-    if (!rewardHex.length) {
-      throw new Error("Ví không cung cấp địa chỉ staking.");
-    }
-
-    const paymentHex = await api.getUsedAddresses();
-    const rewardAddress = toBech32(rewardHex[0]);
-    const paymentAddress = paymentHex.length
-      ? toBech32(paymentHex[0])
-      : "Không có địa chỉ đã sử dụng";
-
-    walletApi = api;
-    walletName = name;
-    currentRewardAddress = rewardAddress;
-
-    $("wallet").textContent = provider.name || name;
-    $("network").textContent = "Cardano Mainnet";
-    $("stakeAddress").textContent = rewardAddress;
-    $("paymentAddress").textContent = paymentAddress;
-    $("disconnect").disabled = false;
-    $("refresh").disabled = false;
-
-    setStatus("Đã kết nối ví. Đang tải dữ liệu...");
-
-    await refreshData();
-
-  } catch (error) {
-    reset();
-    setStatus(error.message || "Không thể kết nối ví.");
-  }
-}
-
-async function refreshData() {
-  if (!walletApi || !currentRewardAddress) return;
-
-  $("refresh").disabled = true;
-  setStatus("Đang cập nhật dữ liệu blockchain...");
-
-  try {
-    // Đọc số dư trực tiếp từ ví, dữ liệu CBOR.
-    const balanceCbor = await walletApi.getBalance();
-    const value = CSL.Value.from_bytes(hexToBytes(balanceCbor));
-    const walletBalance = value.coin().to_str();
-
-    $("balance").textContent = formatADA(walletBalance);
-
-    // Truy vấn thông tin staking công khai.
-    const accountData = await koios("account_info", {
-      _stake_addresses: [currentRewardAddress]
-    });
-
-    const account = Array.isArray(accountData)
-      ? accountData[0]
-      : null;
-
-    if (account) {
-      $("staked").textContent =
-        formatADA(account.active_stake);
-
-      $("rewards").textContent =
-        formatADA(account.rewards_available);
-
-      $("pool").textContent =
-        account.delegated_pool || "Chưa ủy quyền";
-
-      $("delegation").textContent =
-        account.delegated_pool ? "Đã ủy quyền" : "Chưa ủy quyền";
-    } else {
-      $("staked").textContent = "0 ADA";
-      $("rewards").textContent = "0 ADA";
-      $("pool").textContent = "Chưa có dữ liệu";
-      $("delegation").textContent = "Chưa đăng ký staking";
-    }
-
-    $("updated").textContent =
-      "Cập nhật lúc: " + new Date().toLocaleString("vi-VN");
-
-    setStatus("Cập nhật thành công.");
-
-  } catch (error) {
-    setStatus("Không thể tải đầy đủ dữ liệu: " + error.message);
-  } finally {
-    $("refresh").disabled = !walletApi;
-  }
-}
-
-$("connectEternl").addEventListener("click",
-  () => connect("eternl"));
-
-$("connectLace").addEventListener("click",
-  () => connect("lace"));
-
-$("disconnect").addEventListener("click", () => {
-  reset();
-  setStatus("Đã ngắt kết nối trên website.");
+ } catch(error) {
+  alert(error.message || "URL không hợp lệ");
+ }
 });
 
-$("refresh").addEventListener("click", refreshData);
+document.getElementById("download")
+.addEventListener("click", function(){
+ if(!config) return;
+
+ const blob = new Blob(
+  [JSON.stringify(config,null,2)],
+  {type:"application/json"}
+ );
+
+ const link = document.createElement("a");
+ const objectUrl = URL.createObjectURL(blob);
+
+ link.href = objectUrl;
+ link.download = "webappbuilder-config.json";
+ link.click();
+
+ URL.revokeObjectURL(objectUrl);
+});
 </script>
 </body>
 </html>
