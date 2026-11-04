@@ -1,104 +1,49 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nông Trại Xanh – Webgame thư giãn</title>
-<style>
-:root{--green:#2f7d32;--deep:#205b29;--lime:#a6d96a;--cream:#fff8e8;--brown:#815334;--gold:#f4c542;--ink:#243323}
-*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:linear-gradient(#dff5ff,#f5f8dd 45%,#d5edb8);min-height:100vh}
-header{padding:22px max(16px,calc((100% - 1180px)/2));background:linear-gradient(120deg,#286b35,#4b9b43);color:white;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;box-shadow:0 5px 18px #1d57252a}
-.brand{display:flex;align-items:center;gap:12px}.logo{font-size:42px;filter:drop-shadow(0 3px 2px #17451d)}h1{font-size:clamp(22px,3vw,32px);margin:0}.subtitle{opacity:.88;font-size:13px}
-.topstats{display:flex;gap:8px;flex-wrap:wrap}.pill{background:#ffffff20;border:1px solid #ffffff50;border-radius:999px;padding:9px 13px;font-weight:700;white-space:nowrap}
-main{max-width:1180px;margin:22px auto;padding:0 16px 40px;display:grid;grid-template-columns:minmax(0,1.55fr) minmax(290px,.85fr);gap:18px}
-.panel{background:#ffffffeb;border:1px solid #ffffff;border-radius:20px;padding:18px;box-shadow:0 10px 28px #315b2420;margin-bottom:16px}
-.panel h2{font-size:20px;margin:0 0 12px;display:flex;gap:8px;align-items:center}.hint{font-size:13px;color:#5c7158;line-height:1.5}
-.sky{border-radius:16px;overflow:hidden;background:linear-gradient(#87d7f3 0%,#c7efff 58%,#b2d77d 59%,#79b954 100%);position:relative;min-height:150px;padding:18px}
-.sun{position:absolute;right:28px;top:17px;font-size:42px;filter:drop-shadow(0 0 12px #ffe98c)}.farm-title{font-weight:900;font-size:22px;color:#225b2a;text-shadow:0 1px #fff8}.farm-sub{font-size:13px;color:#315d31}
-.field{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:12px;background:#9dce70;border-radius:0 0 16px 16px;border:5px solid #6d9f4e;border-top:0}
-.plot{min-height:124px;border:2px solid #b8d98c;border-radius:13px;background:linear-gradient(#986d42,#80522f);color:white;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:5px;padding:8px;cursor:pointer;transition:transform .15s,filter .15s;box-shadow:inset 0 4px 0 #ffffff17}
-.plot:hover{transform:translateY(-2px);filter:brightness(1.08)}.plot.empty{background:linear-gradient(#a9d66e,#80b951);color:#24552a;border-style:dashed}.crop{font-size:34px;line-height:1.1}.plot strong{font-size:13px}.plot small{font-size:11px;opacity:.92}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.btn{border:0;border-radius:12px;padding:11px 14px;font-weight:800;cursor:pointer;background:var(--green);color:#fff;box-shadow:0 3px 0 #1f5925;transition:transform .12s}.btn:hover{filter:brightness(1.08)}.btn:active{transform:translateY(2px);box-shadow:0 1px 0 #1f5925}.btn.secondary{background:#e8f4db;color:#2b672d;box-shadow:0 3px 0 #bdd8a8}.btn.gold{background:#e5a91b;box-shadow:0 3px 0 #a8750c;color:#352600}.btn:disabled{opacity:.5;cursor:not-allowed}
-.inventory{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.seed{border:1px solid #d9e7cc;border-radius:14px;padding:12px;background:#fbfff7}.seedtop{display:flex;justify-content:space-between;align-items:center;gap:8px}.seedemoji{font-size:27px}.seed p{margin:6px 0;font-size:12px;color:#63745d}.seed .btn{width:100%;padding:8px;font-size:13px}
-.balance{font-size:30px;font-weight:900;color:#23652b}.balance small{font-size:13px;color:#6c7e65;font-weight:600}.walletgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.walletbox{background:#f0f8e9;padding:12px;border-radius:13px}.walletbox span{font-size:12px;color:#61735a;display:block}.walletbox b{font-size:20px}
-label{display:block;font-size:13px;font-weight:750;margin:10px 0 5px}input,select{width:100%;border:1px solid #cbdcbe;border-radius:10px;padding:11px;background:white;font:inherit;color:var(--ink)}.notice{padding:11px 12px;background:#fff4d4;border:1px solid #f1d68b;border-radius:12px;font-size:12px;line-height:1.5;color:#6b4d08;margin-top:10px}.status{margin-top:10px;padding:10px 12px;background:#eaf7e6;border-radius:10px;font-size:13px;display:none}.log{max-height:160px;overflow:auto;font-size:12px;color:#60715b}.log div{padding:7px 0;border-bottom:1px solid #edf2e8}
-footer{text-align:center;font-size:12px;color:#587050;padding:0 16px 25px}.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#234f2a;color:#fff;padding:12px 18px;border-radius:999px;box-shadow:0 8px 25px #0002;transition:.25s;z-index:5}.toast.show{opacity:1;transform:translate(-50%,0)}
-@media(max-width:800px){main{grid-template-columns:1fr}.topstats{width:100%}.pill{font-size:12px}.field{gap:7px;padding:8px}.plot{min-height:110px;padding:5px}.crop{font-size:29px}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEN AN VIÊN - Chibi World</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header>
- <div class="brand"><div class="logo">🌻</div><div><h1>Nông Trại Xanh</h1><div class="subtitle">Gieo hạt hôm nay · Thu hoạch niềm vui mỗi ngày</div></div></div>
- <div class="topstats"><div class="pill">🪙 <span id="headCoins">250</span> xu</div><div class="pill">⭐ <span id="headPoints">0</span> điểm thưởng</div><div class="pill">🌱 Cấp <span id="level">1</span></div></div>
-</header>
-<main>
-<section>
- <div class="panel" style="padding:12px">
-  <div class="sky"><div class="sun">☀️</div><div class="farm-title">Khu vườn của bạn</div><div class="farm-sub">Chăm sóc cây trồng để nhận xu. Nhấn vào ô đất để gieo hoặc thu hoạch.</div></div>
-  <div class="field" id="field"></div>
-  <div class="actions"><button class="btn" id="waterBtn">💧 Tưới toàn bộ</button><button class="btn secondary" id="dailyBtn">🎁 Nhận quà mỗi ngày</button><button class="btn secondary" id="saveBtn">💾 Lưu tiến trình</button></div>
-  <p class="hint" id="farmHint">Mẹo: cây sẽ lớn dần theo thời gian. Bạn có thể đóng trình duyệt và quay lại sau.</p>
- </div>
- <div class="panel">
-  <h2>🌾 Hạt giống</h2><p class="hint">Mua hạt bằng xu, sau đó chọn một ô đất trống để gieo.</p>
-  <div class="inventory" id="seeds"></div>
- </div>
- <div class="panel"><h2>📜 Nhật ký nông trại</h2><div class="log" id="log"><div>🌞 Chào mừng bạn đến với Nông Trại Xanh!</div></div></div>
-</section>
-<aside>
- <div class="panel">
-  <h2>👛 Ví của tôi</h2>
-  <div class="balance"><span id="walletCoins">250</span> <small>xu trong trò chơi</small></div>
-  <div class="walletgrid" style="margin-top:12px"><div class="walletbox"><span>Điểm thưởng mô phỏng</span><b id="walletPoints">0</b></div><div class="walletbox"><span>Giá quy đổi thử</span><b>100 xu = 1 điểm</b></div></div>
-  <label for="exchangeAmount">Số xu muốn quy đổi</label><input id="exchangeAmount" type="number" min="100" step="100" value="100">
-  <button class="btn gold" id="exchangeBtn" style="width:100%;margin-top:9px">🔄 Quy đổi xu thành điểm</button>
-  <div class="notice">⚠️ Đây là webgame minh họa. Xu và điểm chỉ là dữ liệu trong trò chơi, không có giá trị tiền thật. Chức năng quy đổi không tạo ra tiền và không kết nối ngân hàng.</div>
- </div>
- <div class="panel">
-  <h2>🏦 Yêu cầu rút tiền (mô phỏng)</h2>
-  <p class="hint">Bạn có thể thử luồng gửi yêu cầu để xem giao diện. Không nhập thông tin ngân hàng thật.</p>
-  <div class="walletbox"><span>Điểm thưởng khả dụng</span><b id="availablePoints">0 điểm</b></div>
-  <label for="withdrawAmount">Số điểm muốn gửi yêu cầu</label><input id="withdrawAmount" type="number" min="1" step="1" value="1">
-  <label for="demoMethod">Phương thức minh họa</label><select id="demoMethod"><option>Ví thử nghiệm</option><option>Chuyển khoản giả lập</option></select>
-  <label for="demoAccount">Tên tài khoản thử nghiệm</label><input id="demoAccount" maxlength="32" placeholder="Ví dụ: nguoidung_demo">
-  <button class="btn" id="withdrawBtn" style="width:100%;margin-top:12px">📨 Gửi yêu cầu thử</button>
-  <div id="withdrawStatus" class="status"></div>
-  <div class="notice">🔒 Không cung cấp số tài khoản, mật khẩu, mã OTP hoặc dữ liệu tài chính thật ở đây. Rút tiền thật cần máy chủ, xác minh hợp pháp và tích hợp cổng thanh toán an toàn.</div>
- </div>
-</aside>
-</main>
-<footer>Nông Trại Xanh · Bản demo HTML5 chạy trực tiếp trên trình duyệt · Dữ liệu lưu trên thiết bị này</footer>
-<div class="toast" id="toast"></div>
-<script>
-const CROPS=[
- {id:'carrot',name:'Cà rốt',emoji:'🥕',cost:20,reward:34,time:12,desc:'Nhanh lớn · 12 giây'},
- {id:'corn',name:'Bắp',emoji:'🌽',cost:35,reward:58,time:22,desc:'Thu hoạch khá · 22 giây'},
- {id:'tomato',name:'Cà chua',emoji:'🍅',cost:50,reward:82,time:30,desc:'Giá trị tốt · 30 giây'},
- {id:'sunflower',name:'Hướng dương',emoji:'🌻',cost:70,reward:118,time:42,desc:'Lớn chậm · 42 giây'}
-];
-const SAVE_KEY='nongTraiXanhSave_v1';
-let state={coins:250,points:0,level:1,xp:0,plots:Array(9).fill(null),lastDaily:'',logs:[]};
-let selectedCrop='carrot',toastTimer;
-function load(){try{const s=JSON.parse(localStorage.getItem(SAVE_KEY));if(s&&Array.isArray(s.plots)&&s.plots.length===9)state={...state,...s};}catch(e){}}
-function save(silent=false){localStorage.setItem(SAVE_KEY,JSON.stringify(state));if(!silent)toast('Đã lưu tiến trình trên thiết bị!');}
-function log(msg){state.logs.unshift(new Date().toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'})+' · '+msg);state.logs=state.logs.slice(0,20);renderLog();}
-function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),2400);}
-function cropById(id){return CROPS.find(c=>c.id===id);}
-function growth(p){if(!p)return 0;return Math.min(1,(Date.now()-p.plantedAt)/(p.time*1000));}
-function render(){renderStats();renderField();renderSeeds();renderLog();}
-function renderStats(){document.getElementById('headCoins').textContent=state.coins;document.getElementById('walletCoins').textContent=state.coins;document.getElementById('headPoints').textContent=state.points;document.getElementById('walletPoints').textContent=state.points;document.getElementById('availablePoints').textContent=state.points+' điểm';document.getElementById('level').textContent=state.level;}
-function renderField(){const f=document.getElementById('field');f.innerHTML='';state.plots.forEach((p,i)=>{const b=document.createElement('button');b.className='plot'+(!p?' empty':'');if(!p){b.innerHTML='<span class="crop">🟫</span><strong>Ô đất '+(i+1)+'</strong><small>Nhấn để gieo hạt</small>';}else{const c=cropById(p.crop),g=growth(p);b.innerHTML=`<span class="crop">${g>=1?c.emoji: g>.55?'🌿':'🌱'}</span><strong>${c.name}</strong><small>${g>=1?'✨ Đã chín · Thu hoạch': 'Đang lớn · '+Math.ceil((1-g)*c.time)+' giây'}</small>`;}b.addEventListener('click',()=>plotClick(i));f.appendChild(b);});}
-function renderSeeds(){const s=document.getElementById('seeds');s.innerHTML='';CROPS.forEach(c=>{const d=document.createElement('div');d.className='seed';d.innerHTML=`<div class="seedtop"><span class="seedemoji">${c.emoji}</span><b>${c.name}</b></div><p>Giá: 🪙 ${c.cost} xu<br>Thu hoạch: +${c.reward} xu<br>${c.desc}</p><button class="btn ${selectedCrop===c.id?'':'secondary'}" data-id="${c.id}">${selectedCrop===c.id?'✓ Đang chọn':'Chọn hạt giống'}</button>`;d.querySelector('button').onclick=()=>{selectedCrop=c.id;renderSeeds();toast('Đã chọn hạt '+c.name);};s.appendChild(d);});}
-function plotClick(i){const p=state.plots[i];if(p){if(growth(p)<1){toast('Cây vẫn đang lớn, hãy quay lại sau nhé!');return;}const c=cropById(p.crop);state.coins+=c.reward;state.xp+=c.reward;state.plots[i]=null;while(state.xp>=state.level*150){state.xp-=state.level*150;state.level++;log('🎉 Bạn đã lên cấp '+state.level+'!');}log('🌾 Thu hoạch '+c.name+', nhận '+c.reward+' xu.');save(true);render();toast('Thu hoạch thành công: +'+c.reward+' xu!');return;}
-const c=cropById(selectedCrop);if(state.coins<c.cost){toast('Bạn chưa đủ xu để mua hạt giống.');return;}state.coins-=c.cost;state.plots[i]={crop:c.id,plantedAt:Date.now(),time:c.time};log('🌱 Đã gieo '+c.name+' ở ô đất '+(i+1)+'.');save(true);render();toast('Đã gieo '+c.name+'!');}
-document.getElementById('waterBtn').onclick=()=>{let n=0;state.plots.forEach(p=>{if(p){p.plantedAt-=Math.floor(p.time*1000*.15);n++;}});if(!n){toast('Chưa có cây nào cần tưới.');return;}log('💧 Tưới vườn: cây đang trồng lớn nhanh thêm một chút.');save(true);render();toast('Đã tưới '+n+' cây!');};
-document.getElementById('dailyBtn').onclick=()=>{const today=new Date().toLocaleDateString('sv-SE');if(state.lastDaily===today){toast('Bạn đã nhận quà hôm nay rồi!');return;}state.lastDaily=today;state.coins+=100;log('🎁 Nhận quà đăng nhập: +100 xu.');save(true);render();toast('Quà mỗi ngày: +100 xu!');};
-document.getElementById('saveBtn').onclick=()=>save();
-document.getElementById('exchangeBtn').onclick=()=>{const amount=Math.floor(Number(document.getElementById('exchangeAmount').value));if(!Number.isFinite(amount)||amount<100||amount%100!==0){toast('Nhập số xu từ 100 trở lên, theo bội số 100.');return;}if(amount>state.coins){toast('Bạn không đủ xu để quy đổi.');return;}const pts=amount/100;state.coins-=amount;state.points+=pts;log('🔄 Quy đổi '+amount+' xu thành '+pts+' điểm thưởng mô phỏng.');save(true);render();toast('Đã quy đổi thành '+pts+' điểm mô phỏng.');};
-document.getElementById('withdrawBtn').onclick=()=>{const amount=Math.floor(Number(document.getElementById('withdrawAmount').value));const account=document.getElementById('demoAccount').value.trim();const status=document.getElementById('withdrawStatus');if(!Number.isFinite(amount)||amount<1){toast('Nhập số điểm hợp lệ.');return;}if(amount>state.points){toast('Điểm thưởng không đủ.');return;}if(!account){toast('Hãy nhập tên tài khoản thử nghiệm.');return;}state.points-=amount;const code='NTX-'+Math.random().toString(36).slice(2,8).toUpperCase();status.style.display='block';status.innerHTML=`<b>✅ Đã tạo yêu cầu mô phỏng</b><br>Mã yêu cầu: <b>${code}</b><br>Số điểm: ${amount}<br>Phương thức: ${document.getElementById('demoMethod').value}<br>Tài khoản thử nghiệm: ${escapeHtml(account)}<br><b>Trạng thái: Chỉ mô phỏng — không có khoản tiền nào được chuyển.</b>`;log('🏦 Tạo yêu cầu rút thử '+amount+' điểm ('+code+'). Không có tiền thật được chuyển.');save(true);render();toast('Đã tạo yêu cầu rút thử!');};
-function escapeHtml(s){return s.replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));}
-function renderLog(){const el=document.getElementById('log');el.innerHTML=state.logs.length?state.logs.map(x=>'<div>'+escapeHtml(x)+'</div>').join(''):'<div>Chưa có hoạt động nào.</div>';}
-load();render();setInterval(()=>{renderField();},1000);window.addEventListener('beforeunload',()=>save(true));
-</script>
+
+  <div id="loading">🌸 Đang tải SEN AN VIÊN...</div>
+
+  <header class="topbar">
+    <div class="logo">🌸 SEN AN VIÊN</div>
+    <div class="profile">
+      <span>👤 Người chơi</span>
+      <span>⭐ Cấp 1</span>
+      <span>🌸 <b id="points">0</b></span>
+    </div>
+  </header>
+
+  <main id="game-container"></main>
+
+  <section class="quest-panel">
+    <h3>📜 Nhiệm vụ hôm nay</h3>
+    <p>🌸 Khám phá khu vườn sen</p>
+    <p>🏯 Thăm quan ngôi chùa</p>
+    <p>🧘 Thực hiện thiền định</p>
+    <button id="interact">Tương tác</button>
+    <p id="message">Chào mừng bạn đến SEN AN VIÊN!</p>
+  </section>
+
+  <div class="mobile-controls">
+    <button data-key="forward">▲</button>
+    <div>
+      <button data-key="left">◀</button>
+      <button data-key="backward">▼</button>
+      <button data-key="right">▶</button>
+    </div>
+  </div>
+
+  <footer>
+    WASD / Mũi tên: Di chuyển | E: Tương tác
+  </footer>
+
+  <script type="module" src="game.js"></script>
 </body>
 </html>
