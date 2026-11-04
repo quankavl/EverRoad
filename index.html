@@ -4,173 +4,735 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#12375B">
-<title>WebAppBuilder - Website to App</title>
+<title>VIET WEB BUILDER</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
 <style>
-*{box-sizing:border-box}
-body{
- margin:0;font-family:Arial,sans-serif;
- background:#f3f6fa;color:#172b45;
+:root {
+  --primary: #2563eb;
+  --dark: #172033;
+  --light: #f4f6fa;
 }
-header{
- background:#12375b;color:white;
- padding:22px 7%;
- display:flex;justify-content:space-between;
- align-items:center;
+
+body {
+  margin: 0;
+  background: var(--light);
+  font-family: Arial, sans-serif;
 }
-header h2{margin:0}
-main{max-width:900px;margin:35px auto;padding:20px}
-.panel{
- background:white;border-radius:15px;
- padding:25px;margin-bottom:20px;
- box-shadow:0 3px 15px #142b4510;
+
+.topbar {
+  height: 65px;
+  background: #172033;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 22px;
 }
-h1{font-size:27px}
-label{display:block;font-weight:bold;margin:17px 0 8px}
-input,select{
- width:100%;padding:13px;
- border:1px solid #d6dfeb;border-radius:8px;
- font-size:15px;
+
+.logo {
+  font-size: 21px;
+  font-weight: bold;
+  color: #60a5fa;
 }
-button{
- border:0;border-radius:8px;
- padding:13px 20px;
- background:#1769aa;color:white;
- font-weight:bold;cursor:pointer;
+
+.workspace {
+  display: flex;
+  height: calc(100vh - 65px);
+  overflow: hidden;
 }
-button:hover{background:#10548b}
-.options{display:flex;gap:20px;flex-wrap:wrap}
-.options label{font-weight:normal}
-#result{display:none;margin-top:20px}
-.status{padding:15px;background:#e8f7ed;border-radius:8px}
-footer{text-align:center;color:#718096;padding:25px}
+
+.sidebar {
+  width: 260px;
+  background: white;
+  border-right: 1px solid #ddd;
+  overflow-y: auto;
+  padding: 15px;
+  flex-shrink: 0;
+}
+
+.properties {
+  width: 280px;
+  background: white;
+  border-left: 1px solid #ddd;
+  padding: 15px;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.canvas {
+  flex: 1;
+  overflow: auto;
+  padding: 25px;
+  text-align: center;
+}
+
+.preview {
+  background: white;
+  width: 100%;
+  max-width: 1100px;
+  min-height: 700px;
+  margin: auto;
+  box-shadow: 0 2px 15px #00000012;
+  text-align: left;
+}
+
+.template-card {
+  padding: 13px;
+  border: 1px solid #ddd;
+  border-radius: 9px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.template-card:hover {
+  border-color: var(--primary);
+  background: #eff6ff;
+}
+
+.template-card.active {
+  border: 2px solid var(--primary);
+}
+
+.component {
+  border: 1px dashed transparent;
+  position: relative;
+  cursor: pointer;
+}
+
+.component:hover {
+  outline: 2px solid #3b82f6;
+}
+
+.component.selected {
+  outline: 2px solid #2563eb;
+}
+
+.section {
+  padding: 45px 25px;
+  text-align: center;
+}
+
+.hero {
+  padding: 90px 25px;
+  color: white;
+  background: linear-gradient(120deg,#1d4ed8,#06b6d4);
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: bold;
+}
+
+.btn-main {
+  background: var(--primary);
+  color: white;
+  border: 0;
+  padding: 11px 22px;
+  border-radius: 7px;
+}
+
+.field {
+  margin-bottom: 15px;
+}
+
+.field label {
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.field input, .field textarea {
+  font-size: 13px;
+}
+
+.device-mobile .preview {
+  max-width: 390px;
+}
+
+.device-tablet .preview {
+  max-width: 768px;
+}
+
+.section.dragging {
+  opacity: .5;
+}
+
+@media(max-width: 900px) {
+  .properties { width: 220px; }
+  .sidebar { width: 210px; }
+}
+
+@media(max-width: 650px) {
+  .sidebar { width: 150px; }
+  .properties { display: none; }
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+  <div class="logo">VIET WEB BUILDER</div>
+  <div class="d-flex gap-2">
+    <button class="btn btn-sm btn-outline-light"
+      onclick="saveProject()">Lưu dự án</button>
+    <button class="btn btn-sm btn-outline-light"
+      onclick="previewSite()">Xem trước</button>
+    <button class="btn btn-sm btn-primary"
+      onclick="exportSite()">Xuất website</button>
+  </div>
+</header>
+
+<div class="workspace">
+
+  <!-- THƯ VIỆN TEMPLATE -->
+  <aside class="sidebar">
+    <h6 class="fw-bold">THƯ VIỆN GIAO DIỆN</h6>
+    <p class="text-secondary small">Chọn mẫu website</p>
+
+    <div id="templates"></div>
+
+    <hr>
+
+    <h6 class="fw-bold">THÀNH PHẦN</h6>
+
+    <button class="btn btn-outline-primary btn-sm w-100 mb-2"
+      onclick="addSection('hero')">+ Banner</button>
+
+    <button class="btn btn-outline-primary btn-sm w-100 mb-2"
+      onclick="addSection('text')">+ Nội dung</button>
+
+    <button class="btn btn-outline-primary btn-sm w-100 mb-2"
+      onclick="addSection('image')">+ Hình ảnh</button>
+
+    <button class="btn btn-outline-primary btn-sm w-100 mb-2"
+      onclick="addSection('products')">+ Sản phẩm</button>
+
+    <button class="btn btn-outline-primary btn-sm w-100 mb-2"
+      onclick="addSection('contact')">+ Liên hệ</button>
+
+    <button class="btn btn-outline-danger btn-sm w-100"
+      onclick="deleteSelected()">Xóa thành phần</button>
+  </aside>
+
+  <!-- KHU VỰC THIẾT KẾ -->
+  <main class="canvas" id="canvas">
+    <div class="d-flex justify-content-between mb-3">
+      <strong>TRÌNH THIẾT KẾ WEBSITE</strong>
+      <div class="btn-group">
+        <button class="btn btn-sm btn-outline-dark"
+          onclick="setDevice('desktop')">Desktop</button>
+        <button class="btn btn-sm btn-outline-dark"
+          onclick="setDevice('tablet')">Tablet</button>
+        <button class="btn btn-sm btn-outline-dark"
+          onclick="setDevice('mobile')">Mobile</button>
+      </div>
+    </div>
+
+    <div class="preview" id="preview"></div>
+  </main>
+
+  <!-- BẢNG THUỘC TÍNH -->
+  <aside class="properties">
+    <h6 class="fw-bold">THUỘC TÍNH</h6>
+    <div id="propertyPanel">
+      <p class="small text-secondary">
+        Chọn một thành phần trên website để chỉnh sửa.
+      </p>
+    </div>
+  </aside>
+
+</div>
+
+<script>
+const templateList = [
+  "Bán hàng",
+  "Cá nhân",
+  "Du lịch",
+  "Doanh nghiệp",
+  "Giáo dục",
+  "Tin tức",
+  "Đám cưới",
+  "Nông nghiệp",
+  "Làm đẹp",
+  "Nhà hàng"
+];
+
+let currentTemplate = 0;
+let selectedId = null;
+let sections = [];
+
+const preview = document.getElementById("preview");
+
+function createId() {
+  return "section_" + Date.now() + "_" +
+    Math.floor(Math.random() * 10000);
+}
+
+// TẠO THƯ VIỆN TEMPLATE
+function renderTemplates() {
+  const container = document.getElementById("templates");
+
+  container.innerHTML = templateList.map((name, i) => `
+    <div class="template-card ${i === currentTemplate ? 'active' : ''}"
+      onclick="chooseTemplate(${i})">
+      <strong>${String(i+1).padStart(2,'0')}. ${name}</strong>
+      <div class="small text-secondary">Giao diện website</div>
+    </div>
+  `).join("");
+}
+
+// KHỞI TẠO TEMPLATE
+function chooseTemplate(index) {
+  currentTemplate = index;
+  sections = buildTemplate(index);
+  selectedId = null;
+  renderTemplates();
+  renderSite();
+  renderProperties();
+}
+
+function buildTemplate(index) {
+  const data = [
+    ["Chào mừng đến cửa hàng của chúng tôi",
+     "Khám phá những sản phẩm chất lượng.",
+     "Khám phá sản phẩm"],
+    ["Xin chào! Tôi là Nguyễn Văn A",
+     "Chào mừng bạn đến với website cá nhân.",
+     "Tìm hiểu thêm"],
+    ["Khám phá thế giới cùng chúng tôi",
+     "Những hành trình tuyệt vời đang chờ bạn.",
+     "Khám phá ngay"],
+    ["Giải pháp phát triển doanh nghiệp",
+     "Đồng hành cùng sự phát triển của bạn.",
+     "Tìm hiểu dịch vụ"],
+    ["Nền tảng học tập trực tuyến",
+     "Khám phá tri thức và phát triển bản thân.",
+     "Xem khóa học"],
+    ["Tin tức và sự kiện mới nhất",
+     "Cập nhật thông tin mỗi ngày.",
+     "Đọc tin tức"],
+    ["Ngày hạnh phúc của chúng tôi",
+     "Cùng chia sẻ những khoảnh khắc đáng nhớ.",
+     "Xem câu chuyện"],
+    ["Nông sản sạch từ thiên nhiên",
+     "Phát triển nông nghiệp xanh và bền vững.",
+     "Khám phá nông sản"],
+    ["Chăm sóc vẻ đẹp của bạn",
+     "Tỏa sáng với những dịch vụ chất lượng.",
+     "Đặt lịch"],
+    ["Chào mừng đến nhà hàng",
+     "Hương vị tuyệt vời trong từng món ăn.",
+     "Xem thực đơn"]
+  ];
+
+  return [
+    {
+      id: createId(),
+      type: "hero",
+      title: data[index][0],
+      text: data[index][1],
+      button: data[index][2],
+      color: "#2563eb",
+      background: ""
+    },
+    {
+      id: createId(),
+      type: "text",
+      title: "Giới thiệu",
+      text: "Chúng tôi luôn hướng đến chất lượng, sự chuyên nghiệp và trải nghiệm tốt nhất dành cho khách hàng.",
+      color: "#172033"
+    },
+    {
+      id: createId(),
+      type: "products",
+      title: "Khám phá dịch vụ",
+      text: "Những sản phẩm và dịch vụ nổi bật của chúng tôi.",
+      color: "#2563eb"
+    },
+    {
+      id: createId(),
+      type: "contact",
+      title: "Liên hệ với chúng tôi",
+      text: "Email: contact@example.com | Điện thoại: 0123456789",
+      color: "#172033"
+    }
+  ];
+}
+
+// HIỂN THỊ WEBSITE
+function renderSite() {
+  preview.innerHTML = sections.map(section => {
+    let content = "";
+
+    if(section.type === "hero") {
+      content = `
+        <div class="hero" style="background:${escapeAttr(section.background || section.color)}">
+          <h1>${escapeHtml(section.title)}</h1>
+          <p>${escapeHtml(section.text)}</p>
+          <button class="btn btn-light mt-3">
+            ${escapeHtml(section.button)}
+          </button>
+        </div>`;
+    }
+
+    if(section.type === "text") {
+      content = `
+        <div class="section">
+          <h2>${escapeHtml(section.title)}</h2>
+          <p>${escapeHtml(section.text)}</p>
+        </div>`;
+    }
+
+    if(section.type === "products") {
+      content = `
+        <div class="section bg-light">
+          <h2>${escapeHtml(section.title)}</h2>
+          <p>${escapeHtml(section.text)}</p>
+          <div class="row mt-4">
+            ${[1,2,3].map(i => `
+              <div class="col-md-4 mb-3">
+                <div class="card p-3">
+                  <div class="bg-secondary-subtle rounded"
+                    style="height:120px"></div>
+                  <h5 class="mt-3">Sản phẩm ${i}</h5>
+                  <p>Thông tin giới thiệu sản phẩm.</p>
+                  <button class="btn-main">Tìm hiểu</button>
+                </div>
+              </div>
+            `).join("")}
+          </div>
+        </div>`;
+    }
+
+    if(section.type === "image") {
+      content = `
+        <div class="section">
+          <h2>${escapeHtml(section.title)}</h2>
+          <img src="${escapeAttr(section.image || 'https://placehold.co/1000x400')}"
+            class="img-fluid rounded" alt="">
+        </div>`;
+    }
+
+    if(section.type === "contact") {
+      content = `
+        <div class="section bg-light">
+          <h2>${escapeHtml(section.title)}</h2>
+          <p>${escapeHtml(section.text)}</p>
+        </div>`;
+    }
+
+    return `
+      <div class="component ${selectedId === section.id ? 'selected' : ''}"
+        data-id="${section.id}"
+        draggable="true"
+        onclick="selectSection(event,'${section.id}')">
+        ${content}
+      </div>`;
+  }).join("");
+
+  enableDragDrop();
+}
+
+// THÊM THÀNH PHẦN
+function addSection(type) {
+  const section = {
+    id: createId(),
+    type,
+    title: "Tiêu đề mới",
+    text: "Nhập nội dung của bạn tại đây.",
+    button: "Tìm hiểu thêm",
+    color: "#2563eb"
+  };
+
+  sections.push(section);
+  selectedId = section.id;
+  renderSite();
+  renderProperties();
+}
+
+// CHỌN THÀNH PHẦN
+function selectSection(event, id) {
+  event.stopPropagation();
+  selectedId = id;
+  renderSite();
+  renderProperties();
+}
+
+function getSelected() {
+  return sections.find(s => s.id === selectedId);
+}
+
+// BẢNG CHỈNH SỬA
+function renderProperties() {
+  const panel = document.getElementById("propertyPanel");
+  const item = getSelected();
+
+  if(!item) {
+    panel.innerHTML = '<p class="small text-secondary">Hãy chọn thành phần để chỉnh sửa.</p>';
+    return;
+  }
+
+  panel.innerHTML = `
+    <div class="field">
+      <label>Tiêu đề</label>
+      <input class="form-control" value="${escapeAttr(item.title)}"
+        oninput="updateProperty('title',this.value)">
+    </div>
+
+    <div class="field">
+      <label>Nội dung</label>
+      <textarea class="form-control" rows="5"
+        oninput="updateProperty('text',this.value)">${escapeHtml(item.text)}</textarea>
+    </div>
+
+    ${item.type === "hero" ? `
+      <div class="field">
+        <label>Nút bấm</label>
+        <input class="form-control" value="${escapeAttr(item.button)}"
+          oninput="updateProperty('button',this.value)">
+      </div>` : ""}
+
+    ${item.type === "image" ? `
+      <div class="field">
+        <label>Đường dẫn hình ảnh</label>
+        <input class="form-control" value="${escapeAttr(item.image || '')}"
+          oninput="updateProperty('image',this.value)">
+      </div>` : ""}
+
+    <div class="field">
+      <label>Màu sắc</label>
+      <input type="color" class="form-control form-control-color"
+        value="${escapeAttr(item.color || '#2563eb')}"
+        onchange="updateProperty('color',this.value)">
+    </div>
+
+    <button class="btn btn-danger btn-sm w-100"
+      onclick="deleteSelected()">Xóa thành phần</button>
+  `;
+}
+
+function updateProperty(key, value) {
+  const item = getSelected();
+  if(!item) return;
+  item[key] = value;
+  renderSite();
+}
+
+// XÓA
+function deleteSelected() {
+  if(!selectedId) return;
+  sections = sections.filter(s => s.id !== selectedId);
+  selectedId = null;
+  renderSite();
+  renderProperties();
+}
+
+// KÉO THẢ SẮP XẾP
+function enableDragDrop() {
+  document.querySelectorAll(".component").forEach(element => {
+    element.addEventListener("dragstart", e => {
+      e.dataTransfer.setData("text/plain",
+        element.dataset.id);
+    });
+
+    element.addEventListener("dragover", e => {
+      e.preventDefault();
+    });
+
+    element.addEventListener("drop", e => {
+      e.preventDefault();
+
+      const source = e.dataTransfer.getData("text/plain");
+      const target = element.dataset.id;
+
+      if(source === target) return;
+
+      const from = sections.findIndex(s => s.id === source);
+      const to = sections.findIndex(s => s.id === target);
+
+      if(from < 0 || to < 0) return;
+
+      const moved = sections.splice(from,1)[0];
+      sections.splice(to,0,moved);
+
+      renderSite();
+    });
+  });
+}
+
+// CHỌN THIẾT BỊ
+function setDevice(device) {
+  const canvas = document.getElementById("canvas");
+  canvas.classList.remove(
+    "device-mobile","device-tablet"
+  );
+
+  if(device !== "desktop") {
+    canvas.classList.add("device-" + device);
+  }
+}
+
+// LƯU DỰ ÁN
+function saveProject() {
+  const project = {
+    template: currentTemplate,
+    sections: sections
+  };
+
+  localStorage.setItem(
+    "viet_web_builder_project",
+    JSON.stringify(project)
+  );
+
+  alert("Đã lưu dự án trên trình duyệt!");
+}
+
+// MỞ LẠI DỰ ÁN
+function loadProject() {
+  const saved = localStorage.getItem(
+    "viet_web_builder_project"
+  );
+
+  if(!saved) return;
+
+  try {
+    const project = JSON.parse(saved);
+    currentTemplate = project.template;
+    sections = project.sections;
+    renderTemplates();
+    renderSite();
+  } catch(e) {
+    console.error("Không thể mở dự án",e);
+  }
+}
+
+// XEM TRƯỚC
+function previewSite() {
+  const html = generateHTML();
+  const win = window.open("", "_blank");
+
+  if(!win) {
+    alert("Trình duyệt đang chặn cửa sổ mới.");
+    return;
+  }
+
+  win.document.open();
+  win.document.write(html);
+  win.document.close();
+}
+
+// TẠO WEBSITE HTML
+function generateHTML() {
+  const body = sections.map(s => {
+    if(s.type === "hero") {
+      return `
+      <section class="hero" style="background:${escapeAttr(s.background || s.color)}">
+        <h1>${escapeHtml(s.title)}</h1>
+        <p>${escapeHtml(s.text)}</p>
+        <button>${escapeHtml(s.button)}</button>
+      </section>`;
+    }
+
+    if(s.type === "text") {
+      return `<section class="section">
+        <h2>${escapeHtml(s.title)}</h2>
+        <p>${escapeHtml(s.text)}</p>
+      </section>`;
+    }
+
+    if(s.type === "products") {
+      return `<section class="section">
+        <h2>${escapeHtml(s.title)}</h2>
+        <p>${escapeHtml(s.text)}</p>
+        <div class="grid">
+          ${[1,2,3].map(i => `
+            <article class="card">
+              <h3>Sản phẩm ${i}</h3>
+              <p>Thông tin giới thiệu sản phẩm.</p>
+            </article>`).join("")}
+        </div>
+      </section>`;
+    }
+
+    if(s.type === "image") {
+      return `<section class="section">
+        <h2>${escapeHtml(s.title)}</h2>
+        <img src="${escapeAttr(s.image || 'https://placehold.co/1000x400')}"
+          alt="" style="max-width:100%">
+      </section>`;
+    }
+
+    return `<section class="section">
+      <h2>${escapeHtml(s.title)}</h2>
+      <p>${escapeHtml(s.text)}</p>
+    </section>`;
+  }).join("");
+
+  return `<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Website của tôi</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+body{font-family:Arial;margin:0;color:#172033}
+.hero{text-align:center;color:white;padding:90px 20px}
+.hero h1{font-size:40px;font-weight:bold}
+.hero button{padding:12px 25px;border:0;border-radius:7px}
+.section{text-align:center;padding:55px 20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin-top:25px}
+.card{padding:25px;border:1px solid #ddd;border-radius:10px}
 </style>
 </head>
 <body>
+${body}
+<footer class="text-center p-4 bg-light">
+  © ${new Date().getFullYear()} Website của tôi
+</footer>
+</body>
+</html>`;
+}
 
-<header>
-<h2>◈ WebAppBuilder</h2>
-<span>HTML5 Platform · MVP 1.0</span>
-</header>
+// XUẤT WEBSITE
+function exportSite() {
+  const html = generateHTML();
+  const blob = new Blob([html], {
+    type: "text/html;charset=utf-8"
+  });
 
-<main>
-<section class="panel">
-<h1>Biến website thành ứng dụng</h1>
-<p>Cấu hình website và chuẩn bị dự án Android / iOS.</p>
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "website-cua-toi.html";
+  a.click();
 
-<form id="builder">
-<label>Địa chỉ website</label>
-<input id="website" type="url"
-placeholder="https://example.com" required>
+  URL.revokeObjectURL(url);
+}
 
-<label>Tên ứng dụng</label>
-<input id="appName" maxlength="50"
-placeholder="Tên ứng dụng" required>
+// CHỐNG CHÈN HTML KHÔNG AN TOÀN
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  })[c]);
+}
 
-<label>Nền tảng</label>
-<select id="platform">
-<option value="both">Android + iOS</option>
-<option value="android">Android</option>
-<option value="ios">iOS</option>
-</select>
+function escapeAttr(value) {
+  return escapeHtml(value);
+}
 
-<label>Màu thương hiệu</label>
-<input id="color" type="color" value="#1769aa">
-
-<label>Kiếm tiền</label>
-<div class="options">
-<label><input type="checkbox" id="ads">
-Quảng cáo</label>
-<label><input type="checkbox" id="affiliate">
-Affiliate</label>
-</div>
-
-<br>
-<button type="submit">Kiểm tra và tạo cấu hình</button>
-</form>
-
-<div id="result">
-<div class="status">
-<strong>✓ Cấu hình đã được tạo!</strong>
-<p id="summary"></p>
-<button id="download">Xuất cấu hình JSON</button>
-</div>
-</div>
-</section>
-
-<section class="panel">
-<h3>Thông tin nền tảng</h3>
-<p>✓ HTML5, CSS3, JavaScript</p>
-<p>✓ Không bắt buộc máy chủ riêng</p>
-<p>✓ Hỗ trợ cấu hình Android và iOS</p>
-<p>✓ Hỗ trợ cấu hình kiếm tiền cho chủ website</p>
-</section>
-</main>
-
-<footer>WebAppBuilder © 2026</footer>
-
-<script>
-let config = null;
-
-document.getElementById("builder")
-.addEventListener("submit", function(e){
- e.preventDefault();
-
- const website = document.getElementById("website").value.trim();
- const appName = document.getElementById("appName").value.trim();
-
- try {
-  const parsed = new URL(website);
-
-  if(parsed.protocol !== "https:"){
-   throw new Error("Chỉ chấp nhận HTTPS");
-  }
-
-  if(!appName){
-   throw new Error("Tên ứng dụng không hợp lệ");
-  }
-
-  config = {
-   product: "WebAppBuilder",
-   version: "1.0.0",
-   website: parsed.href,
-   appName,
-   platform: document.getElementById("platform").value,
-   theme: document.getElementById("color").value,
-   monetization: {
-    ads: document.getElementById("ads").checked,
-    affiliate: document.getElementById("affiliate").checked
-   }
-  };
-
-  document.getElementById("summary").textContent =
-   appName + " - " + parsed.hostname;
-
-  document.getElementById("result").style.display = "block";
-
- } catch(error) {
-  alert(error.message || "URL không hợp lệ");
- }
-});
-
-document.getElementById("download")
-.addEventListener("click", function(){
- if(!config) return;
-
- const blob = new Blob(
-  [JSON.stringify(config,null,2)],
-  {type:"application/json"}
- );
-
- const link = document.createElement("a");
- const objectUrl = URL.createObjectURL(blob);
-
- link.href = objectUrl;
- link.download = "webappbuilder-config.json";
- link.click();
-
- URL.revokeObjectURL(objectUrl);
-});
+// KHỞI ĐỘNG
+renderTemplates();
+chooseTemplate(0);
+loadProject();
 </script>
+
 </body>
 </html>
