@@ -2,172 +2,404 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1">
-  <title>Cardano Staking | Cá nhân</title>
-  <style>
-    :root {
-      color-scheme: dark;
-      font-family: system-ui, sans-serif;
-      background: #080f20;
-      color: #eaf1ff;
-    }
-    body { margin: 0; }
-    header {
-      padding: 22px 6%;
-      border-bottom: 1px solid #25324b;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    main { max-width: 1000px; margin: auto; padding: 32px 20px; }
-    .brand { font-weight: 800; color: #70aaff; }
-    .card {
-      background: #111d33;
-      border: 1px solid #263650;
-      border-radius: 18px;
-      padding: 24px;
-      margin: 16px 0;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 16px;
-    }
-    button {
-      background: #3478f6;
-      border: 0;
-      border-radius: 10px;
-      padding: 12px 20px;
-      color: white;
-      font-weight: 700;
-      cursor: pointer;
-      margin: 5px;
-    }
-    button:disabled { opacity: .4; cursor: not-allowed; }
-    .muted { color: #9aaecb; }
-    .value { font-size: 24px; font-weight: 700; }
-    .address { overflow-wrap: anywhere; }
-    .warning { color: #ffcf83; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080f20">
+<title>Cardano Staking | Dashboard 2.0</title>
+
+<style>
+:root {
+  font-family: Inter, system-ui, Arial, sans-serif;
+  color: #eaf1ff;
+  background: #080f20;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; }
+header {
+  height: 76px;
+  padding: 0 5%;
+  border-bottom: 1px solid #263650;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.brand { font-size: 19px; font-weight: 800; color: #75aaff; }
+main { max-width: 1120px; margin: auto; padding: 32px 20px; }
+h1 { font-size: 29px; margin-bottom: 5px; }
+h2 { font-size: 18px; margin-top: 0; }
+p { line-height: 1.55; }
+.muted { color: #91a5c4; }
+.small { font-size: 12px; }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+  gap: 16px;
+  margin: 20px 0;
+}
+.card {
+  background: #111d33;
+  border: 1px solid #263650;
+  border-radius: 17px;
+  padding: 22px;
+  min-width: 0;
+}
+.hero {
+  background: linear-gradient(120deg,#15396c,#17294c);
+  border-color: #31578d;
+}
+.value {
+  font-size: clamp(23px,4vw,31px);
+  font-weight: 800;
+  margin: 10px 0;
+  overflow-wrap: anywhere;
+}
+button {
+  border: 0;
+  border-radius: 10px;
+  padding: 12px 17px;
+  margin: 5px 5px 5px 0;
+  font-weight: 700;
+  background: #3478f6;
+  color: white;
+  cursor: pointer;
+}
+button.secondary { background: #293b59; }
+button:disabled { opacity: .45; cursor: not-allowed; }
+.badge {
+  display: inline-block;
+  background: #193d35;
+  color: #7ce2b2;
+  border-radius: 20px;
+  padding: 5px 10px;
+  font-size: 12px;
+}
+.warning {
+  color: #ffcf83;
+  background: #392d19;
+  border-radius: 10px;
+  padding: 12px;
+}
+.address {
+  overflow-wrap: anywhere;
+  font-size: 12px;
+  color: #b9c9e2;
+}
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #263650;
+}
+.row:last-child { border: 0; }
+.status { margin-top: 12px; min-height: 24px; }
+footer {
+  text-align: center;
+  color: #7186a6;
+  padding: 30px 15px;
+  font-size: 12px;
+}
+@media(max-width:550px) {
+  header { padding: 0 16px; }
+  main { padding: 24px 14px; }
+  .brand { font-size: 15px; }
+  h1 { font-size: 24px; }
+}
+</style>
 </head>
+
 <body>
-  <header>
-    <div class="brand">₳ CARDANO STAKING</div>
-    <span>MAINNET · PERSONAL</span>
-  </header>
+<header>
+  <div class="brand">₳ CARDANO STAKING</div>
+  <span class="badge">MAINNET</span>
+</header>
 
-  <main>
-    <h1>Bảng điều khiển Staking</h1>
-    <p class="muted">Quản lý thông tin staking Cardano cá nhân.</p>
+<main>
+  <section>
+    <h1>Dashboard cá nhân</h1>
+    <p class="muted">Quản lý tài sản và staking Cardano của bạn.</p>
+  </section>
 
-    <section class="card">
-      <h2>Kết nối ví Cardano</h2>
-      <button id="eternl">Kết nối Eternl</button>
-      <button id="lace">Kết nối Lace</button>
-      <button id="disconnect" disabled>Ngắt kết nối</button>
-      <p id="status" role="status" aria-live="polite">
-        Chưa kết nối ví
-      </p>
-    </section>
+  <section class="card">
+    <h2>Kết nối ví Cardano</h2>
+    <button id="connectEternl">Eternl</button>
+    <button id="connectLace">Lace</button>
+    <button id="disconnect" class="secondary" disabled>
+      Ngắt kết nối
+    </button>
+    <button id="refresh" class="secondary" disabled>
+      ↻ Làm mới dữ liệu
+    </button>
+    <div id="status" class="status muted" role="status"
+         aria-live="polite">Chưa kết nối ví.</div>
+  </section>
 
-    <div class="grid">
-      <section class="card">
-        <p class="muted">Mạng blockchain</p>
-        <div class="value" id="network">Chưa xác định</div>
-      </section>
-      <section class="card">
-        <p class="muted">Ví đang sử dụng</p>
-        <div class="value" id="wallet">Chưa kết nối</div>
-      </section>
+  <section class="grid">
+    <div class="card hero">
+      <p class="muted">Tổng số dư ADA trong ví</p>
+      <div class="value" id="balance">— ADA</div>
+      <p class="small muted">Dữ liệu đọc từ ví đã kết nối</p>
     </div>
 
-    <section class="card">
-      <h2>Địa chỉ staking</h2>
-      <p id="stake" class="address muted">
-        Kết nối ví để xem địa chỉ.
-      </p>
-    </section>
+    <div class="card">
+      <p class="muted">ADA đang staking</p>
+      <div class="value" id="staked">— ADA</div>
+      <p class="small muted">Active stake theo dữ liệu blockchain</p>
+    </div>
 
-    <section class="card">
-      <h2>Quản lý staking</h2>
-      <p class="warning">
-        Phiên bản này chỉ đọc dữ liệu.
-        Không ký hoặc gửi giao dịch Mainnet.
-      </p>
-      <p>
-        Để ủy quyền ADA, hãy sử dụng chức năng staking
-        có sẵn trong ứng dụng ví chính thức.
-      </p>
-    </section>
-  </main>
+    <div class="card">
+      <p class="muted">Phần thưởng khả dụng</p>
+      <div class="value" id="rewards">— ADA</div>
+      <p class="small muted">Rewards chưa rút theo API</p>
+    </div>
+  </section>
 
-  <script type="module">
-    import { Address } from
-      "https://esm.sh/@emurgo/cardano-serialization-lib-browser@15.0.3";
+  <section class="card">
+    <h2>Thông tin ví</h2>
+    <div class="row">
+      <span class="muted">Ví</span>
+      <strong id="wallet">Chưa kết nối</strong>
+    </div>
+    <div class="row">
+      <span class="muted">Blockchain</span>
+      <strong id="network">Chưa xác định</strong>
+    </div>
+    <p class="muted">Địa chỉ staking (Reward Address)</p>
+    <div id="stakeAddress" class="address">—</div>
+    <p class="muted">Địa chỉ thanh toán</p>
+    <div id="paymentAddress" class="address">—</div>
+  </section>
 
-    let walletApi = null;
+  <section class="card">
+    <h2>Thông tin Stake Pool</h2>
+    <div class="row">
+      <span class="muted">Pool ID</span>
+      <strong id="pool">—</strong>
+    </div>
+    <div class="row">
+      <span class="muted">Trạng thái ủy quyền</span>
+      <strong id="delegation">Chưa xác định</strong>
+    </div>
+  </section>
 
-    const $ = id => document.getElementById(id);
+  <section class="card">
+    <h2>Thông tin hệ thống</h2>
+    <div class="row">
+      <span class="muted">Nguồn dữ liệu</span>
+      <strong>Koios API</strong>
+    </div>
+    <div class="row">
+      <span class="muted">Mạng</span>
+      <strong>Cardano Mainnet</strong>
+    </div>
+    <div class="row">
+      <span class="muted">Giao dịch</span>
+      <strong>Chưa kích hoạt</strong>
+    </div>
+    <p class="small muted" id="updated">Chưa cập nhật dữ liệu.</p>
+  </section>
 
-    function reset() {
-      walletApi = null;
-      $("wallet").textContent = "Chưa kết nối";
-      $("network").textContent = "Chưa xác định";
-      $("stake").textContent = "Chưa có địa chỉ";
-      $("disconnect").disabled = true;
+  <div class="warning small">
+    Bảo mật: Website không yêu cầu Seed Phrase hoặc Private Key.
+    Không gửi ADA vào website. Mọi dữ liệu địa chỉ gửi đến Koios
+    để truy vấn blockchain công khai. Phiên bản này không ký giao dịch.
+  </div>
+</main>
+
+<footer>
+  CARDANO PERSONAL STAKING · VERSION 2.0<br>
+  Non-custodial · Vietnamese Interface
+</footer>
+
+<script type="module">
+import * as CSL from
+  "https://esm.sh/@emurgo/cardano-serialization-lib-browser@15.0.3";
+
+const API = "https://api.koios.rest/api/v1";
+
+const $ = id => document.getElementById(id);
+let walletApi = null;
+let walletName = "";
+let currentRewardAddress = "";
+
+function setStatus(message) {
+  $("status").textContent = message;
+}
+
+function formatADA(lovelace) {
+  const number = Number(lovelace);
+  if (!Number.isFinite(number)) return "Không có dữ liệu";
+  return (number / 1_000_000).toLocaleString("vi-VN", {
+    maximumFractionDigits: 6
+  }) + " ADA";
+}
+
+function hexToBytes(hex) {
+  if (!/^(?:[0-9a-fA-F]{2})+$/.test(hex)) {
+    throw new Error("Dữ liệu địa chỉ không hợp lệ.");
+  }
+  return Uint8Array.from(
+    hex.match(/.{2}/g).map(x => parseInt(x,16))
+  );
+}
+
+function toBech32(hex) {
+  return CSL.Address.from_bytes(hexToBytes(hex)).to_bech32();
+}
+
+async function koios(endpoint, body) {
+  const response = await fetch(API + "/" + endpoint, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(body)
+  });
+
+  if (!response.ok) {
+    throw new Error("Koios API lỗi: " + response.status);
+  }
+  return response.json();
+}
+
+function reset() {
+  walletApi = null;
+  walletName = "";
+  currentRewardAddress = "";
+
+  $("balance").textContent = "— ADA";
+  $("staked").textContent = "— ADA";
+  $("rewards").textContent = "— ADA";
+  $("wallet").textContent = "Chưa kết nối";
+  $("network").textContent = "Chưa xác định";
+  $("stakeAddress").textContent = "—";
+  $("paymentAddress").textContent = "—";
+  $("pool").textContent = "—";
+  $("delegation").textContent = "Chưa xác định";
+  $("disconnect").disabled = true;
+  $("refresh").disabled = true;
+  $("updated").textContent = "Chưa cập nhật dữ liệu.";
+}
+
+async function connect(name) {
+  reset();
+  setStatus("Đang kết nối ví...");
+
+  try {
+    const provider = window.cardano?.[name];
+
+    if (!provider || typeof provider.enable !== "function") {
+      throw new Error("Không tìm thấy ví " + name);
     }
 
-    async function connect(walletName) {
-      reset();
-      $("status").textContent = "Đang kết nối...";
+    const api = await provider.enable();
+    const networkId = await api.getNetworkId();
 
-      try {
-        const provider = window.cardano?.[walletName];
-        if (!provider || typeof provider.enable !== "function") {
-          throw new Error("Không tìm thấy tiện ích ví " + walletName);
-        }
-
-        const api = await provider.enable();
-        const networkId = await api.getNetworkId();
-
-        if (networkId !== 1) {
-          throw new Error(
-            "Ví không ở Mainnet. Kết nối đã bị từ chối."
-          );
-        }
-
-        const rewardAddresses = await api.getRewardAddresses();
-        const addresses = rewardAddresses.map(hex => {
-          const bytes = Uint8Array.from(
-            hex.match(/.{2}/g).map(x => parseInt(x, 16))
-          );
-          return Address.from_bytes(bytes).to_bech32();
-        });
-
-        walletApi = api;
-        $("network").textContent = "Cardano Mainnet";
-        $("wallet").textContent = provider.name || walletName;
-        $("stake").textContent =
-          addresses.join("\n") || "Ví không trả về địa chỉ staking";
-        $("stake").style.whiteSpace = "pre-wrap";
-        $("disconnect").disabled = false;
-        $("status").textContent = "Kết nối thành công";
-      } catch (error) {
-        reset();
-        $("status").textContent =
-          error instanceof Error ? error.message : "Lỗi kết nối ví";
-      }
+    if (networkId !== 1) {
+      throw new Error("Ví không kết nối Cardano Mainnet.");
     }
 
-    $("eternl").addEventListener("click", () => connect("eternl"));
-    $("lace").addEventListener("click", () => connect("lace"));
-    $("disconnect").addEventListener("click", () => {
-      reset();
-      $("status").textContent =
-        "Đã ngắt kết nối trong website";
+    const rewardHex = await api.getRewardAddresses();
+    if (!rewardHex.length) {
+      throw new Error("Ví không cung cấp địa chỉ staking.");
+    }
+
+    const paymentHex = await api.getUsedAddresses();
+    const rewardAddress = toBech32(rewardHex[0]);
+    const paymentAddress = paymentHex.length
+      ? toBech32(paymentHex[0])
+      : "Không có địa chỉ đã sử dụng";
+
+    walletApi = api;
+    walletName = name;
+    currentRewardAddress = rewardAddress;
+
+    $("wallet").textContent = provider.name || name;
+    $("network").textContent = "Cardano Mainnet";
+    $("stakeAddress").textContent = rewardAddress;
+    $("paymentAddress").textContent = paymentAddress;
+    $("disconnect").disabled = false;
+    $("refresh").disabled = false;
+
+    setStatus("Đã kết nối ví. Đang tải dữ liệu...");
+
+    await refreshData();
+
+  } catch (error) {
+    reset();
+    setStatus(error.message || "Không thể kết nối ví.");
+  }
+}
+
+async function refreshData() {
+  if (!walletApi || !currentRewardAddress) return;
+
+  $("refresh").disabled = true;
+  setStatus("Đang cập nhật dữ liệu blockchain...");
+
+  try {
+    // Đọc số dư trực tiếp từ ví, dữ liệu CBOR.
+    const balanceCbor = await walletApi.getBalance();
+    const value = CSL.Value.from_bytes(hexToBytes(balanceCbor));
+    const walletBalance = value.coin().to_str();
+
+    $("balance").textContent = formatADA(walletBalance);
+
+    // Truy vấn thông tin staking công khai.
+    const accountData = await koios("account_info", {
+      _stake_addresses: [currentRewardAddress]
     });
-  </script>
+
+    const account = Array.isArray(accountData)
+      ? accountData[0]
+      : null;
+
+    if (account) {
+      $("staked").textContent =
+        formatADA(account.active_stake);
+
+      $("rewards").textContent =
+        formatADA(account.rewards_available);
+
+      $("pool").textContent =
+        account.delegated_pool || "Chưa ủy quyền";
+
+      $("delegation").textContent =
+        account.delegated_pool ? "Đã ủy quyền" : "Chưa ủy quyền";
+    } else {
+      $("staked").textContent = "0 ADA";
+      $("rewards").textContent = "0 ADA";
+      $("pool").textContent = "Chưa có dữ liệu";
+      $("delegation").textContent = "Chưa đăng ký staking";
+    }
+
+    $("updated").textContent =
+      "Cập nhật lúc: " + new Date().toLocaleString("vi-VN");
+
+    setStatus("Cập nhật thành công.");
+
+  } catch (error) {
+    setStatus("Không thể tải đầy đủ dữ liệu: " + error.message);
+  } finally {
+    $("refresh").disabled = !walletApi;
+  }
+}
+
+$("connectEternl").addEventListener("click",
+  () => connect("eternl"));
+
+$("connectLace").addEventListener("click",
+  () => connect("lace"));
+
+$("disconnect").addEventListener("click", () => {
+  reset();
+  setStatus("Đã ngắt kết nối trên website.");
+});
+
+$("refresh").addEventListener("click", refreshData);
+</script>
 </body>
 </html>
