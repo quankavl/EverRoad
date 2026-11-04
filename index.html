@@ -3,47 +3,171 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SEN AN VIÊN - Chibi World</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+  <title>Cardano Staking | Cá nhân</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: system-ui, sans-serif;
+      background: #080f20;
+      color: #eaf1ff;
+    }
+    body { margin: 0; }
+    header {
+      padding: 22px 6%;
+      border-bottom: 1px solid #25324b;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    main { max-width: 1000px; margin: auto; padding: 32px 20px; }
+    .brand { font-weight: 800; color: #70aaff; }
+    .card {
+      background: #111d33;
+      border: 1px solid #263650;
+      border-radius: 18px;
+      padding: 24px;
+      margin: 16px 0;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 16px;
+    }
+    button {
+      background: #3478f6;
+      border: 0;
+      border-radius: 10px;
+      padding: 12px 20px;
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+      margin: 5px;
+    }
+    button:disabled { opacity: .4; cursor: not-allowed; }
+    .muted { color: #9aaecb; }
+    .value { font-size: 24px; font-weight: 700; }
+    .address { overflow-wrap: anywhere; }
+    .warning { color: #ffcf83; }
+  </style>
 </head>
 <body>
-
-  <div id="loading">🌸 Đang tải SEN AN VIÊN...</div>
-
-  <header class="topbar">
-    <div class="logo">🌸 SEN AN VIÊN</div>
-    <div class="profile">
-      <span>👤 Người chơi</span>
-      <span>⭐ Cấp 1</span>
-      <span>🌸 <b id="points">0</b></span>
-    </div>
+  <header>
+    <div class="brand">₳ CARDANO STAKING</div>
+    <span>MAINNET · PERSONAL</span>
   </header>
 
-  <main id="game-container"></main>
+  <main>
+    <h1>Bảng điều khiển Staking</h1>
+    <p class="muted">Quản lý thông tin staking Cardano cá nhân.</p>
 
-  <section class="quest-panel">
-    <h3>📜 Nhiệm vụ hôm nay</h3>
-    <p>🌸 Khám phá khu vườn sen</p>
-    <p>🏯 Thăm quan ngôi chùa</p>
-    <p>🧘 Thực hiện thiền định</p>
-    <button id="interact">Tương tác</button>
-    <p id="message">Chào mừng bạn đến SEN AN VIÊN!</p>
-  </section>
+    <section class="card">
+      <h2>Kết nối ví Cardano</h2>
+      <button id="eternl">Kết nối Eternl</button>
+      <button id="lace">Kết nối Lace</button>
+      <button id="disconnect" disabled>Ngắt kết nối</button>
+      <p id="status" role="status" aria-live="polite">
+        Chưa kết nối ví
+      </p>
+    </section>
 
-  <div class="mobile-controls">
-    <button data-key="forward">▲</button>
-    <div>
-      <button data-key="left">◀</button>
-      <button data-key="backward">▼</button>
-      <button data-key="right">▶</button>
+    <div class="grid">
+      <section class="card">
+        <p class="muted">Mạng blockchain</p>
+        <div class="value" id="network">Chưa xác định</div>
+      </section>
+      <section class="card">
+        <p class="muted">Ví đang sử dụng</p>
+        <div class="value" id="wallet">Chưa kết nối</div>
+      </section>
     </div>
-  </div>
 
-  <footer>
-    WASD / Mũi tên: Di chuyển | E: Tương tác
-  </footer>
+    <section class="card">
+      <h2>Địa chỉ staking</h2>
+      <p id="stake" class="address muted">
+        Kết nối ví để xem địa chỉ.
+      </p>
+    </section>
 
-  <script type="module" src="game.js"></script>
+    <section class="card">
+      <h2>Quản lý staking</h2>
+      <p class="warning">
+        Phiên bản này chỉ đọc dữ liệu.
+        Không ký hoặc gửi giao dịch Mainnet.
+      </p>
+      <p>
+        Để ủy quyền ADA, hãy sử dụng chức năng staking
+        có sẵn trong ứng dụng ví chính thức.
+      </p>
+    </section>
+  </main>
+
+  <script type="module">
+    import { Address } from
+      "https://esm.sh/@emurgo/cardano-serialization-lib-browser@15.0.3";
+
+    let walletApi = null;
+
+    const $ = id => document.getElementById(id);
+
+    function reset() {
+      walletApi = null;
+      $("wallet").textContent = "Chưa kết nối";
+      $("network").textContent = "Chưa xác định";
+      $("stake").textContent = "Chưa có địa chỉ";
+      $("disconnect").disabled = true;
+    }
+
+    async function connect(walletName) {
+      reset();
+      $("status").textContent = "Đang kết nối...";
+
+      try {
+        const provider = window.cardano?.[walletName];
+        if (!provider || typeof provider.enable !== "function") {
+          throw new Error("Không tìm thấy tiện ích ví " + walletName);
+        }
+
+        const api = await provider.enable();
+        const networkId = await api.getNetworkId();
+
+        if (networkId !== 1) {
+          throw new Error(
+            "Ví không ở Mainnet. Kết nối đã bị từ chối."
+          );
+        }
+
+        const rewardAddresses = await api.getRewardAddresses();
+        const addresses = rewardAddresses.map(hex => {
+          const bytes = Uint8Array.from(
+            hex.match(/.{2}/g).map(x => parseInt(x, 16))
+          );
+          return Address.from_bytes(bytes).to_bech32();
+        });
+
+        walletApi = api;
+        $("network").textContent = "Cardano Mainnet";
+        $("wallet").textContent = provider.name || walletName;
+        $("stake").textContent =
+          addresses.join("\n") || "Ví không trả về địa chỉ staking";
+        $("stake").style.whiteSpace = "pre-wrap";
+        $("disconnect").disabled = false;
+        $("status").textContent = "Kết nối thành công";
+      } catch (error) {
+        reset();
+        $("status").textContent =
+          error instanceof Error ? error.message : "Lỗi kết nối ví";
+      }
+    }
+
+    $("eternl").addEventListener("click", () => connect("eternl"));
+    $("lace").addEventListener("click", () => connect("lace"));
+    $("disconnect").addEventListener("click", () => {
+      reset();
+      $("status").textContent =
+        "Đã ngắt kết nối trong website";
+    });
+  </script>
 </body>
 </html>
